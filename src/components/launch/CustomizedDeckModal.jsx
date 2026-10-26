@@ -37,34 +37,33 @@ export default function CustomizedDeckModal({
   onClose,
   onEditConcept
 }) {
-  if (!isOpen || !concept) return null;
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [copiedDeck, setCopiedDeck] = useState(false);
 
   const creatorBrandHex = creator?.brand_color || creator?.brandColor || null;
   const [activeBrandColor, setActiveBrandColor] = useState(
-    () => concept.brandColor || creatorBrandHex || BRAND_COLORS[conceptIndex % BRAND_COLORS.length].hex
+    () => concept?.brandColor || creatorBrandHex || BRAND_COLORS[conceptIndex % BRAND_COLORS.length].hex
   );
-  const [copiedDeck, setCopiedDeck] = useState(false);
+
+  // Reset slide when opening a concept
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentSlide(0);
+    }
+  }, [isOpen, concept]);
 
   // Sync if creatorBrandHex changes
   useEffect(() => {
-    if (concept.brandColor) {
+    if (concept?.brandColor) {
       setActiveBrandColor(concept.brandColor);
     } else if (creatorBrandHex) {
       setActiveBrandColor(creatorBrandHex);
     }
-  }, [concept.brandColor, creatorBrandHex]);
-
-  const brandColorObj = getBrandColorObj(activeBrandColor);
-  const accentHex = brandColorObj.hex;
-
-  const creatorName = creator?.name || creator?.display_name || "Creator";
-  const firstName = creatorName.split(" ")[0];
-  const cHandle = creator?.handle || `@${firstName.toLowerCase()}`;
-  const niche = creator?.niche || "Creator Economy";
-  const followers = creator?.followerStr || (creator?.follower_count ? `${creator.follower_count.toLocaleString()}` : "250K");
+  }, [concept?.brandColor, creatorBrandHex]);
 
   // Keyboard navigation
   useEffect(() => {
+    if (!isOpen) return;
     const handleKeyDown = (e) => {
       if (e.key === "ArrowRight") {
         setCurrentSlide((prev) => Math.min(prev + 1, 3));
@@ -76,7 +75,18 @@ export default function CustomizedDeckModal({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !concept) return null;
+
+  const brandColorObj = getBrandColorObj(activeBrandColor);
+  const accentHex = brandColorObj.hex;
+
+  const creatorName = creator?.name || creator?.display_name || "Creator";
+  const firstName = creatorName.split(" ")[0];
+  const cHandle = creator?.handle || `@${firstName.toLowerCase()}`;
+  const niche = creator?.niche || "Creator Economy";
+  const followers = creator?.followerStr || (creator?.follower_count ? `${creator.follower_count.toLocaleString()}` : "250K");
 
   const slides = [
     { title: "Opportunity & Partnership", subtitle: "Co-Founder Venture Blueprint" },

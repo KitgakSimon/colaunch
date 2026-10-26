@@ -553,10 +553,10 @@ export default function AcquisitionEngine({
   const [step2EmailOnly, setStep2EmailOnly] = useState(false);
   const [step2SearchQuery, setStep2SearchQuery] = useState("");
   const [templateSubject, setTemplateSubject] = useState(
-    "Quick idea for {{display_name}} 💡 [#{{handle}}]",
+    "Partnership inquiry for {{display_name}} [#{{handle}}]",
   );
   const [templateBody, setTemplateBody] = useState(
-    `Hi {{first_name}},\n\nI’ve been following your {{niche}} content on {{platform}} and love what you're building with your community! 👋\n\nCoLaunch ⚡ | 50/50 Venture Model\nWe partner 50/50 with creators to build custom software tools and monetization apps for their audience. Our team handles 100% of the engineering, hosting, payment setup, and customer support with zero upfront cost to you.\n\n• Full Delivery: 100% Engineering, UI/UX & QA\n• Zero Risk: $0 Upfront Cost & Co-ownership\n• Hands-Off Ops: Global Hosting, Billing & 24/7 Support\n\nWe analyzed your channel and engineered 3 tailored software product concepts for your {{follower_count}} followers that could drive recurring monthly revenue 🚀\n\nWould you be open to taking a look at a brief 3-concept breakdown this week?\n\nTo reply, simply shoot back a quick response:\n• "I'm interested, let's go ahead with the process" — and I'll send over the 3 custom software concepts and revenue roadmap.\n• Or "I am not interested, sorry" — and I will immediately take you off our list with zero follow-ups.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships · CoLaunch\n\n---\nRef: [CF-STAGE:STEP3_INQUIRY | CF-CID:{{creator_id}} | Handle:@{{handle}}]`,
+    `Hi {{first_name}},\n\nI have been following your {{niche}} work on {{platform}} and wanted to reach out directly regarding a potential venture partnership.\n\nI head venture partnerships at CoLaunch. We partner 50/50 with creators to build, deploy, and monetize custom software products for their audience. Our studio covers 100% of software engineering, UI/UX design, cloud infrastructure, and ongoing technical support at zero financial cost to you.\n\nBased on an analysis of your channel, our team has architected 3 tailored software product concepts designed specifically for your community to build a sustainable, recurring software revenue stream.\n\nWould you be open to reviewing a short 3-concept breakdown and interactive landing page preview this week?\n\nTo reply, simply respond directly to this email:\n• "I am interested, let's proceed" — and I will send over the concepts, revenue roadmap, and live previews.\n• Or "Not interested" — and I will immediately close your file with zero follow-ups.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP3_INQUIRY | CF-CID:{{creator_id}} | Handle:@{{handle}}]`,
   );
   const [showStep3EmailPreview, setShowStep3EmailPreview] = useState(false);
 
@@ -3737,13 +3737,20 @@ export default function AcquisitionEngine({
     const rawConcepts = (creator.productConcepts && creator.productConcepts.length > 0)
       ? creator.productConcepts
       : ensureCreatorConcepts(creator);
-    const conceptsWithImages = rawConcepts.map((c) => {
+    const frontendBase = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
+    const creatorSlug = (creator.handle || creator.name || 'creator').replace(/^@/, '').toLowerCase().replace(/[^a-z0-9\-]/g, '');
+
+    const conceptsWithImages = rawConcepts.map((c, i) => {
       const img = c.customImageUrl || c.imageUrl || c.image_url || getConceptImageUrl(c, creator.niche);
+      const conceptSlug = (c.name || `concept-${i + 1}`).toLowerCase().replace(/[^a-z0-9\-]/g, '-');
+      const landingPageUrl = c.landingPageUrl || c.landing_page_url || `${frontendBase}/preorder/${creatorSlug}?concept=${conceptSlug}`;
       return {
         ...c,
         imageUrl: img,
         image_url: img,
         customImageUrl: c.customImageUrl || img,
+        landingPageUrl,
+        landing_page_url: landingPageUrl,
       };
     });
 
@@ -3751,19 +3758,19 @@ export default function AcquisitionEngine({
     const firstName = (creator.name || creator.display_name || "there").split(" ")[0];
     const cId = creator.id;
 
-    const defaultSubject = `Top 3 software concepts tailored for @${cleanHandle}`;
+    const defaultSubject = `Software concepts tailored for @${cleanHandle}`;
     const defaultBody =
       `Hi ${firstName},\n\n` +
-      `Following up as promised! Based on our analysis of your ${creator.niche || "channel"} audience on ${creator.platform || "social media"}, here are the top 3 software product concepts we designed for your community:\n\n` +
+      `Following up as promised. Based on our analysis of your ${creator.niche || "channel"} audience on ${creator.platform || "social media"}, here are the top 3 software product concepts we designed for your community:\n\n` +
       conceptsWithImages
         .map(
           (c, i) =>
-            `${i + 1}. ${c.name} (${c.pricing || "$29/mo"}) — ${c.tagline}\n   • Solves: ${c.problem || c.description} (Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Customized Blueprint]" : ""}`,
+            `${i + 1}. ${c.name} (${c.pricing || "$29/mo"})\n   • Tagline: ${c.tagline || "Custom audience software"}\n   • Problem: ${c.problem || c.description} (Opportunity Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Custom Blueprint]" : ""}\n   • Landing Page: ${c.landingPageUrl}`,
         )
         .join("\n\n") +
-      `\n\nUnder our 50/50 partnership, our engineering team will build and deploy the complete MVP at zero cost to you.\n\n` +
-      `Take a look and let us know which concept you'd be most excited to build and launch with us! To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
-      `Best regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `\n\nUnder our 50/50 partnership, our engineering team handles 100% of product development, hosting, payment billing, and customer support with zero financial cost to you.\n\n` +
+      `Please review the landing page previews above and let us know which concept you prefer. To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
+      `Best regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     const subject = (creator.id === selectedCreator?.id && customPitchSubject) ? customPitchSubject : defaultSubject;
     const body = (creator.id === selectedCreator?.id && customPitchBody) ? customPitchBody : defaultBody;
@@ -3999,9 +4006,13 @@ export default function AcquisitionEngine({
       }
     }
 
+    const frontendBase = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
+    const creatorSlug = cleanHandle.toLowerCase().replace(/[^a-z0-9\-]/g, '');
+    const landingUrl = `${frontendBase}/preorder/${creatorSlug}?concept=${conceptName.toLowerCase().replace(/[^a-z0-9\-]/g, '-')}`;
+
     return {
-      subject: `Top 3 software concepts tailored for @${cleanHandle}`,
-      body: `Hi ${firstName},\n\nFollowing up on our partnership! Based on our analysis of your ${creator.niche || "content"} audience, we engineered 3 custom software concepts for your community.\n\nOur top recommendation is:\n• ${conceptName} (${pricing}) — ${tagline}\n  Key Focus: Solves ${problem} (Target MVP: ${mvpTime})\n\nUnder our 50/50 model, CoLaunch handles 100% of the engineering and infrastructure at zero cost to you.\n\nTake a look and let us know if ${conceptName} sounds like a winner, or if you'd like to explore the other 2 concepts!\n\nBest regards,\nThe CoLaunch Team`,
+      subject: `Software concepts tailored for @${cleanHandle}`,
+      body: `Hi ${firstName},\n\nFollowing up on our partnership discussion. Based on our analysis of your ${creator.niche || "content"} audience, we engineered 3 custom software concepts for your community.\n\nOur top recommendation is:\n• ${conceptName} (${pricing}) — ${tagline}\n  Key Focus: Solves ${problem} (Target MVP: ${mvpTime})\n  Landing Page: ${landingUrl}\n\nUnder our 50/50 partnership, CoLaunch handles 100% of engineering, hosting, billing, and support at zero financial cost to you.\n\nPlease take a look and let us know which concept you prefer.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch`,
     };
   };
 
@@ -4079,16 +4090,20 @@ export default function AcquisitionEngine({
       selectedCreator.productConcepts || ensureCreatorConcepts(selectedCreator);
     const cleanHandle = (selectedCreator.handle || "").replace(/^@/, "").trim();
     const firstName = selectedCreator.name?.split(" ")[0] || "there";
+    const creatorSlug = (selectedCreator.handle || selectedCreator.name || "creator").replace(/^@/, "").toLowerCase().replace(/[^a-z0-9\-]/g, "");
+    const frontendBase = typeof window !== "undefined" ? window.location.origin : "http://localhost:3001";
     const subject = `Software concepts breakdown for @${cleanHandle}`;
     const body =
-      `Hi ${firstName},\n\nSharing our technical breakdown! We analyzed your top content to architect 3 custom SaaS solutions for your followers:\n\n` +
+      `Hi ${firstName},\n\nFollowing up on our partnership discussion. We analyzed your audience to architect 3 custom software solutions for your followers:\n\n` +
       concepts
         .map(
-          (c, i) =>
-            `${i + 1}. ${c.name} (${c.pricing}) — ${c.tagline}\n   • Key Feature: ${c.keyFeatures?.[0] || "Automated Workflow"}\n   • Target MVP: ${c.mvpDifficulty || "2 weeks"}`,
+          (c, i) => {
+            const landingUrl = c.landingPageUrl || c.landing_page_url || `${frontendBase}/preorder/${creatorSlug}?concept=${(c.name || `concept-${i+1}`).toLowerCase().replace(/[^a-z0-9\-]/g, '-')}`;
+            return `${i + 1}. ${c.name} (${c.pricing || "$29/mo"})\n   • Tagline: ${c.tagline || "Custom software platform"}\n   • Solves: ${c.problem || c.description} (Opportunity Score: ${c.opportunityScore || 95}/100)\n   • Landing Page: ${landingUrl}`;
+          }
         )
         .join("\n\n") +
-      `\n\nWe handle 100% of engineering, hosting, billing, and support under a 50/50 revenue share.\n\nWhich of these concepts feels like the best fit for your audience?\n\nBest regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${selectedCreator.id} | Handle:@${cleanHandle}]`;
+      `\n\nUnder our 50/50 partnership, our engineering team handles 100% of product development, hosting, payment billing, and customer support with zero financial cost to you.\n\nTo move forward, simply reply to this email with your preferred concept number.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${selectedCreator.id} | Handle:@${cleanHandle}]`;
     setCustomPitchSubject(subject);
     setCustomPitchBody(body);
   };
@@ -4142,30 +4157,39 @@ export default function AcquisitionEngine({
           ? creator.productConcepts
           : ensureCreatorConcepts(creator));
 
-    // Ensure all 3 concepts have their exact AI or admin-modified images and properties
+    const frontendBase = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
+    const creatorSlug = (creator.handle || creator.name || 'creator').replace(/^@/, '').toLowerCase().replace(/[^a-z0-9\-]/g, '');
+
+    // Ensure all 3 concepts have their exact AI or admin-modified images, properties, and landing page URLs
     const conceptsToSend = baseConcepts.map((c, i) => {
       const resolvedImg = c.customImageUrl || c.imageUrl || c.image_url || getConceptImageUrl(c, creator.niche);
+      const conceptSlug = (c.name || `concept-${i + 1}`).toLowerCase().replace(/[^a-z0-9\-]/g, '-');
+      const landingPageUrl = c.landingPageUrl || c.landing_page_url || `${frontendBase}/preorder/${creatorSlug}?concept=${conceptSlug}`;
       return {
         ...c,
         imageUrl: resolvedImg,
         image_url: resolvedImg,
         customImageUrl: c.customImageUrl || resolvedImg,
         isModifiedByAdmin: Boolean(c.isModifiedByAdmin || c.customImageUrl),
+        landingPageUrl,
+        landing_page_url: landingPageUrl,
       };
     });
 
     const cleanHandle = (creator.handle || "").replace(/^@/, "").trim();
     const firstName = (creator.name || creator.display_name || "there").split(" ")[0];
-    const pitchSubject = `Top 3 software concepts tailored for @${cleanHandle}`;
+    const pitchSubject = `Software concepts tailored for @${cleanHandle}`;
     const pitchBody =
-      `Hi ${firstName},\n\nFollowing up as promised! Based on our analysis of your ${creator.niche || "channel"} audience on ${creator.platform || "social media"}, here are the top 3 software product concepts we designed for your community:\n\n` +
+      `Hi ${firstName},\n\nFollowing up on our partnership discussion. Based on our analysis of your ${creator.niche || "channel"} audience on ${creator.platform || "social media"}, here are the top 3 software product concepts we designed for your community:\n\n` +
       conceptsToSend
         .map(
           (c, i) =>
-            `${i + 1}. ${c.name} (${c.pricing || "$29/mo"}) — ${c.tagline}\n   • Solves: ${c.problem || c.description} (Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Customized Blueprint]" : ""}`,
+            `${i + 1}. ${c.name} (${c.pricing || "$29/mo"})\n   • Tagline: ${c.tagline || "Custom software platform"}\n   • Solves: ${c.problem || c.description} (Opportunity Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Custom Blueprint]" : ""}\n   • Landing Page: ${c.landingPageUrl}`,
         )
         .join("\n\n") +
-      `\n\nUnder our 50/50 partnership, our engineering team will build and deploy the complete MVP at zero cost to you.\n\nTake a look and let us know which concept you'd be most excited to build and launch with us! To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\nBest regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `\n\nUnder our 50/50 partnership, our engineering team handles 100% of product development, hosting, payment billing, and customer support with zero financial cost to you.\n\n` +
+      `Please review the landing page previews above and let us know which concept you prefer. To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
+      `Best regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     // Use custom pitch only if this is the currently selected creator (user may have edited it)
     const subjectToSend =
@@ -5206,7 +5230,7 @@ export default function AcquisitionEngine({
       const tagline = concept?.tagline || "Tailored software venture";
       const problem = concept?.problem || "Monetizing and streamlining workflows for your community";
 
-      const kickoffSubject = `🚀 Action Required: Choose Your Co-Launch Track for ${prodName} (Full DIY $${cobuilderPassPrice} USD vs Studio-Managed)`;
+      const kickoffSubject = `Action Required: Choose Your Co-Launch Track for ${prodName} (Full DIY $${cobuilderPassPrice} USD vs Studio-Managed)`;
       const kickoffBody = `Hi ${firstName},
 
 Exciting milestone! We have officially finalized the architecture for **${prodName}** and initialized your venture workspace.
@@ -5366,8 +5390,8 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
     const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:3001";
     const magicPortalUrl = `${origin}/portal/${portalSlug}?token=${portalToken}&offer=track_choice`;
 
-    const followUpSubject = `⏰ Reminder: Choose Your Co-Launch Track for ${prodName} ($${cobuilderPassPrice} DIY or Studio-Managed)`;
-    const followUpBody = `Hi ${firstName},\n\nJust following up on the co-launch offer for **${prodName}**!\n\nPlease let us know if you would like to proceed with:\n1. 🚀 Track 1: Do-It-Yourself ProjectOS ($${cobuilderPassPrice} USD one-time fee) with 100% revenue retention & full command control\n2. 🤝 Track 2: Studio-Managed Track (50/50 Revenue Split — Free Upfront)\n\nClick the link below to select your track or complete the $${cobuilderPassPrice} payment:\n${magicPortalUrl}\n\nFeel free to reply directly to this email with any questions!\n\nBest regards,\nCoLaunch Studio Team`;
+    const followUpSubject = `Reminder: Choose Your Co-Launch Track for ${prodName} ($${cobuilderPassPrice} DIY or Studio-Managed)`;
+    const followUpBody = `Hi ${firstName},\n\nFollowing up on the co-launch offer for **${prodName}**.\n\nPlease let us know if you would like to proceed with:\n1. Track 1: Do-It-Yourself ProjectOS ($${cobuilderPassPrice} USD one-time fee) with 100% revenue retention & full command control\n2. Track 2: Studio-Managed Track (50/50 Revenue Split — Free Upfront)\n\nClick the link below to select your track or complete the $${cobuilderPassPrice} payment:\n${magicPortalUrl}\n\nFeel free to reply directly to this email with any questions.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch`;
 
     try {
       const { sendDirectEmail } = await import("../../services/opsApi");
@@ -7657,153 +7681,49 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                         </div>
 
                         {/* BEGIN: EmailBodyContent */}
-                        <main className="px-4 sm:px-6 md:px-12 py-6 sm:py-8 bg-slate-50/50 overflow-y-auto" data-purpose="email-body">
-                          <div className="max-w-2xl mx-auto space-y-5 text-slate-800 leading-relaxed text-[15px]">
+                        <main className="px-4 sm:px-6 md:px-12 py-6 sm:py-8 bg-white overflow-y-auto" data-purpose="email-body">
+                          <div className="max-w-2xl mx-auto space-y-4 text-slate-800 leading-relaxed text-[15px]">
                             <p className="font-normal text-slate-800">
                               Hi {previewFirstName},
                             </p>
                             <p>
-                              I’ve been following your {previewNiche} content on {previewPlatform} and love what you're building with your community! 👋
+                              I have been following your {previewNiche} work on {previewPlatform} and wanted to reach out directly regarding a potential venture partnership.
                             </p>
-
-                            {/* Value Proposition Hero Card */}
-                            <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 md:p-6 shadow-sm" data-purpose="value-proposition-card">
-                              <div className="flex items-center space-x-2 text-indigo-900 font-semibold text-base mb-2">
-                                <span className="font-bold">CoLaunch</span>
-                                <span className="text-amber-500">⚡</span>
-                                <span className="text-slate-400 font-normal">|</span>
-                                <span className="text-slate-700 text-sm font-medium">50/50 Venture Model</span>
-                              </div>
-                              <p className="text-slate-700 text-sm md:text-[15px] leading-relaxed mb-5">
-                                We partner <strong>50/50 with creators</strong> to build custom software tools and monetization apps for their audience. Our team handles 100% of the engineering, hosting, payment setup, and customer support with zero upfront cost to you.
-                              </p>
-
-                              {/* 3-Column Capability Grid */}
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-100">
-                                <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                                  <div className="text-indigo-600 font-semibold text-xs tracking-wider uppercase mb-1">Full Delivery</div>
-                                  <div className="text-slate-800 font-medium text-xs leading-snug">100% Engineering, UI/UX &amp; QA</div>
-                                </div>
-                                <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                                  <div className="text-emerald-600 font-semibold text-xs tracking-wider uppercase mb-1">Zero Risk</div>
-                                  <div className="text-slate-800 font-medium text-xs leading-snug">$0 Upfront Cost &amp; Co-ownership</div>
-                                </div>
-                                <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                                  <div className="text-blue-600 font-semibold text-xs tracking-wider uppercase mb-1">Hands-Off Ops</div>
-                                  <div className="text-slate-800 font-medium text-xs leading-snug">Global Hosting, Billing &amp; 24/7 Support</div>
-                                </div>
-                              </div>
-                            </div>
-
                             <p>
-                              We analyzed your channel and engineered <span className="font-semibold text-slate-900">3 tailored software product concepts</span> for your <span className="inline-flex items-center font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100 text-xs">{previewFollowers} followers</span> that could drive recurring monthly revenue 🚀
+                              I head venture partnerships at CoLaunch. We partner 50/50 with creators to build, deploy, and monetize custom software products for their audience. Our studio covers 100% of software engineering, UI/UX design, cloud infrastructure, and ongoing technical support at zero financial cost to you.
                             </p>
-
-                            {/* Tailored Concepts Section */}
-                            <div className="space-y-3 pt-2" data-purpose="tailored-concepts-list">
-                              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                                Tailored Concepts Engineered for @{previewHandle}
-                              </div>
-
-                              {/* Concept 1 */}
-                              <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs flex items-start space-x-3.5 hover:border-slate-300 transition">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
-                                  01
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <h2 className="text-sm font-semibold text-slate-900 flex items-center flex-wrap gap-2">
-                                    <span>DeepFocus OS</span>
-                                    <span className="text-[11px] font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">SaaS App</span>
-                                  </h2>
-                                  <p className="text-xs text-slate-600 mt-1 leading-normal">
-                                    Digital minimalism &amp; multi-screen time-blocking workspace inspired by your Time-Block Planner methodology.
-                                  </p>
-                                </div>
-                              </div>
-
-                              {/* Concept 2 */}
-                              <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs flex items-start space-x-3.5 hover:border-slate-300 transition">
-                                <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
-                                  02
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <h2 className="text-sm font-semibold text-slate-900 flex items-center flex-wrap gap-2">
-                                    <span>MonkMode Sprint Timer</span>
-                                    <span className="text-[11px] font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Desktop Utility</span>
-                                  </h2>
-                                  <p className="text-xs text-slate-600 mt-1 leading-normal">
-                                    Aggressive distraction blocker &amp; cognitive fatigue tracker designed for deep scholarly focus cycles.
-                                  </p>
-                                </div>
-                              </div>
-
-                              {/* Concept 3 */}
-                              <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-xs flex items-start space-x-3.5 hover:border-slate-300 transition">
-                                <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
-                                  03
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <h2 className="text-sm font-semibold text-slate-900 flex items-center flex-wrap gap-2">
-                                    <span>ScholarArchive</span>
-                                    <span className="text-[11px] font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Knowledge Engine</span>
-                                  </h2>
-                                  <p className="text-xs text-slate-600 mt-1 leading-normal">
-                                    Curated citation, source synthesis, and longform idea graph tool engineered specifically for knowledge workers.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Closing Question */}
-                            <p className="pt-2 font-medium text-slate-900">
-                              Would you be open to taking a look at a brief 3-concept breakdown this week?
+                            <p>
+                              Based on an analysis of your channel, our team has architected 3 tailored software product concepts designed specifically for your community ({previewFollowers} followers) to build a sustainable, recurring software revenue stream.
+                            </p>
+                            <p>
+                              Would you be open to reviewing a short 3-concept breakdown and interactive landing page preview this week?
                             </p>
 
                             {/* Reply Instructions Box */}
                             <div className="p-3.5 bg-slate-50 border border-slate-200/90 rounded-xl space-y-1.5 text-xs text-slate-700">
                               <p className="font-semibold text-slate-900 flex items-center gap-1.5">
                                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-                                <span>To reply, simply shoot back a quick response:</span>
+                                <span>To reply, simply respond directly to this email:</span>
                               </p>
                               <div className="space-y-1.5 pl-3 border-l-2 border-emerald-500/40">
                                 <p>
-                                  • <strong className="text-slate-900 font-semibold">"I'm interested, let's go ahead with the process"</strong> — and I'll send over the 3 custom software concepts and revenue roadmap.
+                                  • <strong className="text-slate-900 font-semibold">"I am interested, let's proceed"</strong> — and I will send over the concepts, revenue roadmap, and live previews.
                                 </p>
                                 <p>
-                                  • Or <strong className="text-slate-900 font-semibold">"I am not interested, sorry"</strong> — and I will immediately close your file with zero follow-ups.
+                                  • Or <strong className="text-slate-900 font-semibold">"Not interested"</strong> — and I will immediately close your file with zero follow-ups.
                                 </p>
                               </div>
                             </div>
 
-                            {/* Call to Action Buttons */}
-                            <div className="pt-1 pb-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3" data-purpose="call-to-action-panel">
-                              <a
-                                href="#deck-preview"
-                                onClick={(e) => e.preventDefault()}
-                                className="inline-flex justify-center items-center px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow-sm transition hover:shadow cursor-pointer"
-                              >
-                                <svg className="w-4 h-4 mr-2 text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
-                                Review 3-Concept Deck (PDF)
-                              </a>
-                              <a
-                                href="#book-chat"
-                                onClick={(e) => e.preventDefault()}
-                                className="inline-flex justify-center items-center px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-semibold shadow-xs transition cursor-pointer"
-                              >
-                                <svg className="w-4 h-4 mr-2 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
-                                Book 15-Min Intro Chat
-                              </a>
-                            </div>
-
                             {/* Quick Response Chips */}
-                            <div className="flex items-center flex-wrap gap-2 text-xs pt-1 pb-4">
+                            <div className="flex items-center flex-wrap gap-2 text-xs pt-1 pb-2">
                               <span className="text-slate-400 font-medium">Quick Reply:</span>
-                              <button className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 transition cursor-pointer font-medium" type="button">
-                                "I'm interested, let's go ahead with the process"
-                              </button>
-                              <button className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 transition cursor-pointer font-medium" type="button">
-                                "I am not interested, sorry"
-                              </button>
+                              <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-medium">
+                                "I am interested, let's proceed"
+                              </span>
+                              <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-medium">
+                                "Not interested"
+                              </span>
                             </div>
 
                             {/* Sign-off text */}
@@ -8909,11 +8829,11 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                   <div className="flex flex-wrap items-center gap-2 pt-0.5">
                     <span className="text-slate-500">Recipient Reply Options:</span>
                     <span className="px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded font-medium text-[11px]">
-                      "I'm interested, let's go ahead with the process"
+                      "I am interested, let's proceed"
                     </span>
                     <span className="text-slate-400">or</span>
                     <span className="px-2 py-0.5 bg-slate-100 border border-slate-200 text-slate-700 rounded font-medium text-[11px]">
-                      "I am not interested, sorry"
+                      "Not interested"
                     </span>
                   </div>
                 </div>
@@ -8953,43 +8873,30 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                     <div className="p-4 rounded-xl bg-slate-50/50 border border-slate-200/70 font-sans text-slate-800 space-y-3 text-[13px] leading-relaxed">
                       <p>Hi {sampleFirst},</p>
                       <p>
-                        I’ve been following your {sampleNiche} on {samplePlatform} and love what you're building with your community! 👋
+                        I have been following your {sampleNiche} work on {samplePlatform} and wanted to reach out directly regarding a potential venture partnership.
                       </p>
-                      <div className="bg-white p-3 rounded-lg border border-slate-200/80 space-y-1.5">
-                        <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-                          <span>CoLaunch</span>
-                          <span className="text-amber-500">⚡</span>
-                          <span className="text-slate-400">|</span>
-                          <span className="text-slate-600 font-medium">50/50 Venture Model</span>
-                        </div>
-                        <p className="text-xs text-slate-600 leading-normal">
-                          We partner 50/50 with creators to build custom software tools and monetization apps for their audience. Our team handles 100% of the engineering, hosting, payment setup, and customer support with zero upfront cost to you.
-                        </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
-                          <span className="bg-slate-50 p-1.5 rounded border border-slate-100 font-medium text-slate-700">• 100% Engineering &amp; QA</span>
-                          <span className="bg-slate-50 p-1.5 rounded border border-slate-100 font-medium text-slate-700">• $0 Upfront Cost (50/50)</span>
-                          <span className="bg-slate-50 p-1.5 rounded border border-slate-100 font-medium text-slate-700">• Hands-Off Global Ops</span>
-                        </div>
-                      </div>
                       <p>
-                        We analyzed your channel and engineered <strong className="text-slate-900">3 tailored software product concepts</strong> for your <span className="px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 font-medium border border-indigo-100 text-xs">{sampleFollowers} followers</span> that could drive recurring monthly revenue 🚀
+                        I head venture partnerships at CoLaunch. We partner 50/50 with creators to build, deploy, and monetize custom software products for their audience. Our studio covers 100% of software engineering, UI/UX design, cloud infrastructure, and ongoing technical support at zero financial cost to you.
+                      </p>
+                      <p>
+                        Based on an analysis of your channel, our team has architected 3 tailored software product concepts designed specifically for your community ({sampleFollowers}) to build a sustainable, recurring software revenue stream.
                       </p>
                       <p className="font-medium text-slate-900">
-                        Would you be open to taking a look at a brief 3-concept breakdown this week?
+                        Would you be open to reviewing a short 3-concept breakdown and interactive landing page preview this week?
                       </p>
 
                       {/* Reply Instructions Box */}
                       <div className="p-3.5 bg-white rounded-lg border-2 border-emerald-500/20 shadow-2xs space-y-1.5">
                         <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                          <span>To reply, simply shoot back a quick response:</span>
+                          <span>To reply, simply respond directly to this email:</span>
                         </div>
                         <div className="space-y-1.5 pl-3 border-l-2 border-emerald-500/50 text-xs">
                           <p>
-                            • <strong className="text-slate-900 font-bold">"I'm interested, let's go ahead with the process"</strong> — and I'll send over the 3 custom software concepts and revenue roadmap.
+                            • <strong className="text-slate-900 font-bold">"I am interested, let's proceed"</strong> — and I will send over the concepts, revenue roadmap, and live previews.
                           </p>
                           <p>
-                            • Or <strong className="text-slate-900 font-bold">"I am not interested, sorry"</strong> — and I will immediately close your file with zero follow-ups.
+                            • Or <strong className="text-slate-900 font-bold">"Not interested"</strong> — and I will immediately close your file with zero follow-ups.
                           </p>
                         </div>
                       </div>
@@ -8997,7 +8904,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                       <div className="pt-2 text-xs text-slate-600">
                         <p>Best regards,</p>
                         <p className="font-bold text-slate-900 mt-0.5">Alex Rivera</p>
-                        <p className="text-slate-500">Head of Venture Partnerships · CoLaunch</p>
+                        <p className="text-slate-500">Head of Venture Partnerships, CoLaunch</p>
                       </div>
                     </div>
                   </div>

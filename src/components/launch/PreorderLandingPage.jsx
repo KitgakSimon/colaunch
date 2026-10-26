@@ -21,12 +21,29 @@ export default function PreorderLandingPage({ slug }) {
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('stripe') // 'stripe' | 'paypal'
 
+  // Read ?concept= query parameter from URL
+  const conceptParam = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('concept') || ''
+    : ''
+
   // Dynamic Selected Concept & Pricing Extraction
-  const selectedConcept = project?.selectedConcept || (
-    Array.isArray(project?.concepts)
-      ? project.concepts.find(c => c.selected) || project.concepts[0]
-      : null
-  )
+  const selectedConcept = (() => {
+    if (!project) return null
+    const conceptsList = Array.isArray(project.concepts) && project.concepts.length > 0
+      ? project.concepts
+      : (Array.isArray(project.productConcepts) && project.productConcepts.length > 0 ? project.productConcepts : [])
+
+    if (conceptParam && conceptsList.length > 0) {
+      const cleanParam = conceptParam.toLowerCase().replace(/[^a-z0-9]/g, '')
+      const matched = conceptsList.find(c => {
+        const cName = (c.name || c.id || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+        return cName.includes(cleanParam) || cleanParam.includes(cName)
+      })
+      if (matched) return matched
+    }
+
+    return project.selectedConcept || (conceptsList.length > 0 ? conceptsList.find(c => c.selected) || conceptsList[0] : null)
+  })()
 
   const productName = project?.productName || selectedConcept?.name || project?.title || 'Software Co-Launch'
   const creatorName = project?.creatorName || project?.creatorHandle || 'Creator Partner'
@@ -161,8 +178,76 @@ export default function PreorderLandingPage({ slug }) {
                 return pSlug === clean || pName === clean || pHandle === clean || pId === slug.toLowerCase()
               })
             }
+            if (slug && !dbProj) {
+              try {
+                const { getCreators } = await import('../../services/opsApi')
+                const allCreators = await getCreators()
+                const cList = Array.isArray(allCreators) ? allCreators : allCreators?.creators || []
+                const clean = slug.toLowerCase().replace(/[^a-z0-9]/g, '')
+                const matchedCreator = cList.find(c => {
+                  const cHandle = (c.handle || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+                  const cName = (c.name || c.display_name || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+                  const cId = (c.id || '').toLowerCase()
+                  return cHandle === clean || cName === clean || cId === slug.toLowerCase()
+                })
+                if (matchedCreator) {
+                  const concepts = matchedCreator.productConcepts || []
+                  const targetConcept = (conceptParam && concepts.find(c => {
+                    const cleanP = conceptParam.toLowerCase().replace(/[^a-z0-9]/g, '')
+                    const cN = (c.name || c.id || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+                    return cN.includes(cleanP) || cleanP.includes(cN)
+                  })) || concepts[0] || null
+
+                  dbProj = {
+                    id: matchedCreator.id,
+                    slug: slug,
+                    creatorId: matchedCreator.id,
+                    creatorName: matchedCreator.name || matchedCreator.display_name || 'Creator Partner',
+                    creatorHandle: matchedCreator.handle,
+                    creatorAvatar: matchedCreator.avatar_url || matchedCreator.avatar,
+                    niche: matchedCreator.niche,
+                    productName: targetConcept?.name || `${matchedCreator.name || 'Creator'} OS`,
+                    productTagline: targetConcept?.tagline || `The automated operating system for ${matchedCreator.niche || 'tech'} professionals`,
+                    selectedConcept: targetConcept,
+                    concepts: concepts,
+                    pricing: targetConcept?.pricing || '$29/mo Starter • $79/mo Pro',
+                    keyFeatures: targetConcept?.keyFeatures || targetConcept?.features || [],
+                    problem: targetConcept?.problem || targetConcept?.description || 'Audience operational friction',
+                    targetAudience: targetConcept?.customer || matchedCreator.niche,
+                  }
+                }
+              } catch (e) {
+                console.warn('[Preorder] Creator fallback lookup error:', e)
+              }
+            }
+
             if (!dbProj && list.length > 0) {
               dbProj = list[0]
+            }
+
+            if (!dbProj && slug) {
+              const formattedCreator = slug.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+              const formattedConcept = conceptParam
+                ? conceptParam.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                : `${formattedCreator} OS`
+
+              dbProj = {
+                id: slug,
+                slug: slug,
+                creatorName: formattedCreator,
+                creatorHandle: slug,
+                productName: formattedConcept,
+                productTagline: `The bespoke software suite built with ${formattedCreator} for high-performing operators.`,
+                pricing: '$29/mo Starter • $79/mo Pro',
+                keyFeatures: [
+                  'Automated workflow execution & audience sync',
+                  'Client milestone tracking & unified inbox',
+                  'Dedicated member portal & automated operations',
+                  'VIP Founding Pass with direct partner onboarding'
+                ],
+                problem: 'Scattered operational tools, unorganized client comms, and manual delivery bottlenecks.',
+                targetAudience: 'Community members, consultants, and creator operators'
+              }
             }
           } catch (e) {
             console.warn('[Preorder] Projects list fallback notice:', e)
