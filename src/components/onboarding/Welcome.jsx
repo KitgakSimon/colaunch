@@ -33,7 +33,14 @@ import {
   RotateCcw,
   Compass,
   Cpu,
-  ChevronUp
+  ChevronUp,
+  Github,
+  Twitter,
+  Youtube,
+  Mail,
+  Globe,
+  Radio,
+  Server
 } from 'lucide-react'
 import CoLaunchLogo from '../ui/CoLaunchLogo'
 import FloatingPolygons, { HeroShallowPolygons } from '../ui/FloatingPolygons'
@@ -301,6 +308,17 @@ export default function Welcome() {
   const { next, goTo, userProfile } = useForge()
   const [openFaq, setOpenFaq] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [footerChannelHandle, setFooterChannelHandle] = useState('')
+
+  const handleFooterChannelSubmit = (e) => {
+    if (e) e.preventDefault()
+    const clean = (footerChannelHandle || '').trim().replace(/^@/, '')
+    if (clean) {
+      window.location.href = `/launch?creator=${encodeURIComponent(clean)}`
+    } else {
+      window.location.href = '/launch'
+    }
+  }
 
   // Interactive Creator Demo State
   const [selectedCreatorDemo, setSelectedCreatorDemo] = useState('mkbhd')
@@ -2475,295 +2493,454 @@ export default function Welcome() {
 
       </section>
 
-      {/* ── CLOSING DARK CTA BANNER (DOT GRID MATRIX) ────────────────────────── */}
-      <section className="pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
-        <div className="p-8 sm:p-14 lg:p-16 rounded-[32px] sm:rounded-[40px] bg-[#0A0F1D] text-white border border-slate-800 text-center relative overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.55)]">
-          
-          {/* Dot Grid Background Pattern */}
-          <div 
-            className="absolute inset-0 pointer-events-none opacity-25"
-            style={{
-              backgroundImage: 'radial-gradient(#94A3B8 1.5px, transparent 1.5px)',
-              backgroundSize: '24px 24px'
-            }}
-          />
+      {/* ── MEMPHIS-INSPIRED BRAND CLOSING CANVAS & REDESIGNED FOOTER ────────── */}
+      <section className="relative w-full bg-[#C8FF3D] text-slate-950 overflow-hidden pt-8 sm:pt-12 select-none">
+        
+        {/* Subtle Ambient Grain & Radiance */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-20"
+          style={{
+            backgroundImage: 'radial-gradient(#0A0F1D 1.2px, transparent 1.2px)',
+            backgroundSize: '20px 20px'
+          }}
+        />
 
-          {/* Radiant Lime & Emerald Ambient Glow Center */}
+        {/* Top Minimal Navigation Strip */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex items-center justify-between relative z-20 pb-2 sm:pb-3">
+          {/* Top Left Monogram Mark */}
           <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full blur-[150px] opacity-[0.30] pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(132, 204, 22, 0.45) 0%, rgba(16, 185, 129, 0.25) 45%, transparent 70%)' }}
-          />
-
-          {/* Soft Deep Indigo Corner Ambient Light */}
-          <div 
-            className="absolute top-0 right-0 w-[450px] h-[350px] rounded-full blur-[130px] opacity-[0.20] pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%)' }}
-          />
-
-          <div className="max-w-3xl mx-auto relative z-10">
-            <span className="text-xs sm:text-sm font-mono uppercase tracking-wider text-lime-400 bg-lime-950/80 border border-lime-500/30 px-4 py-1.5 rounded-full font-bold inline-flex items-center gap-2 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-lime-400" />
-              <span>ZERO-CAPITAL 50/50 PARTNERSHIP</span>
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="cursor-pointer inline-flex items-center gap-2 group"
+            title="CoLaunch Home"
+          >
+            <div className="w-9 h-9 rounded-xl bg-slate-950 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="13" width="7" height="7" rx="1.5" fill="#FFFFFF" />
+                <rect x="3" y="4" width="7" height="7" rx="1.5" fill="#94A3B8" fillOpacity="0.8" />
+                <rect x="12" y="4" width="7" height="7" rx="1.5" fill="#FFFFFF" />
+                <rect x="12" y="13" width="7" height="7" rx="1.5" fill="#C8FF3D" />
+              </svg>
+            </div>
+            <span className="font-display font-black text-xs tracking-widest text-slate-950 uppercase hidden sm:inline-block">
+              COLAUNCH
             </span>
+          </div>
 
-            <h3 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black text-white mt-5 leading-[1.12] tracking-tight">
-              Ready to turn your audience into recurring software income?
-            </h3>
+          {/* Top Right Menu Toggle */}
+          <button
+            type="button"
+            onClick={() => { window.location.href = '/launch' }}
+            className="w-9 h-9 rounded-xl border-2 border-slate-950 flex flex-col items-center justify-center gap-1 hover:bg-slate-950 hover:text-[#C8FF3D] transition-colors group cursor-pointer"
+            title="Menu"
+          >
+            <span className="w-3.5 h-0.5 bg-current rounded-full transition-transform group-hover:scale-x-110" />
+            <span className="w-3.5 h-0.5 bg-current rounded-full transition-transform group-hover:scale-x-110" />
+          </button>
+        </div>
 
-            <p className="mt-4 text-base sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed sm:leading-8 font-normal">
-              We build your custom app in 14 days for free, connect automated Stripe deposits, and split recurring profits 50/50.
-            </p>
+        {/* Main Upper Hero Section */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-1 pb-2 relative z-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+            
+            {/* Left Headline & Action Box */}
+            <div className="lg:col-span-7 text-left space-y-3.5">
+              
+              {/* Reference-Inspired Bold Display Headline */}
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-black text-slate-950 leading-[1.04] tracking-tight">
+                Let&apos;s Make<br />
+                Something Great<br />
+                Together
+              </h2>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              {/* High-Contrast Electric Lime Primary Action Button (Neutral clean shadow, no neon green glow) */}
-              <button
-                type="button"
-                onClick={() => { window.location.href = '/launch' }}
-                className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-9 py-4 rounded-2xl bg-[#84CC16] hover:bg-[#A3E635] text-slate-950 text-base sm:text-lg font-display font-extrabold shadow-md hover:shadow-lg shadow-black/30 hover:shadow-black/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 select-none min-h-[54px]"
-              >
-                <span>Start Engagement</span>
-                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-                {/* Signature Top-Right Accent Beacon Dot */}
-                <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3 pointer-events-none items-center justify-center">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#0A0F1D]" />
+              <p className="text-sm sm:text-base text-slate-900 font-medium max-w-lg leading-relaxed">
+                Turn your audience into recurring software equity. 100% managed engineering, $0 upfront, 50/50 profit split.
+              </p>
+
+              {/* Boxed Action Button (Exact Reference Styling: Rectangular, Dark 2px Border) */}
+              <div className="pt-1 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => { window.location.href = '/launch' }}
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3 border-2 border-slate-950 text-slate-950 font-display font-black text-xs uppercase tracking-widest bg-transparent hover:bg-slate-950 hover:text-[#C8FF3D] transition-all duration-200 cursor-pointer active:scale-95 shadow-sm group"
+                >
+                  <span>TELL US ABOUT IT</span>
+                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <a
+                  href="#creators"
+                  onClick={(e) => scrollToSection(e, 'creators')}
+                  className="inline-flex items-center gap-1.5 px-4 py-3 text-xs font-mono font-bold text-slate-900 hover:text-slate-950 uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  <Play className="w-3 h-3 fill-slate-950 text-slate-950" />
+                  <span>Explore Creator SaaS</span>
+                </a>
+              </div>
+
+              {/* Micro-Trust Tags */}
+              <div className="pt-1 flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px] font-mono font-bold text-slate-900/90">
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-slate-950 stroke-[3]" />
+                  <span>$0 UPFRONT</span>
                 </span>
-              </button>
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-slate-950 stroke-[3]" />
+                  <span>14-DAY PRODUCTION MVP</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-slate-950 stroke-[3]" />
+                  <span>AUTOMATED STRIPE SPLITS</span>
+                </span>
+              </div>
 
-              <a
-                href="#creators"
-                onClick={(e) => scrollToSection(e, 'creators')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-slate-600 text-base font-semibold transition-all active:scale-[0.98] cursor-pointer min-h-[54px]"
-              >
-                <Play className="w-4 h-4 text-lime-400 fill-lime-400" />
-                <span>See Creator Demos</span>
-              </a>
             </div>
 
-            {/* Micro guarantees */}
-            <div className="mt-8 pt-8 border-t border-slate-800/80 flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-sm sm:text-base font-medium text-slate-300">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-lime-400 shrink-0" />
-                <span>$0 Upfront Cost</span>
+            {/* Right Memphis 3D Geometric Floating Canvas (Compact Height) */}
+            <div className="lg:col-span-5 relative h-48 sm:h-56 lg:h-[240px] flex items-center justify-center">
+              
+              {/* 1. Playful 3D Wavy Ribbon / Snake (Top Center) */}
+              <div className="absolute top-0 right-6 sm:right-12 animate-float" style={{ animationDuration: '7s' }}>
+                <svg className="w-36 h-22 sm:w-44 sm:h-28 drop-shadow-lg" viewBox="0 0 220 120" fill="none">
+                  {/* Extruded Depth Side (White with bold dark outline) */}
+                  <path
+                    d="M 25,65 C 50,15 90,15 115,65 C 140,115 180,115 205,65"
+                    stroke="#0A0F1D"
+                    strokeWidth="24"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 25,65 C 50,15 90,15 115,65 C 140,115 180,115 205,65"
+                    stroke="#FFFFFF"
+                    strokeWidth="18"
+                    strokeLinecap="round"
+                  />
+                  {/* Top Ribbon Face */}
+                  <path
+                    d="M 25,50 C 50,0 90,0 115,50 C 140,100 180,100 205,50"
+                    stroke="#0A0F1D"
+                    strokeWidth="24"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 25,50 C 50,0 90,0 115,50 C 140,100 180,100 205,50"
+                    stroke="#0284C7"
+                    strokeWidth="16"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 25,50 C 50,0 90,0 115,50 C 140,100 180,100 205,50"
+                    stroke="#38BDF8"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                    strokeDasharray="14 24"
+                  />
+                </svg>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-lime-400 shrink-0" />
-                <span>14-Day Production Launch</span>
+
+              {/* 2. 3D Isometric Zigzag / Stepped Block (Center Left) */}
+              <div className="absolute top-16 left-2 sm:left-8 animate-float" style={{ animationDuration: '6s', animationDelay: '1s' }}>
+                <svg className="w-26 h-22 sm:w-32 sm:h-28 drop-shadow-xl" viewBox="0 0 160 140" fill="none">
+                  <polygon
+                    points="30,50 60,30 90,50 120,30 140,45 110,65 140,85 110,105 80,85 50,105 30,90 60,70"
+                    fill="#EC4899"
+                    stroke="#0A0F1D"
+                    strokeWidth="4"
+                    strokeLinejoin="round"
+                  />
+                  <polygon
+                    points="30,35 60,15 90,35 120,15 140,30 110,50 140,70 110,90 80,70 50,90 30,75 60,55"
+                    fill="#0A0F1D"
+                    stroke="#0A0F1D"
+                    strokeWidth="4"
+                    strokeLinejoin="round"
+                  />
+                  <polygon
+                    points="30,35 50,90 30,75"
+                    fill="#10B981"
+                    stroke="#0A0F1D"
+                    strokeWidth="3"
+                  />
+                </svg>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-lime-400 shrink-0" />
-                <span>50/50 Automatic Stripe Splits</span>
+
+              {/* 3. 3D Pyramid / Prism (Right Center) */}
+              <div className="absolute top-8 right-0 sm:right-4 animate-float" style={{ animationDuration: '8s', animationDelay: '2s' }}>
+                <svg className="w-22 h-26 sm:w-28 sm:h-32 drop-shadow-xl" viewBox="0 0 140 160" fill="none">
+                  <ellipse cx="70" cy="145" rx="45" ry="10" fill="rgba(0,0,0,0.18)" />
+                  <polygon
+                    points="70,20 120,130 70,140"
+                    fill="#0A0F1D"
+                    stroke="#0A0F1D"
+                    strokeWidth="4"
+                    strokeLinejoin="round"
+                  />
+                  <polygon
+                    points="70,20 20,130 70,140"
+                    fill="#F472B6"
+                    stroke="#0A0F1D"
+                    strokeWidth="4"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx="70" cy="20" r="3" fill="#FFFFFF" />
+                </svg>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-lime-400 shrink-0" />
-                <span>You Retain 100% Brand Ownership</span>
+
+              {/* 4. Pennant Flag / Stand */}
+              <div className="absolute bottom-2 right-20 sm:right-28 animate-float" style={{ animationDuration: '5.5s', animationDelay: '1.5s' }}>
+                <svg className="w-16 h-18 sm:w-20 sm:h-22" viewBox="0 0 100 120" fill="none">
+                  <line x1="50" y1="20" x2="50" y2="105" stroke="#0A0F1D" strokeWidth="4" strokeLinecap="round" />
+                  <line x1="30" y1="105" x2="70" y2="105" stroke="#0A0F1D" strokeWidth="4" strokeLinecap="round" />
+                  <path
+                    d="M 50,25 Q 75,35 85,60 L 50,60 Z"
+                    fill="#0A0F1D"
+                    stroke="#0A0F1D"
+                    strokeWidth="3"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
+
+              {/* Floating Accents */}
+              <div className="absolute top-2 right-10 w-5 h-5 rounded-full bg-white shadow-md" />
+              <div className="absolute bottom-8 right-6 w-6 h-6 rounded-full border-3 border-white shadow-sm" />
+              <div className="absolute top-24 right-28 w-3.5 h-3.5 rounded-full bg-slate-950" />
+              <div className="absolute top-8 left-20 w-4 h-4 rounded-full border-2 border-slate-950" />
+              <div className="absolute bottom-16 left-6 w-4 h-1.5 rounded-full bg-cyan-400 rotate-45 shadow-xs" />
+              <div className="absolute top-6 right-24 w-3.5 h-1.5 rounded-full bg-pink-400 -rotate-12" />
+
             </div>
 
           </div>
         </div>
+
+        {/* ── COMPACT ASYMMETRIC WAVE SEPARATOR (SNUG TRANSITION) ── */}
+        <div className="w-full overflow-hidden leading-none relative -mb-1 pointer-events-none">
+          <svg
+            viewBox="0 0 1440 80"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-10 sm:h-14 lg:h-16 block text-[#070B14]"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M 0,35 C 300,55 520,48 780,25 C 1040,6 1260,12 1440,18 L 1440,80 L 0,80 Z"
+              fill="#070B14"
+            />
+          </svg>
+        </div>
+
       </section>
 
-      {/* ── PREMIUM MULTI-COLUMN DARK FOOTER ───────────────────────────────── */}
-      <footer className="bg-[#070B14] text-slate-400 border-t border-slate-800/80 pt-16 pb-12 relative overflow-hidden">
+      {/* ── LOWER CANVAS: REDESIGNED COLAUNCH FOOTER (DEEP OBSIDIAN CANVAS) ─────── */}
+      <footer className="bg-[#070B14] text-slate-400 pt-3 sm:pt-5 pb-8 relative overflow-hidden text-left">
         
-        {/* Subtle dot grid overlay in footer */}
+        {/* Subtle Ambient Matrix Grid */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-15"
+          className="absolute inset-0 pointer-events-none opacity-10"
           style={{
             backgroundImage: 'radial-gradient(#94A3B8 1px, transparent 1px)',
             backgroundSize: '24px 24px'
           }}
         />
 
-        {/* Ambient top light */}
-        <div 
-          className="absolute -top-24 left-1/2 -translate-x-1/2 w-[800px] h-[150px] rounded-full blur-[100px] opacity-[0.12] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%)' }}
-        />
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          {/* Main 4-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-slate-800/80">
+          {/* Main Footer Directory Columns with Vertical Divider Lines */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-0 pb-8 border-b border-slate-800/80 items-start">
             
-            {/* Col 1 & 2: Brand Identity & Telemetry */}
-            <div className="lg:col-span-2 space-y-5 text-left">
+            {/* ── COLUMN 1: BRAND LOGO + DESCRIPTION + LIME FRAMED CONTACT US BUTTON (5 COLS) ── */}
+            <div className="md:col-span-5 pr-0 md:pr-10 space-y-4">
+              
+              {/* Brand Logo */}
               <div 
-                className="cursor-pointer inline-block"
+                className="cursor-pointer inline-flex items-center gap-3 group"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                title="CoLaunch Home"
               >
-                <CoLaunchLogo size={22} showText={true} theme="dark" />
+                <CoLaunchLogo size={26} showText={true} theme="dark" />
               </div>
 
-              <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
-                The zero-capital venture studio co-founding software businesses with elite digital creators. We design, code, host, and split profits 50/50.
+              {/* Description Under Logo */}
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
+                The premier zero-capital venture studio co-founding software businesses with top digital creators. We design, code, host, and split net profits 50/50.
               </p>
 
-              {/* Real-time Telemetry & Cohort Badge */}
-              <div className="space-y-2 pt-2">
-                <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-xs font-mono">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                  <span className="text-slate-300 font-semibold">ALL SYSTEMS OPERATIONAL</span>
-                  <span className="text-slate-600">·</span>
-                  <span className="text-slate-400">99.99% Uptime</span>
-                </div>
-                <div className="text-xs font-mono text-emerald-400/90 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>Next Intake: 3 of 5 studio partner slots filled this month</span>
-                </div>
+              {/* Framed Button with Electric Lime Border (Exact Homage to Reference Yellow Border) */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => { window.location.href = '/launch' }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-2.5 border-2 border-[#C8FF3D] text-[#C8FF3D] font-display font-black text-xs uppercase tracking-widest bg-transparent hover:bg-[#C8FF3D] hover:text-slate-950 transition-all duration-200 cursor-pointer active:scale-95 shadow-sm group"
+                >
+                  <span>CONTACT US</span>
+                </button>
               </div>
+
             </div>
 
-            {/* Col 3: Studio Platform Navigation */}
-            <div className="text-left space-y-4">
-              <h5 className="font-mono text-xs uppercase tracking-wider text-slate-200 font-bold">
-                PLATFORM
-              </h5>
-              <ul className="space-y-2.5 text-sm font-medium">
+            {/* ── COLUMN 2: 4 CLEAN NAVIGATION LINKS (4 COLS) ── */}
+            <div className="md:col-span-4 border-t md:border-t-0 md:border-l border-slate-700/60 pt-6 md:pt-0 pl-0 md:pl-10 lg:pl-14 space-y-3">
+              <ul className="space-y-3 font-display font-bold text-xs sm:text-sm tracking-wider uppercase text-slate-300">
+                <li>
+                  <a 
+                    href="#" 
+                    onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                    className="hover:text-[#C8FF3D] transition-colors cursor-pointer block"
+                  >
+                    HOME
+                  </a>
+                </li>
                 <li>
                   <a 
                     href="#creators" 
                     onClick={(e) => scrollToSection(e, 'creators')}
-                    className="hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1.5"
+                    className="hover:text-[#C8FF3D] transition-colors cursor-pointer block"
                   >
-                    <span>Creators Roster</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    CLIENT WORK
                   </a>
                 </li>
                 <li>
                   <a 
                     href="#workflow" 
                     onClick={(e) => scrollToSection(e, 'workflow')}
-                    className="hover:text-white transition-colors cursor-pointer"
+                    className="hover:text-[#C8FF3D] transition-colors cursor-pointer block"
                   >
-                    14-Day Workflow
+                    OUR PRODUCTS
                   </a>
                 </li>
                 <li>
                   <a 
                     href="#reviews" 
                     onClick={(e) => scrollToSection(e, 'reviews')}
-                    className="hover:text-white transition-colors cursor-pointer"
+                    className="hover:text-[#C8FF3D] transition-colors cursor-pointer block"
                   >
-                    Reviews & Testimonials
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="#steps" 
-                    onClick={(e) => scrollToSection(e, 'steps')}
-                    className="hover:text-white transition-colors cursor-pointer"
-                  >
-                    Step-by-Step Build
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="#calculator" 
-                    onClick={(e) => scrollToSection(e, 'calculator')}
-                    className="hover:text-white transition-colors cursor-pointer"
-                  >
-                    Revenue Calculator
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="#faq" 
-                    onClick={(e) => scrollToSection(e, 'faq')}
-                    className="hover:text-white transition-colors cursor-pointer"
-                  >
-                    Common FAQs
+                    ABOUT
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Col 4: Venture Studio Model Guarantees */}
-            <div className="text-left space-y-4">
-              <h5 className="font-mono text-xs uppercase tracking-wider text-slate-200 font-bold">
-                VENTURE MODEL
-              </h5>
-              <ul className="space-y-2.5 text-sm">
-                <li className="flex items-center gap-2 text-slate-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>$0 Upfront Engineering</span>
-                </li>
-                <li className="flex items-center gap-2 text-slate-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>50/50 Automatic Stripe Splits</span>
-                </li>
-                <li className="flex items-center gap-2 text-slate-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>14-Day Turnaround</span>
-                </li>
-                <li className="flex items-center gap-2 text-slate-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>24/7 Managed Infrastructure</span>
-                </li>
-                <li className="flex items-center gap-2 text-slate-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>You Retain 100% Fan Trust</span>
-                </li>
-                <li className="flex items-center gap-2 text-slate-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Complete Milestone Approval</span>
-                </li>
-              </ul>
-            </div>
+            {/* ── COLUMN 3: HORIZONTAL SOCIAL ICONS (3 COLS) ── */}
+            <div className="md:col-span-3 border-t md:border-t-0 md:border-l border-slate-700/60 pt-6 md:pt-0 pl-0 md:pl-10 lg:pl-12 flex flex-col justify-between space-y-4">
+              
+              <div className="space-y-2.5">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold block">
+                  FOLLOW US
+                </span>
 
-            {/* Col 5: Apply as Co-Founder Card */}
-            <div className="text-left space-y-4">
-              <h5 className="font-mono text-xs uppercase tracking-wider text-slate-200 font-bold">
-                PARTNER WITH US
-              </h5>
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-lime-400 shrink-0" />
-                  <span className="text-xs font-mono font-bold text-slate-200 uppercase">Co-Founder Intake</span>
-                </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Have 50k+ followers and repeat comment requests? See what custom SaaS your audience wants.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => { window.location.href = '/launch' }}
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-400 hover:to-lime-400 text-slate-950 font-display font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm shadow-emerald-500/20 active:scale-95"
-                >
-                  <span>Start Engagement</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-                <div className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5 justify-center pt-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>256-bit SSL · Stripe Verified</span>
+                {/* Horizontal Clean Social Icons */}
+                <div className="flex items-center gap-2.5">
+                  <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer hover:scale-105"
+                    title="CoLaunch on X"
+                  >
+                    <Twitter className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="https://youtube.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer hover:scale-105"
+                    title="CoLaunch on YouTube"
+                  >
+                    <Youtube className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="https://github.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer hover:scale-105"
+                    title="CoLaunch on GitHub"
+                  >
+                    <Github className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="mailto:partnerships@colaunch.com"
+                    className="w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer hover:scale-105"
+                    title="Direct Executive Email Line"
+                  >
+                    <Mail className="w-4 h-4" />
+                  </a>
                 </div>
               </div>
+
+              {/* Verified Stripe Partner Badge (Exact Reference Placement: Bottom Right Pill) */}
+              <div className="pt-1">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0B1222] border border-slate-800 shadow-sm text-[10px] font-mono text-slate-300">
+                  <div className="w-3.5 h-3.5 rounded bg-[#635BFF] flex items-center justify-center text-white font-bold text-[9px] shrink-0">
+                    S
+                  </div>
+                  <span className="font-bold tracking-tight">STRIPE VERIFIED</span>
+                </div>
+              </div>
+
             </div>
 
           </div>
 
-          {/* Bottom Bar */}
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <span>© {new Date().getFullYear()} COLAUNCH STUDIO INC.</span>
+          {/* ── BOTTOM LEGAL, TRUST & BACK TO TOP BAR ── */}
+          <div className="pt-4 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+            
+            {/* Copyright & Core Model */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5">
+              <span className="text-slate-300 font-bold">© {new Date().getFullYear()} COLAUNCH STUDIO INC.</span>
               <span>·</span>
               <span>ZERO CAPITAL CO-FOUNDERS</span>
               <span>·</span>
-              <span className="text-emerald-400/90 font-medium">STRIPE VERIFIED PARTNER</span>
+              <span className="text-emerald-400/90 font-medium flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>50/50 AUTOMATED REVENUE SPLIT</span>
+              </span>
             </div>
 
+            {/* Legal & Compliance Links */}
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-slate-400">
+              <a 
+                href="#workflow" 
+                onClick={(e) => scrollToSection(e, 'workflow')} 
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                Terms of Co-Founding
+              </a>
+              <a 
+                href="#faq" 
+                onClick={(e) => scrollToSection(e, 'faq')} 
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                Mutual IP Spec
+              </a>
+              <a 
+                href="/portal" 
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                Creator Privacy
+              </a>
+              <a 
+                href="mailto:partnerships@colaunch.com" 
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                Security & Inbound
+              </a>
+            </div>
+
+            {/* Back to Top Interactive Button */}
             <button
               type="button"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors cursor-pointer py-1 px-2.5 rounded-lg hover:bg-slate-900 border border-transparent hover:border-slate-800"
+              className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-all cursor-pointer py-2 px-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 active:scale-95 group shadow-sm shrink-0"
               title="Scroll back to top"
             >
-              <span>Back to Top</span>
-              <ChevronUp className="w-3.5 h-3.5" />
+              <span className="text-xs font-mono font-bold">BACK TO TOP</span>
+              <ChevronUp className="w-3.5 h-3.5 text-[#C8FF3D] group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </div>
 
         </div>
       </footer>
+
 
       {/* ── INTERACTIVE CREATOR DEMO SANDBOX MODAL ───────────────────────── */}
       {demoModalOpen && (() => {
