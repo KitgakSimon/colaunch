@@ -5,7 +5,6 @@ import {
   Search,
   Send,
   MessageSquare,
-  Sparkles,
   CheckCircle2,
   XCircle,
   Eye,
@@ -569,444 +568,17 @@ export default function AcquisitionEngine({
   const [loadingCreatorsFromDb, setLoadingCreatorsFromDb] = useState(
     !(initialCreators && Array.isArray(initialCreators) && initialCreators.length > 0)
   );
-  const FALLBACK_DEFAULT_CREATORS = [
-    {
-      id: "creator_coachly",
-      handle: "CoachlyHQ",
-      name: "Coachly",
-      display_name: "Coachly",
-      platform: "YouTube",
-      avatar_url: "https://ui-avatars.com/api/?name=Coachly&background=16A34A&color=fff&bold=true",
-      brand_color: "#16A34A",
-      followerStr: "380K",
-      follower_count: 380000,
-      niche: "Tech & Coaching",
-      status: "interested",
-      bio: "Connecting ambitious practitioners with elite 1-on-1 industry coaches across design, engineering, and product.",
-      hasAiConcepts: true,
-      productConcepts: [
-        {
-          id: "p1",
-          name: "Coachly OS",
-          tagline: "The all-in-one operating system for elite mentors & coaches",
-          description: "Unified client booking, video session management, interactive whiteboards, and recurring client retainers.",
-          brandColor: "#16A34A",
-          demographicAlignment: "24-44 Yrs • High-income consultants, design leads & software engineers",
-          problem: "Coaches struggle with fragmented Calendly/Zoom/Stripe setups and manual payment chasing.",
-          customer: "Independent tech coaches, design mentors, and executive advisors",
-          keyFeatures: [
-            "Automated Client Booking & Scheduling",
-            "Interactive Whiteboard & Notes Vault",
-            "Client Milestone & Action Item Tracker",
-            "Instant Stripe Payouts & Subscriptions"
-          ],
-          audienceEvidence: "Over 800+ practitioners waiting on early onboarding waitlists.",
-          pricing: "$29/mo Starter • $79/mo Pro",
-          revenueModel: "SaaS Subscription • 50/50 Revenue Share • Projected $28.4K MRR",
-          competition: "Generic Calendly vs. purpose-built mentor OS",
-          mvpDifficulty: "Low (2 weeks)",
-          opportunityScore: 97,
-          mockupType: "saas_os",
-          mockup: {
-            appUrl: "coachly.app",
-            primaryStat: "$28.4K MRR",
-            primaryMetric: "$28.4K MRR",
-            activeMetric: "1,240 Active",
-            efficiencyMetric: "96%",
-            accentColor: "emerald"
-          }
-        },
-        {
-          id: "p2",
-          name: "Coachly Copilot AI",
-          tagline: "AI-powered client feedback and portfolio diagnostic assistant",
-          description: "An intelligent copilot that pre-screens mentee deliverables, generates actionable critique rubrics, and runs mock interviews.",
-          brandColor: "#0284C7",
-          demographicAlignment: "22-38 Yrs • Career changers and tech job seekers",
-          problem: "Mentors spend hours repeating basic portfolio audits and resume teardowns.",
-          customer: "Career coaches, bootcamp grads, and junior/mid tech talent",
-          keyFeatures: [
-            "Instant Portfolio & Resume Diagnostic",
-            "AI Mock Interview Simulator",
-            "Personalized Skill Gap Roadmaps",
-            "Automated Follow-Up Action Plans"
-          ],
-          audienceEvidence: "High demand for fast, automated pre-session feedback.",
-          pricing: "$39/mo Creator • $99/mo Studio",
-          revenueModel: "Tiered SaaS • 50/50 Revenue Share • Projected $34.2K MRR",
-          competition: "ChatGPT generic prompts vs. industry-vetted critique criteria",
-          mvpDifficulty: "Medium (3 weeks)",
-          opportunityScore: 94,
-          mockupType: "ai_copilot",
-          mockup: {
-            appUrl: "coachly.ai",
-            primaryStat: "850+ Active Students",
-            primaryMetric: "$34.2K MRR",
-            activeMetric: "850 Active",
-            efficiencyMetric: "98%",
-            accentColor: "cyan"
-          }
-        },
-        {
-          id: "p3",
-          name: "Coachly VIP Mastermind",
-          tagline: "Exclusive deal desk, client mastermind, and contract vault",
-          description: "A private high-signal community for top-earning consultants with weekly deal reviews and premium templates.",
-          brandColor: "#D97706",
-          demographicAlignment: "26-50 Yrs • Established practitioners scaling to $20k+/mo",
-          problem: "Senior coaches lack a trusted peer network for pricing negotiations and client referrals.",
-          customer: "Six-figure consultants and executive coaches",
-          keyFeatures: [
-            "Weekly Live Deal Desk & Pricing Teardowns",
-            "High-Ticket Proposal & Contract Templates",
-            "Verified Peer Referral Network",
-            "Private Mastermind Roundtables"
-          ],
-          audienceEvidence: "Proven willingness to pay premium membership fees for high-ticket client referrals.",
-          pricing: "$49/mo Membership • $149/mo VIP Access",
-          revenueModel: "Recurring Membership • 50/50 Revenue Share • Projected $42.0K MRR",
-          competition: "Slack groups vs. curated high-signal deal desk",
-          mvpDifficulty: "Low (1 week)",
-          opportunityScore: 98,
-          mockupType: "knowledge_hub",
-          mockup: {
-            appUrl: "coachlyvault.com",
-            primaryStat: "310 Founding Members",
-            primaryMetric: "$42.0K MRR",
-            activeMetric: "310 Active",
-            efficiencyMetric: "94%",
-            accentColor: "amber"
-          }
-        }
-      ],
-      audienceIntelligence: {
-        topContent: {
-          headline: "High engagement on tech mentorship, career roadmaps, and portfolio reviews",
-          badge: "Top 5% Engagement",
-          metricLabel: "4.2x higher comment density on practical career advice breakdowns"
-        },
-        recurringQuestions: {
-          quote: "How can I book personalized 1-on-1 feedback without paying $500/hr?",
-          badge: "Workflow Automation",
-          metricLabel: "Over 600+ recurring community questions asking for structured mentorship"
-        },
-        painPoints: {
-          description: "Audience struggles with fragmented booking tools, generic course materials, and lack of accountability.",
-          badge: "Critical Friction",
-          communityLabel: "89% of surveyed practitioners want direct, vetted feedback"
-        },
-        demographics: {
-          description: "Predominantly 24-42 year-old ambitious tech practitioners and design leads with high purchasing power.",
-          badge: "High Buying Intent",
-          purchasingPower: "Tier 1 US/UK/EU audience with strong personal development budget"
-        },
-        monetization: {
-          description: "Currently monetizing via ad revenue and occasional sponsorships — missing recurring software MRR.",
-          badge: "Uncapped SaaS MRR",
-          recommendation: "A dedicated SaaS platform can easily generate $25k-$80k monthly recurring revenue."
-        },
-        competitors: {
-          description: "Generic booking tools exist but lack dedicated portfolio review tools and brand loyalty.",
-          badge: "Strong Moat",
-          moat: "Direct trust with 380K followers creates immediate day-1 customer acquisition."
-        }
-      }
-    },
-    {
-      id: "creator_study100",
-      handle: "study100",
-      name: "study100",
-      display_name: "study100",
-      platform: "YouTube",
-      avatar_url: "https://ui-avatars.com/api/?name=study100&background=4F46E5&color=fff&bold=true",
-      brand_color: "#4F46E5",
-      followerStr: "520K",
-      follower_count: 520000,
-      niche: "Education & AI",
-      status: "interested",
-      bio: "Turning complex academic syllabi into adaptive AI drills, personalized diagnostic tests, and mastery score paths.",
-      hasAiConcepts: true,
-      productConcepts: [
-        {
-          id: "p1",
-          name: "study100 Tutor OS",
-          tagline: "The AI tutor that actually gets you the score",
-          description: "An adaptive exam preparation operating system that converts complex curriculum into interactive daily practice.",
-          brandColor: "#16A34A",
-          demographicAlignment: "18-32 Yrs • High-intent students and exam candidates",
-          problem: "Students waste hours on generic textbooks without knowing their actual weak spots.",
-          customer: "Standardized test takers, university students, and professional certification candidates",
-          keyFeatures: [
-            "Adaptive Practice Question Generator",
-            "Instant Step-by-Step AI Explanations",
-            "Real-Time Exam Score Prediction",
-            "Personalized Daily Study Roadmap"
-          ],
-          audienceEvidence: "Over 1,200+ comments asking for study100's personal revision notes and flashcards.",
-          pricing: "$19/mo Starter • $49/mo Pro",
-          revenueModel: "SaaS Subscription • 50/50 Revenue Share • Projected $24.8K MRR",
-          competition: "Quizlet / Khan Academy (generic) vs. adaptive exam-targeted mastery",
-          mvpDifficulty: "Low (2 weeks)",
-          opportunityScore: 96,
-          mockupType: "ai_copilot",
-          mockup: {
-            appUrl: "study100.ai",
-            primaryStat: "1,850 Active Students",
-            primaryMetric: "$24.8K MRR",
-            activeMetric: "1,850 Active",
-            efficiencyMetric: "97%",
-            accentColor: "emerald"
-          }
-        },
-        {
-          id: "p2",
-          name: "study100 Exam Simulator",
-          tagline: "Full-length timed diagnostic exam engine with AI scoring",
-          description: "Simulate exact test-day conditions with automated grading and instant diagnostic teardowns.",
-          brandColor: "#0284C7",
-          demographicAlignment: "20-35 Yrs • Professional certification candidates",
-          problem: "Practice exams don't provide instant diagnostic explanations for mistakes.",
-          customer: "High-stakes certification candidates (MCAT, LSAT, CPA, AWS)",
-          keyFeatures: [
-            "Full-Length Timed Test Simulator",
-            "Automated Weak-Point Heatmap",
-            "Targeted Drill Generation",
-            "Detailed Performance Benchmark"
-          ],
-          audienceEvidence: "High conversion on timed practice mock exams.",
-          pricing: "$29/mo Candidate • $79/mo Mastery",
-          revenueModel: "Tiered SaaS • 50/50 Revenue Share • Projected $31.5K MRR",
-          competition: "Static PDFs vs. interactive dynamic simulator",
-          mvpDifficulty: "Medium (3 weeks)",
-          opportunityScore: 93,
-          mockupType: "saas_os",
-          mockup: {
-            appUrl: "study100exam.app",
-            primaryStat: "$31.5K MRR",
-            primaryMetric: "$31.5K MRR",
-            activeMetric: "920 Active",
-            efficiencyMetric: "95%",
-            accentColor: "cyan"
-          }
-        },
-        {
-          id: "p3",
-          name: "study100 Honors Club",
-          tagline: "Private accountability cohorts and top-scorer study rooms",
-          description: "Virtual silent study rooms, live weekly Q&As with top scorers, and curated revision cheat sheets.",
-          brandColor: "#D97706",
-          demographicAlignment: "18-30 Yrs • Dedicated high-achieving students",
-          problem: "Studying in isolation causes procrastination and lack of consistency.",
-          customer: "Competitive applicants and high-honors students",
-          keyFeatures: [
-            "24/7 Virtual Silent Study Rooms",
-            "Weekly Live Q&A with 99th-Percentile Scorers",
-            "Exclusive Master Revision Cheat Sheets",
-            "Peer Accountability Matching"
-          ],
-          audienceEvidence: "Discord and study stream viewers requesting dedicated private study groups.",
-          pricing: "$39/mo Membership • $119 One-Time Access",
-          revenueModel: "Recurring Membership • 50/50 Revenue Share • Projected $38.4K MRR",
-          competition: "Free forums vs. curated high-discipline study community",
-          mvpDifficulty: "Low (1 week)",
-          opportunityScore: 97,
-          mockupType: "knowledge_hub",
-          mockup: {
-            appUrl: "study100club.com",
-            primaryStat: "540 Active Members",
-            primaryMetric: "$38.4K MRR",
-            activeMetric: "540 Active",
-            efficiencyMetric: "93%",
-            accentColor: "amber"
-          }
-        }
-      ],
-      audienceIntelligence: {
-        topContent: {
-          headline: "High engagement on exam revision techniques, spaced repetition, and study schedules",
-          badge: "Top 3% Engagement",
-          metricLabel: "5.1x higher replay rate on exam walkthroughs and formula breakdowns"
-        },
-        recurringQuestions: {
-          quote: "How do you study 6 hours without burning out or forgetting the syllabus?",
-          badge: "Study Efficiency",
-          metricLabel: "Over 850+ recurring student questions asking for study schedules"
-        },
-        painPoints: {
-          description: "Students are overwhelmed by dense syllabi and lack personalized diagnostic practice.",
-          badge: "Exam Anxiety",
-          communityLabel: "92% of surveyed students want adaptive AI practice questions"
-        },
-        demographics: {
-          description: "18-32 year-old ambitious students, medical/law aspirants, and tech cert candidates.",
-          badge: "High Motivation",
-          purchasingPower: "High willingness to invest in test preparation software"
-        },
-        monetization: {
-          description: "Currently monetizing via YouTube AdSense — missing massive recurring EdTech SaaS revenue.",
-          badge: "Uncapped SaaS MRR",
-          recommendation: "An adaptive EdTech SaaS tool can easily generate $20k-$75k monthly recurring revenue."
-        },
-        competitors: {
-          description: "Generic flashcard apps lack syllabus alignment and AI diagnostic score modeling.",
-          badge: "Strong Moat",
-          moat: "520K dedicated students trust study100's proven scoring methodology."
-        }
-      }
-    },
-    {
-      id: "creator_puppyborrow",
-      handle: "puppyborrow",
-      name: "Puppy Borrow",
-      display_name: "Puppy Borrow",
-      platform: "YouTube",
-      avatar_url: "https://ui-avatars.com/api/?name=Puppy+Borrow&background=D97706&color=fff&bold=true",
-      brand_color: "#D97706",
-      followerStr: "290K",
-      follower_count: 290000,
-      niche: "Pets & Community",
-      status: "interested",
-      bio: "Connecting dog owners with vetted local dog lovers for walks, weekends, happy moments, and trusted care.",
-      hasAiConcepts: true,
-      productConcepts: [
-        {
-          id: "p1",
-          name: "Puppy Borrow Care Club",
-          tagline: "More tails wagging. More hearts happy.",
-          description: "A trusted local community platform connecting dog owners with verified neighborhood dog lovers for walks, playdates, and care.",
-          brandColor: "#D97706",
-          demographicAlignment: "25-55 Yrs • Dog owners and pet enthusiasts",
-          problem: "Pet owners struggle with expensive kennels and untrusted boarding options.",
-          customer: "Urban dog owners and local pet lovers who cannot own a dog full-time",
-          keyFeatures: [
-            "Verified Identity & Background Checks",
-            "GPS Walk Tracking & Photo Updates",
-            "24/7 Veterinary Emergency Hotline",
-            "Automated Care Scheduling & Messaging"
-          ],
-          audienceEvidence: "Over 1,400+ comments expressing love for local borrowing and trusted pet care.",
-          pricing: "$19/mo Starter • $49/mo Family Care",
-          revenueModel: "Community Subscription • 50/50 Revenue Share • Projected $26.5K MRR",
-          competition: "Expensive commercial kennels vs. warm community matching",
-          mvpDifficulty: "Low (2 weeks)",
-          opportunityScore: 98,
-          mockupType: "knowledge_hub",
-          mockup: {
-            appUrl: "puppyborrow.com",
-            primaryStat: "1,200+ Happy Matches",
-            primaryMetric: "$26.5K MRR",
-            activeMetric: "1,240 Active",
-            efficiencyMetric: "96%",
-            accentColor: "amber"
-          }
-        },
-        {
-          id: "p2",
-          name: "Puppy Borrow Sitter OS",
-          tagline: "The all-in-one management tool for professional pet sitters",
-          description: "A streamlined operating system for independent sitters with automated client bookings, insurance, and billing.",
-          brandColor: "#16A34A",
-          demographicAlignment: "20-45 Yrs • Independent sitters and dog walkers",
-          problem: "Sitters manage clients through messy SMS threads and untracked cash payments.",
-          customer: "Part-time and full-time dog walkers and local sitters",
-          keyFeatures: [
-            "1-Click Sitter Calendar & Booking",
-            "Automated Invoicing & Direct Deposit",
-            "Client Care Log & Medical Instructions",
-            "Built-In Liability Protection"
-          ],
-          audienceEvidence: "Sitters asking for an organized way to handle recurring neighborhood clients.",
-          pricing: "$29/mo Sitter • $69/mo Agency",
-          revenueModel: "SaaS Subscription • 50/50 Revenue Share • Projected $21.8K MRR",
-          competition: "Rover high take-rates (20%+) vs. our flat low-fee tool",
-          mvpDifficulty: "Low (2 weeks)",
-          opportunityScore: 94,
-          mockupType: "saas_os",
-          mockup: {
-            appUrl: "sitteros.app",
-            primaryStat: "$21.8K MRR",
-            primaryMetric: "$21.8K MRR",
-            activeMetric: "680 Active",
-            efficiencyMetric: "95%",
-            accentColor: "emerald"
-          }
-        },
-        {
-          id: "p3",
-          name: "Puppy Health Copilot",
-          tagline: "AI-assisted pet wellness tracker and nutrition advisor",
-          description: "An intelligent pet health copilot that tracks dietary allergies, medication reminders, and behavioral logs.",
-          brandColor: "#0284C7",
-          demographicAlignment: "22-48 Yrs • Health-conscious pet owners",
-          problem: "Pet owners forget vaccine schedules and struggle with confusing nutritional labels.",
-          customer: "Devoted pet parents seeking personalized health guidance",
-          keyFeatures: [
-            "Nutritional Ingredient Scanner & Advisor",
-            "Automated Vaccine & Medication Alerts",
-            "Behavioral & Weight Trend Tracker",
-            "Vet-Approved First-Aid Guidance"
-          ],
-          audienceEvidence: "High engagement on dog nutrition, training, and care videos.",
-          pricing: "$15/mo Essential • $39/mo Premium Care",
-          revenueModel: "Tiered SaaS • 50/50 Revenue Share • Projected $29.4K MRR",
-          competition: "Generic Google searches vs. instant personalized pet copilot",
-          mvpDifficulty: "Medium (3 weeks)",
-          opportunityScore: 92,
-          mockupType: "ai_copilot",
-          mockup: {
-            appUrl: "puppyhealth.ai",
-            primaryStat: "950+ Active Pets",
-            primaryMetric: "$29.4K MRR",
-            activeMetric: "950 Active",
-            efficiencyMetric: "97%",
-            accentColor: "cyan"
-          }
-        }
-      ],
-      audienceIntelligence: {
-        topContent: {
-          headline: "High engagement on community dog stories, local meetups, and pet care tips",
-          badge: "Top 4% Engagement",
-          metricLabel: "6.2x higher comment rate on community borrowing testimonials"
-        },
-        recurringQuestions: {
-          quote: "How can I find a trusted dog sitter who truly loves dogs like family?",
-          badge: "Trust & Safety",
-          metricLabel: "Over 750+ community inquiries asking for local trusted dog care"
-        },
-        painPoints: {
-          description: "Pet owners are anxious about leaving dogs alone and face exorbitant boarding costs.",
-          badge: "Pet Care Stress",
-          communityLabel: "94% of surveyed owners prefer local community lovers over commercial kennels"
-        },
-        demographics: {
-          description: "25-55 year-old dog lovers, young professionals, and families with high pet care budgets.",
-          badge: "High Attachment",
-          purchasingPower: "Tier 1 pet spending audience with recurring subscription appetite"
-        },
-        monetization: {
-          description: "Currently monetizing via ad revenue — missing high-margin community subscription MRR.",
-          badge: "Uncapped Community MRR",
-          recommendation: "A local membership network can generate $20k-$60k monthly recurring revenue."
-        },
-        competitors: {
-          description: "Commercial apps charge 20%+ commission fees and feel impersonal.",
-          badge: "Strong Moat",
-          moat: "Puppy Borrow's warm, friendly brand creates immediate high trust and word-of-mouth."
-        }
-      }
-    }
-  ];
+  // All creators loaded strictly from MongoDB Atlas
 
   const [creators, setCreators] = useState(() => {
-    // Strictly prefer DB data (initialCreators) as the source of truth, fallback to verified defaults
+    // Strictly load real creators from MongoDB (initialCreators) as the source of truth
     if (initialCreators && Array.isArray(initialCreators) && initialCreators.length > 0) {
       return initialCreators;
     }
-    return FALLBACK_DEFAULT_CREATORS;
+    return [];
   });
 
-  // Direct DB fetch on mount — ensures all DB creators load immediately
+  // Direct DB fetch on mount — ensures all DB creators load immediately from MongoDB Atlas
   useEffect(() => {
     let cancelled = false;
     setLoadingCreatorsFromDb(true);
@@ -1020,7 +592,7 @@ export default function AcquisitionEngine({
             for (const p of (prev || [])) {
               if (p.id) localById.set(String(p.id), p);
             }
-            const merged = dbList.map((dbC) => {
+            return dbList.map((dbC) => {
               const localMatch = dbC.id ? localById.get(String(dbC.id)) : null;
               if (!localMatch) {
                 const safeStatus = (dbC.status === "launched" && !dbC.project_id && !dbC.projectId && !dbC.active_project_id)
@@ -1042,37 +614,24 @@ export default function AcquisitionEngine({
                 ...(preserveLocalEmail ? { email: localMatch.email, email_public: localMatch.email_public, email_verified: localMatch.email_verified } : {}),
               };
             });
-            // Append any local-only creators not yet in DB
-            const dbIds = new Set(dbList.map(c => String(c.id || '')).filter(Boolean));
-            for (const p of (prev || [])) {
-              const pId = String(p.id || '');
-              if (pId && !dbIds.has(pId)) {
-                merged.push(p);
-              }
-            }
-            return merged;
           });
         } else {
-          // If DB is empty, retain fallback creators so studio is always responsive
-          setCreators((prev) => (prev && prev.length > 0 ? prev : FALLBACK_DEFAULT_CREATORS));
+          setCreators((prev) => (prev && prev.length > 0 ? prev : []));
         }
         setLoadingCreatorsFromDb(false);
       }).catch(() => {
         if (!cancelled) {
-          setCreators((prev) => (prev && prev.length > 0 ? prev : FALLBACK_DEFAULT_CREATORS));
           setLoadingCreatorsFromDb(false);
         }
       });
     }).catch(() => {
       if (!cancelled) {
-        setCreators((prev) => (prev && prev.length > 0 ? prev : FALLBACK_DEFAULT_CREATORS));
         setLoadingCreatorsFromDb(false);
       }
     });
     return () => { cancelled = true; };
   }, []);
 
-  // Sync incoming initialCreators from parent layout / database sync
   // Sync incoming initialCreators from parent layout / database sync
   // DB is the authoritative source — always adopt DB creators, preserving local-only edits
   useEffect(() => {
@@ -1090,8 +649,8 @@ export default function AcquisitionEngine({
           if (p.id) localById.set(String(p.id), p);
         }
 
-        // Start from DB creators as the base, overlaying any locally-edited fields for the current active ID
-        const merged = initialCreators.map((dbCreator) => {
+        // Strictly adopt DB creators as base, overlaying any locally-edited fields
+        return initialCreators.map((dbCreator) => {
           const localMatch = dbCreator.id ? localById.get(String(dbCreator.id)) : null;
 
           if (!localMatch) {
@@ -1121,17 +680,6 @@ export default function AcquisitionEngine({
             } : {}),
           };
         });
-
-        // Append any local-only creators not yet in DB
-        const dbIds = new Set(initialCreators.map(c => String(c.id || '')).filter(Boolean));
-        for (const p of prev) {
-          const pId = String(p.id || '');
-          if (pId && !dbIds.has(pId)) {
-            merged.push(p);
-          }
-        }
-
-        return merged;
       });
     }
   }, [initialCreators, discovering]);
@@ -1159,11 +707,18 @@ export default function AcquisitionEngine({
       const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
       const creatorParam = searchParams?.get('creator') || searchParams?.get('creatorId');
       if (creatorParam) return creatorParam;
-      return initialCreators?.[0]?.id || FALLBACK_DEFAULT_CREATORS[0].id;
+      return initialCreators?.[0]?.id || null;
     } catch {
-      return FALLBACK_DEFAULT_CREATORS[0].id;
+      return null;
     }
   });
+
+  // Auto-select first creator from DB if none currently selected
+  useEffect(() => {
+    if (!selectedCreatorId && creators && creators.length > 0) {
+      setSelectedCreatorId(creators[0].id);
+    }
+  }, [creators, selectedCreatorId]);
   const [scopedCreatorId, setScopedCreatorId] = useState(() => {
     try {
       const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -6776,7 +6331,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
             { step: 2, num: "Step 02", label: "Find & Qualify", icon: Search },
             { step: 3, num: "Step 03", label: "Direct Outreach", icon: Send },
             { step: 4, num: "Step 04", label: "Interested Review", icon: MessageSquare },
-            { step: 5, num: "Step 05", label: "Audience & Ideas", icon: Sparkles },
+            { step: 5, num: "Step 05", label: "Audience & Ideas", icon: Lightbulb },
             { step: 6, num: "Step 06", label: "Pitch & Select", icon: Award },
           ].map((item) => {
             const Icon = item.icon;
@@ -7511,7 +7066,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
               {/* Merge Tags Insertion Toolbar */}
               <div className="px-3.5 sm:px-5 py-2.5 bg-slate-50/70 border-b border-slate-200 flex items-center gap-2 overflow-x-auto text-[11px] max-w-full">
                 <span className="text-slate-600 font-bold uppercase tracking-wider text-[10px] flex-shrink-0 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-amber-500" />
+                  <Tag className="w-3 h-3 text-slate-500" />
                   <span>Insert Tags:</span>
                 </span>
                 {[
@@ -8466,7 +8021,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                                     : "text-slate-600 bg-slate-100 border-slate-200"
                                   }`}
                               >
-                                <Sparkles className="w-3 h-3 text-amber-500" />
+                                <TrendingUp className="w-3 h-3 text-emerald-600" />
                                 <span>{score}/100</span>
                                 {isAbove && <span className="text-emerald-600">✓</span>}
                               </span>
@@ -8624,7 +8179,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                                         {hunterLoadingId === c.id && hunterActionType === 'find' ? (
                                           <RefreshCw className="w-3 h-3 animate-spin text-emerald-600" />
                                         ) : (
-                                          <Sparkles className="w-3 h-3 text-emerald-600" />
+                                          <Search className="w-3 h-3 text-emerald-600" />
                                         )}
                                         <span>
                                           {hunterLoadingId === c.id && hunterActionType === 'find'
@@ -9862,7 +9417,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
             <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start justify-between gap-3 shadow-2xs animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 </div>
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
@@ -9948,7 +9503,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                 onClick={() => setShowInterestedModal(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
               >
-                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <Heart className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Interested Modal ({interestedCreators.length})</span>
               </button>
 
@@ -10070,8 +9625,8 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 font-display">
-                          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>AI Audience Intelligence & Co-Launch Synthesis in Progress</span>
+                          <Activity className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Audience Intelligence & Co-Launch Synthesis in Progress</span>
                         </span>
                         <span className="text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full font-mono border border-emerald-200 font-bold">
                           Live AI Engine
@@ -10098,7 +9653,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                     {isDispatched ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     ) : (
-                      <Sparkles className="w-4 h-4 text-slate-600" />
+                      <Layers className="w-4 h-4 text-slate-600" />
                     )}
                   </div>
                   <div>
@@ -10140,7 +9695,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                 </span>
               </div>
               <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 mt-0.5 font-display">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <Lightbulb className="w-4 h-4 text-emerald-600" />
                 <span>Audience Analysis & Top 3 Product Concepts</span>
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -10161,7 +9716,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                 {isSynthesizingStep5Ai ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-500" />
                 ) : (
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                  <RefreshCw className="w-3.5 h-3.5 text-emerald-600" />
                 )}
                 <span>
                   {isSynthesizingStep5Ai
@@ -10469,7 +10024,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                         {isSynthesizingStep5Ai ? (
                           <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-400" />
                         ) : (
-                          <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                          <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
                         )}
                         <span>{isSynthesizingStep5Ai ? "Synthesizing..." : "Regenerate with Prompt"}</span>
                       </button>
@@ -10559,7 +10114,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                               style={{ backgroundColor: activeCreatorBrandColor }}
                               title={`Extracted Avatar Color: ${activeCreatorBrandColor}`}
                             >
-                              <Sparkles className="w-2.5 h-2.5 text-white" />
+                              <Palette className="w-2.5 h-2.5 text-white" />
                             </span>
                           </div>
                           <div className="space-y-0.5">
@@ -11947,7 +11502,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                               className="w-3.5 h-3.5 accent-indigo-600 rounded cursor-pointer"
                             />
                             <span className="flex items-center gap-1">
-                              <Sparkles className="w-3 h-3 text-indigo-600" />
+                              <Wand2 className="w-3 h-3 text-indigo-600" />
                               <span>Auto Draft:</span>
                               <span className={autoDraftEnabled ? "text-emerald-700 font-extrabold" : "text-slate-500 font-normal"}>
                                 {autoDraftEnabled ? "ON" : "OFF"}
@@ -11973,7 +11528,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                           className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-2xs"
                           title="Generate fresh AI draft tailored to creator's latest response"
                         >
-                          <Sparkles className={`w-3.5 h-3.5 text-emerald-600 ${isGeneratingStep6Ai ? "animate-spin" : ""}`} />
+                          <RefreshCw className={`w-3.5 h-3.5 text-emerald-600 ${isGeneratingStep6Ai ? "animate-spin" : ""}`} />
                           <span>{isGeneratingStep6Ai ? "Generating..." : "Generate AI Draft"}</span>
                         </button>
 
@@ -12000,7 +11555,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                     {autoDraftEnabled && (
                       <div className="p-2 rounded-xl bg-indigo-50/70 border border-indigo-100 flex flex-wrap items-center gap-1.5">
                         <span className="text-[10px] font-bold text-indigo-900 uppercase tracking-wider flex items-center gap-1 mr-1">
-                          <Sparkles className="w-3 h-3 text-indigo-600" />
+                          <Layers className="w-3 h-3 text-indigo-600" />
                           <span>Auto Draft Angle:</span>
                         </span>
                         {[
@@ -12117,7 +11672,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-emerald-600" />
+                  <Heart className="w-5 h-5 text-emerald-600" />
                   <h3 className="text-base font-bold text-slate-900">
                     Interested & Qualified Creators ({interestedCreators.length}
                     )
@@ -12609,7 +12164,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                     {decisionModal.isGeneratingAi ? (
                       <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-600" />
                     ) : (
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                      <RefreshCw className="w-3.5 h-3.5 text-emerald-600" />
                     )}
                     <span>
                       {decisionModal.isGeneratingAi

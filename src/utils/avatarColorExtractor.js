@@ -384,36 +384,42 @@ export async function extractBrandColorFromAvatar(avatarUrl, creator = null) {
 
 /**
  * Returns a set of 3 harmonious concept colors derived from the creator's avatar brand color:
- * - Concept 1: Primary Signature Brand Color
+ * - Concept 1: Primary Signature Brand Color (guaranteed high contrast)
  * - Concept 2: High-Contrast AI Copilot Accent (Analogous or High-Tech Cyan/Indigo pair)
- * - Concept 3: Warm Executive Mastermind Accent (Complementary Gold/Amber or Deep Obsidian Slate)
+ * - Concept 3: Warm Executive Mastermind Accent (Complementary Gold/Amber, Cyan, or Lime - never dark slate)
  */
 export function getHarmoniousConceptColors(primaryHex) {
-  const [r, g, b] = hexToRgb(primaryHex);
+  let safeHex = primaryHex || "#10B981";
+  const clean = safeHex.replace('#', '').toLowerCase().trim();
+  if (['0f172a', '1e293b', '090b10', '0a0e17', '000000', '111827', '334155', '475569'].includes(clean)) {
+    safeHex = "#06B6D4";
+  }
+
+  const [r, g, b] = hexToRgb(safeHex);
   const [h, s, l] = rgbToHsl(r, g, b);
 
-  // Concept 1 is the signature extracted color
-  const c1 = primaryHex;
+  // Concept 1 is the signature color (boost lightness if too dark)
+  const c1 = l < 35 ? hslToHex(h, Math.max(75, s), 50) : safeHex;
 
-  // Concept 2: Shift hue by +35° to +45° or high-tech cyan/indigo pair
-  let h2 = (h + 38) % 360;
-  // If primary was already close to cyan/blue, shift towards purple/indigo
+  // Concept 2: Shift hue by +38° to +48° for high-contrast tech accent
+  let h2 = (h + 40) % 360;
   if (h >= 180 && h <= 220) {
     h2 = 255; // Royal indigo
   } else if (h >= 100 && h <= 165) {
     h2 = 199; // Ocean cyan
   }
-  const c2 = hslToHex(h2, Math.max(70, s), Math.max(42, Math.min(54, l)));
+  const c2 = hslToHex(h2, Math.max(75, s), Math.max(48, Math.min(58, l)));
 
-  // Concept 3: Warm executive amber or rich obsidian slate
+  // Concept 3: Warm executive amber or vibrant cyan/lime (never dark slate)
   let c3;
   if (h >= 30 && h <= 70) {
-    // Already amber/yellow, use obsidian slate
-    c3 = "#0F172A";
+    c3 = "#06B6D4"; // Ocean Cyan
+  } else if (h >= 170 && h <= 250) {
+    c3 = "#F59E0B"; // Warm Gold/Amber
   } else {
-    // Use venture amber/gold
-    c3 = "#D97706";
+    c3 = "#F59E0B"; // Venture Amber
   }
 
   return [c1, c2, c3];
 }
+

@@ -972,7 +972,7 @@ export default function CreatorLaunchLayout({
       </div>
 
       {/* Top Navbar */}
-      <header className="h-14 border-b border-slate-200/90 bg-white/95 backdrop-blur-md sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 relative shadow-2xs">
+      <header className="h-14 border-b border-slate-200/90 bg-white/95 backdrop-blur-md sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 relative shadow-2xs">
         {/* Workspace Switching Progress Bar */}
         {isSwitchingCreator && (
           <div className="absolute bottom-0 left-0 right-0 h-[2px] z-50 overflow-hidden bg-slate-200">

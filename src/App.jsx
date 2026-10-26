@@ -701,10 +701,14 @@ export default function App() {
     if (userProfile?.username) {
       fetch(`/api/auth/profile/${encodeURIComponent(userProfile.username)}`)
         .then(res => {
-          if (!res.ok) throw new Error('Failed to load user profile')
+          if (!res.ok) {
+            console.warn('[Forge] User profile not found on server, maintaining active local session')
+            return null
+          }
           return res.json()
         })
         .then(data => {
+          if (!data) return
           console.log('[Forge] Restored user profile session from database:', data)
           if (data.status === 'success') {
             // Restore creatorData, calendar, launch pack, and studio copies from DB to localStorage
@@ -734,7 +738,7 @@ export default function App() {
           }
         })
         .catch(err => {
-          console.error('[Forge] Failed to restore user profile from DB on mount:', err)
+          console.warn('[Forge] Profile sync notice (non-fatal, local session preserved):', err)
         })
     }
   }, [userProfile, updateAiKeys])

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   X,
-  Sparkles,
   Check,
   Plus,
   Trash2,

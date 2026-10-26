@@ -8,7 +8,6 @@ import {
   Play,
   Pause,
   Volume2,
-  Sparkles,
   Check,
   Copy,
   ExternalLink,
@@ -122,9 +121,8 @@ export default function PostVisualMockup({
             <span className="text-white font-semibold">X Announcement Preview</span>
             <span className="text-[#71767b] font-normal hidden sm:inline">· Official Post</span>
           </div>
-          <span className="text-[10px] font-mono bg-[#16181c] text-[#e7e9ea] px-2.5 py-0.5 rounded-full border border-[#2f3336] flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Live Post Preview</span>
+          <span className="text-[10px] font-mono bg-[#16181c] text-[#e7e9ea] px-2.5 py-0.5 rounded-full border border-[#2f3336]">
+            Live Post Preview
           </span>
         </div>
 
@@ -234,15 +232,9 @@ export default function PostVisualMockup({
             {/* Visual Header Banner */}
             <div className="p-3.5 sm:p-4 pb-3 flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02]">
               <div className="flex items-center gap-2">
-                <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/90" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/90" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/90" />
-                </div>
-                <span className="text-[10px] font-mono text-slate-400" style={{ color: '#94a3b8' }}>app.{productName.toLowerCase().replace(/[^a-z0-9]/g, '')}.io</span>
+                <span className="text-xs font-bold text-white tracking-tight">{productName}</span>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/15 text-amber-300 border border-amber-400/30 flex items-center gap-1 font-mono">
-                <Sparkles className="w-2.5 h-2.5 text-amber-400" />
+              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/15 text-amber-300 border border-amber-400/30 font-mono">
                 {activeImageUrl ? 'Announcement Graphic' : 'Founding Cohort (50 Spots)'}
               </span>
             </div>
@@ -578,9 +570,8 @@ export default function PostVisualMockup({
                 >
                   <div className="flex items-center justify-between text-[10px] font-mono">
                     <span className="font-semibold" style={{ color: '#a5b4fc' }}>Studio MVP</span>
-                    <span className="font-bold flex items-center gap-1" style={{ color: '#34d399' }}>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span>Live In Sprint</span>
+                    <span className="font-bold" style={{ color: '#34d399' }}>
+                      Live In Sprint
                     </span>
                   </div>
                   <div className="text-sm font-extrabold" style={{ color: '#ffffff' }}>{productName}</div>
@@ -981,9 +972,8 @@ export default function PostVisualMockup({
                 <span className="text-xs font-bold text-white">{creatorName}</span>
                 <span className="text-[10px] text-slate-400 font-mono">@{creatorHandle}</span>
               </div>
-              <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Active Now · 1:1 VIP Outreach
+              <span className="text-[10px] text-emerald-400 font-mono">
+                Active Now &mdash; 1:1 VIP Outreach
               </span>
             </div>
           </div>

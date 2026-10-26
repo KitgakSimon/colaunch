@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
+  Pencil,
   Layers,
   Users,
   Target,
@@ -21,7 +22,7 @@ import {
   TrendingUp,
   Monitor
 } from "lucide-react";
-import DynamicConceptMockup, { BRAND_COLORS, getBrandColorObj } from "./DynamicConceptMockup";
+import DynamicConceptMockup, { BRAND_COLORS, getBrandColorObj, sanitizeAccentColor, getContrastTextColor } from "./DynamicConceptMockup";
 
 /**
  * CustomizedDeckModal
@@ -80,7 +81,8 @@ export default function CustomizedDeckModal({
   if (!isOpen || !concept) return null;
 
   const brandColorObj = getBrandColorObj(activeBrandColor);
-  const accentHex = brandColorObj.hex;
+  const accentHex = sanitizeAccentColor(brandColorObj.hex);
+  const contrastText = getContrastTextColor(accentHex);
 
   const creatorName = creator?.name || creator?.display_name || "Creator";
   const firstName = creatorName.split(" ")[0];
@@ -126,8 +128,8 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
     setTimeout(() => setCopiedDeck(false), 2500);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
+  const modalContent = (
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-[#0A0E17] text-white rounded-3xl border border-slate-800 shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden relative">
         {/* Top Deck Navigation Bar */}
         <div className="px-6 py-4 border-b border-slate-800/80 flex items-center justify-between bg-slate-950/60 backdrop-blur-sm">
@@ -137,7 +139,7 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
             ) : (
               <div
                 className="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs shadow-xs"
-                style={{ backgroundColor: accentHex }}
+                style={{ backgroundColor: accentHex, color: contrastText }}
               >
                 {firstName[0]}
               </div>
@@ -145,7 +147,7 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-white font-display">
-                  {creatorName} • Customized Opportunity Deck
+                  {creatorName} &mdash; Customized Opportunity Deck
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono">
                   Slide {currentSlide + 1} of {slides.length}
@@ -242,7 +244,6 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
                       borderColor: `${accentHex}30`
                     }}
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
                     <span>CoLaunch 50/50 Co-Founder Venture</span>
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -252,7 +253,7 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
                     {concept.tagline}
                   </p>
                   <p className="text-xs text-slate-400 font-mono">
-                    Engineered exclusively for {creatorName} ({cHandle}) • {followers} Followers in {niche}
+                    Engineered exclusively for {creatorName} ({cHandle}) | {followers} Followers in {niche}
                   </p>
                 </div>
 
@@ -442,7 +443,7 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
                       }}
                       className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <Pencil className="w-3.5 h-3.5 text-slate-300" />
                       <span>Edit Concept Details</span>
                     </button>
                   )}
@@ -558,14 +559,16 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
                 onClose();
               }
             }}
-            className="px-4 py-1.5 rounded-xl text-slate-900 font-bold hover:opacity-95 transition-all flex items-center gap-1.5 cursor-pointer text-xs shadow-md"
-            style={{ backgroundColor: accentHex }}
+            className="px-4 py-1.5 rounded-xl font-bold hover:opacity-95 transition-all flex items-center gap-1.5 cursor-pointer text-xs shadow-md"
+            style={{ backgroundColor: accentHex, color: contrastText }}
           >
-            <span>{currentSlide === slides.length - 1 ? "Close Deck" : "Next Slide"}</span>
-            <ChevronRight className="w-4 h-4" />
+            <span style={{ color: contrastText }}>{currentSlide === slides.length - 1 ? "Close Deck" : "Next Slide"}</span>
+            <ChevronRight className="w-4 h-4" style={{ color: contrastText }} />
           </button>
         </div>
       </div>
     </div>
   );
+
+  return typeof document !== "undefined" ? createPortal(modalContent, document.body) : null;
 }
