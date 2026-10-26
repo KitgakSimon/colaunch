@@ -59,14 +59,6 @@ export default function CreatorFollowUpCRM({
     return [];
   }, [rawCreators]);
 
-  // Auto-launch CRM Guided Tour if not already dismissed in this browser
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      startCrmTour(false);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
-
   const realThreads = useMemo(() => {
     if (Array.isArray(rawThreads)) return rawThreads;
     if (rawThreads && Array.isArray(rawThreads.data)) return rawThreads.data;

@@ -1614,34 +1614,36 @@ export default function CreatorLaunchLayout({
       />
 
       {/* Creator Follow-Up & Reply Status CRM Directory Modal */}
-      <CreatorFollowUpCRM
-        isOpen={showFollowUpCRM}
-        onClose={() => setShowFollowUpCRM(false)}
-        creators={getSafeDiscoveredCreators()}
-        realThreads={getSafeRealThreads()}
-        projects={allProjects}
-        pitchSentMap={getSafeSentMap('forge_launch_pitch_sent_map')}
-        onSelectCreator={(cid, targetStep) => {
-          setShowFollowUpCRM(false)
-          if (targetStep === 'section2' || targetStep === 7) {
-            handleSwitchToCreatorProject(cid)
-          } else {
-            setActiveSection('section1')
-            const stepNum = Number(targetStep) || 5
-            setAcquisitionNavState({ step: stepNum, creatorId: cid, nonce: Date.now() })
-            try {
-              const url = new URL(window.location.href)
-              url.searchParams.set('section', 'section1')
-              url.searchParams.set('step', String(stepNum))
-              if (cid) url.searchParams.set('creator', cid)
-              window.history.replaceState({}, '', url.toString())
-            } catch (e) { }
-          }
-        }}
-        onDeleteCreator={() => {
-          fetchCrmData()
-        }}
-      />
+      {showFollowUpCRM && (
+        <CreatorFollowUpCRM
+          isOpen={showFollowUpCRM}
+          onClose={() => setShowFollowUpCRM(false)}
+          creators={getSafeDiscoveredCreators()}
+          realThreads={getSafeRealThreads()}
+          projects={allProjects}
+          pitchSentMap={getSafeSentMap('forge_launch_pitch_sent_map')}
+          onSelectCreator={(cid, targetStep) => {
+            setShowFollowUpCRM(false)
+            if (targetStep === 'section2' || targetStep === 7) {
+              handleSwitchToCreatorProject(cid)
+            } else {
+              setActiveSection('section1')
+              const stepNum = Number(targetStep) || 5
+              setAcquisitionNavState({ step: stepNum, creatorId: cid, nonce: Date.now() })
+              try {
+                const url = new URL(window.location.href)
+                url.searchParams.set('section', 'section1')
+                url.searchParams.set('step', String(stepNum))
+                if (cid) url.searchParams.set('creator', cid)
+                window.history.replaceState({}, '', url.toString())
+              } catch (e) { }
+            }
+          }}
+          onDeleteCreator={() => {
+            fetchCrmData()
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -79,6 +79,29 @@ export function stopActiveTour() {
 function createManagedTour({ steps, dismissKey, onDoneText = 'Done ✓' }) {
   stopActiveTour()
 
+  if (!Array.isArray(steps) || steps.length === 0) return null
+
+  // Ensure DOM elements actually exist before launching so orphaned popovers never show
+  if (typeof document !== 'undefined') {
+    const firstStepElement = steps[0]?.element
+    if (firstStepElement && !document.querySelector(firstStepElement)) {
+      console.warn(`[DriverTour] First step target '${firstStepElement}' not found in DOM. Tour cancelled.`)
+      return null
+    }
+
+    const validSteps = steps.filter(step => {
+      if (!step.element) return true
+      return !!document.querySelector(step.element)
+    })
+
+    if (validSteps.length === 0) {
+      console.warn('[DriverTour] No target elements found in DOM. Tour cancelled.')
+      return null
+    }
+
+    steps = validSteps
+  }
+
   const safeDismissAndClose = (drv) => {
     dismissTour(dismissKey)
     try {
@@ -87,7 +110,6 @@ function createManagedTour({ steps, dismissKey, onDoneText = 'Done ✓' }) {
     stopActiveTour()
   }
 
-  // Filter steps so driver only attempts to navigate elements that exist or will exist
   const driverObj = driver({
     showProgress: true,
     animate: true,
@@ -280,6 +302,9 @@ export function startSection2Tour(force = false) {
  */
 export function startCrmTour(force = false) {
   if (!force && isTourCrmDismissed()) return null
+  if (typeof document !== 'undefined' && !document.querySelector('#tour-crm-header')) {
+    return null
+  }
 
   const steps = [
     {

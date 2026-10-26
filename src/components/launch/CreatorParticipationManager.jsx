@@ -63,13 +63,6 @@ export default function CreatorParticipationManager() {
   const [toast, setToast] = useState(null)
   const [copiedId, setCopiedId] = useState(null)
 
-  // Auto-launch Participation Manager Guided Tour if not already dismissed in this browser
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      startParticipationTour(false)
-    }, 1200)
-    return () => clearTimeout(timer)
-  }, [])
 
   // Theme State: 'light' or 'dark' (defaults to light per user request)
   const [theme, setTheme] = useState(() => {

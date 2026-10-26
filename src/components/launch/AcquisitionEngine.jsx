@@ -77,7 +77,6 @@ import ClientProfileModal from "./ClientProfileModal";
 import { deleteAllCreators } from "../../services/opsApi";
 import { buildSmartFallbackPlan } from "../../services/ai";
 import AdminPipelineLookup from "./AdminPipelineLookup";
-import CreatorFollowUpCRM from "./CreatorFollowUpCRM";
 import FloatingPolygons, { HeroShallowPolygons } from "../ui/FloatingPolygons";
 import ActionNotificationToast from "../ui/ActionNotificationToast";
 import ConfirmationModal from "../ui/ConfirmationModal";
@@ -750,7 +749,6 @@ export default function AcquisitionEngine({
   const [isSynthesizingStep5Ai, setIsSynthesizingStep5Ai] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(null);
   const [replyFilter, setReplyFilter] = useState("all");
-  const [showFollowUpCRM, setShowFollowUpCRM] = useState(false);
 
   // Synchronize active step and selected creator across devices
   useEffect(() => {
@@ -11750,84 +11748,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
         onNotify={notify}
       />
 
-      {/* Creator Follow-Up & Reply Status CRM Directory Modal */}
-      <CreatorFollowUpCRM
-        isOpen={showFollowUpCRM}
-        onClose={() => setShowFollowUpCRM(false)}
-        creators={creators}
-        realThreads={realThreads}
-        projects={dbProjects}
-        pitchSentMap={pitchSentMap}
-        onSelectCreator={(cid, targetStep, conceptId) => {
-          setSelectedCreatorId(cid);
-          setScopedCreatorId(cid);
-          if (conceptId) setSelectedConceptId(conceptId);
-          setShowFollowUpCRM(false);
-          if (targetStep === "section2" || targetStep === 7) {
-            if (onGoToProjectOS) onGoToProjectOS(cid);
-          } else {
-            setActiveStep(Number(targetStep) || 5);
-          }
-        }}
-        onSyncImap={() => syncImapReplies(true)}
-        onApproveCreator={handleApproveCreator}
-        onRejectCreator={handleRejectCreator}
-        onDeleteCreator={async (creatorId) => {
-          const targetCreator = (creators || []).find((c) => c.id === creatorId || c.handle === creatorId);
-          const cleanHandle = (targetCreator?.handle || creatorId || "").replace(/^@/, "").toLowerCase();
-          const targetEmail = (targetCreator?.email || targetCreator?.email_public || "").toLowerCase().trim();
 
-          setCreators((prev) =>
-            (prev || []).filter(
-              (c) =>
-                c.id !== creatorId &&
-                c.handle !== creatorId &&
-                (c.handle || "").replace(/^@/, "").toLowerCase() !== cleanHandle
-            )
-          );
-          setRealThreads((prev) =>
-            (prev || []).filter((t) => {
-              if (t.creator_id === creatorId) return false;
-              if (t.creator_handle && t.creator_handle.replace(/^@/, "").toLowerCase() === cleanHandle) return false;
-              if (targetEmail && (t.creator_email?.toLowerCase().trim() === targetEmail || t.recipient_email?.toLowerCase().trim() === targetEmail)) return false;
-              return true;
-            })
-          );
-          setPitchSentMap((prev) => {
-            const next = { ...prev };
-            delete next[creatorId];
-            delete next[cleanHandle];
-            return next;
-          });
-          setAiDetectedChoiceMap((prev) => {
-            const next = { ...prev };
-            delete next[creatorId];
-            delete next[cleanHandle];
-            return next;
-          });
-          setCreatorConceptSelectionMap((prev) => {
-            const next = { ...prev };
-            delete next[creatorId];
-            delete next[cleanHandle];
-            return next;
-          });
-          if (selectedCreatorId === creatorId || selectedCreatorId === cleanHandle) {
-            setSelectedCreatorId(null);
-          }
-
-          try {
-            const { deleteCreator } = await import("../../services/opsApi");
-            await deleteCreator(creatorId);
-          } catch (e) {
-            console.warn("deleteCreator API notice:", e);
-          }
-        }}
-        onOpenDecisionModal={(c, decision) => {
-          setShowFollowUpCRM(false);
-          openDecisionModal(c, decision);
-        }}
-        onNotify={notify}
-      />
 
       {/* ── Step 4 Decision & Optional Email Notification Modal ─────────────── */}
       {decisionModal.isOpen && decisionModal.creator && (

@@ -2426,7 +2426,7 @@ partnerships@colaunch.com`
 
       {/* PHASE EXECUTION MODAL (PHASE 1 / PHASE 2 / PHASE 3) - CLEAN WHITE THEME */}
       {showPhaseExecutionModal && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[9999] bg-slate-900/15 backdrop-blur-[2px] flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-hidden">
+        <div className="fixed inset-0 z-[9999] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-hidden">
           <div className="max-w-5xl w-full max-h-[92vh] overflow-y-auto rounded-3xl bg-white border border-slate-200 p-6 pb-12 space-y-6 shadow-2xl overscroll-contain text-slate-900 phase-modal-white-theme">
             <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <div className="flex items-center gap-3">
@@ -2496,7 +2496,7 @@ partnerships@colaunch.com`
 
       {/* SHARE CREATOR PORTAL MODAL */}
       {showShareModal && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[9999] bg-slate-900/15 backdrop-blur-[2px] flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-hidden">
+        <div className="fixed inset-0 z-[9999] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-hidden">
           <div className="max-w-2xl w-full p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-2xl max-h-[92vh] flex flex-col overscroll-contain text-slate-900">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-3 shrink-0">
@@ -2843,7 +2843,7 @@ partnerships@colaunch.com`
 
       {/* VENTURE FILE PREVIEW MODAL */}
       {previewingFile && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[99999] bg-slate-900/15 backdrop-blur-[2px] flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-hidden">
+        <div className="fixed inset-0 z-[99999] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-hidden">
           <div className="max-w-3xl w-full max-h-[85vh] flex flex-col rounded-3xl bg-white border border-slate-200 p-6 shadow-2xl space-y-4 text-slate-900">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3 shrink-0">
               <div className="flex items-center gap-3">
