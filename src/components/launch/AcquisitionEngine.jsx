@@ -71,6 +71,13 @@ import {
   Layers,
 } from "lucide-react";
 import DynamicConceptMockup, { BRAND_COLORS, getBrandColorObj } from "./DynamicConceptMockup";
+import {
+  extractBrandColorFromAvatar,
+  getHarmoniousConceptColors,
+  getFriendlyColorName,
+  hexToRgba
+} from "../../utils/avatarColorExtractor";
+import { resolveCreatorTheme } from "../../utils/creatorTheme";
 import ConceptEditorModal from "./ConceptEditorModal";
 import CustomizedDeckModal from "./CustomizedDeckModal";
 import ClientProfileModal from "./ClientProfileModal";
@@ -569,6 +576,8 @@ export default function AcquisitionEngine({
       name: "Coachly",
       display_name: "Coachly",
       platform: "YouTube",
+      avatar_url: "https://ui-avatars.com/api/?name=Coachly&background=16A34A&color=fff&bold=true",
+      brand_color: "#16A34A",
       followerStr: "380K",
       follower_count: 380000,
       niche: "Tech & Coaching",
@@ -709,6 +718,8 @@ export default function AcquisitionEngine({
       name: "study100",
       display_name: "study100",
       platform: "YouTube",
+      avatar_url: "https://ui-avatars.com/api/?name=study100&background=4F46E5&color=fff&bold=true",
+      brand_color: "#4F46E5",
       followerStr: "520K",
       follower_count: 520000,
       niche: "Education & AI",
@@ -849,6 +860,8 @@ export default function AcquisitionEngine({
       name: "Puppy Borrow",
       display_name: "Puppy Borrow",
       platform: "YouTube",
+      avatar_url: "https://ui-avatars.com/api/?name=Puppy+Borrow&background=D97706&color=fff&bold=true",
+      brand_color: "#D97706",
       followerStr: "290K",
       follower_count: 290000,
       niche: "Pets & Community",
@@ -3602,6 +3615,121 @@ export default function AcquisitionEngine({
   const [viewingDeckConcept, setViewingDeckConcept] = useState(null);
   const [viewingDeckIndex, setViewingDeckIndex] = useState(0);
   const [step5EmailViewMode, setStep5EmailViewMode] = useState("preview"); // "preview" | "edit"
+
+  // Step 5 Creator Avatar AI Vision & Brand Color state
+  const [creatorBrandColorMap, setCreatorBrandColorMap] = useState(() => {
+    try {
+      const stored = localStorage.getItem("forge_creator_brand_color_map");
+      return stored ? JSON.parse(stored) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+  const [isExtractingAvatarColor, setIsExtractingAvatarColor] = useState(false);
+
+  // Automatically inspect creator avatar and extract signature brand color via AI Vision
+  useEffect(() => {
+    if (!selectedCreator) return;
+    const cId = selectedCreator.id;
+    const avatarUrl = getCreatorAvatar(selectedCreator);
+    const existing = creatorBrandColorMap[cId];
+
+    // Explicit manual or preset brand color on creator
+    const directBrandColor = selectedCreator.brand_color || selectedCreator.brandColor;
+
+    if (!existing || (directBrandColor && existing.primaryHex.toLowerCase() !== directBrandColor.toLowerCase() && existing.source !== "manual_custom")) {
+      setIsExtractingAvatarColor(true);
+      extractBrandColorFromAvatar(avatarUrl, selectedCreator)
+        .then((result) => {
+          const primaryHex = directBrandColor || result.primaryHex || "#16A34A";
+          const harmonious = getHarmoniousConceptColors(primaryHex);
+          const colorName = result.name || getFriendlyColorName(primaryHex);
+
+          const newEntry = {
+            primaryHex,
+            name: colorName,
+            source: result.source || "avatar_vision",
+            colors: harmonious,
+          };
+
+          setCreatorBrandColorMap((prev) => {
+            const next = { ...prev, [cId]: newEntry };
+            try {
+              localStorage.setItem("forge_creator_brand_color_map", JSON.stringify(next));
+            } catch (e) {}
+            return next;
+          });
+
+          // Sync with Creator Dashboard and Operator Studio theme
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(
+              new CustomEvent("forge_theme_changed", {
+                detail: resolveCreatorTheme(primaryHex, selectedCreator.niche, selectedCreator.name),
+              })
+            );
+          }
+        })
+        .finally(() => {
+          setIsExtractingAvatarColor(false);
+        });
+    } else if (existing?.primaryHex) {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("forge_theme_changed", {
+            detail: resolveCreatorTheme(existing.primaryHex, selectedCreator.niche, selectedCreator.name),
+          })
+        );
+      }
+    }
+  }, [selectedCreator?.id, selectedCreator?.avatar_url, activeStep]);
+
+  const handleSetCreatorBrandColor = (newHex) => {
+    if (!selectedCreator || !newHex) return;
+    const cId = selectedCreator.id;
+    const harmonious = getHarmoniousConceptColors(newHex);
+    const colorName = getFriendlyColorName(newHex);
+
+    const newEntry = {
+      primaryHex: newHex,
+      name: colorName,
+      source: "manual_custom",
+      colors: harmonious,
+    };
+
+    setCreatorBrandColorMap((prev) => {
+      const next = { ...prev, [cId]: newEntry };
+      try {
+        localStorage.setItem("forge_creator_brand_color_map", JSON.stringify(next));
+      } catch (e) {}
+      return next;
+    });
+
+    // Update concepts so Concept 1 uses newHex, 2 & 3 use harmonious pair
+    setCreators((prev) =>
+      prev.map((c) => {
+        if (c.id !== cId) return c;
+        const updatedConcepts = (c.productConcepts || []).map((cp, idx) => ({
+          ...cp,
+          brandColor: harmonious[idx % harmonious.length],
+        }));
+        return {
+          ...c,
+          brandColor: newHex,
+          brand_color: newHex,
+          productConcepts: updatedConcepts,
+        };
+      })
+    );
+
+    // Sync to Creator Dashboard & Admin OS
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("forge_theme_changed", {
+          detail: resolveCreatorTheme(newHex, selectedCreator.niche, selectedCreator.name),
+        })
+      );
+    }
+  };
 
   // Dynamic Step 5 Proposal Email Resolver: always mirrors latest AI or admin-modified concepts
   const getStep5EmailData = (creator = selectedCreator) => {
@@ -10495,9 +10623,124 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                     </div>
                   </div>
 
+                  {/* Creator Avatar AI Vision & Brand Color Extraction Bar */}
+                  {(() => {
+                    const activeColorInfo = creatorBrandColorMap[selectedCreator.id] || {
+                      primaryHex: selectedCreator.brand_color || selectedCreator.brandColor || "#16A34A",
+                      name: getFriendlyColorName(selectedCreator.brand_color || selectedCreator.brandColor || "#16A34A"),
+                      source: "avatar_vision",
+                      colors: getHarmoniousConceptColors(selectedCreator.brand_color || selectedCreator.brandColor || "#16A34A"),
+                    };
+                    const activeCreatorBrandColor = activeColorInfo.primaryHex;
+
+                    return (
+                      <div className="p-3.5 sm:p-4 rounded-2xl bg-[#090D14] border border-slate-800 text-white shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="relative shrink-0">
+                            <img
+                              src={getCreatorAvatar(selectedCreator)}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent((selectedCreator.name || selectedCreator.handle || "Creator").replace(/^@/, ''))}&background=0f172a&color=fff&bold=true`;
+                              }}
+                              alt=""
+                              className="w-10 h-10 rounded-full object-cover border-2 shadow-sm"
+                              style={{ borderColor: activeCreatorBrandColor }}
+                            />
+                            <span
+                              className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-[#090D14] flex items-center justify-center shadow-xs"
+                              style={{ backgroundColor: activeCreatorBrandColor }}
+                              title={`Extracted Avatar Color: ${activeCreatorBrandColor}`}
+                            >
+                              <Sparkles className="w-2.5 h-2.5 text-white" />
+                            </span>
+                          </div>
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-xs font-bold text-white font-display">
+                                Creator Signature Brand Color
+                              </span>
+                              <span
+                                className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border flex items-center gap-1.5 shadow-2xs"
+                                style={{
+                                  color: activeCreatorBrandColor,
+                                  backgroundColor: `${activeCreatorBrandColor}22`,
+                                  borderColor: `${activeCreatorBrandColor}55`,
+                                }}
+                              >
+                                <Eye className="w-2.5 h-2.5" />
+                                <span>
+                                  {isExtractingAvatarColor
+                                    ? "AI Vision Scanning Avatar..."
+                                    : `AI Vision Extracted from Avatar: ${activeColorInfo.name}`}
+                                </span>
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-slate-400">
+                              Active Palette: <strong className="text-slate-100 font-mono">{activeCreatorBrandColor}</strong> • Decided for Step 5 Landing Page Mockups, Pitch Decks, Creator Portal & Admin Studio.
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Palette Tuner & Custom Hex Picker */}
+                        <div className="flex items-center gap-1.5 flex-wrap shrink-0">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">
+                            Tune Color:
+                          </span>
+                          {[
+                            { name: "Extracted", hex: activeColorInfo.primaryHex },
+                            { name: "Emerald", hex: "#16A34A" },
+                            { name: "Cyan", hex: "#0284C7" },
+                            { name: "Amber", hex: "#D97706" },
+                            { name: "Obsidian", hex: "#0F172A" },
+                            { name: "Lime", hex: "#65A30D" },
+                            { name: "Indigo", hex: "#4F46E5" },
+                          ].map((item, idx) => {
+                            const isSelected = activeCreatorBrandColor.toLowerCase() === item.hex.toLowerCase();
+                            return (
+                              <button
+                                key={`${item.name}-${idx}`}
+                                type="button"
+                                onClick={() => handleSetCreatorBrandColor(item.hex)}
+                                className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[10px] font-bold transition-all cursor-pointer ${
+                                  isSelected
+                                    ? "bg-slate-800 border-white/60 text-white shadow-xs scale-105"
+                                    : "bg-slate-900 hover:bg-slate-800 border-slate-700 text-slate-300 hover:text-white"
+                                }`}
+                                title={`Switch to ${item.name} (${item.hex})`}
+                              >
+                                <span className="w-2.5 h-2.5 rounded-full shadow-2xs" style={{ backgroundColor: item.hex }} />
+                                <span>{item.name}</span>
+                              </button>
+                            );
+                          })}
+
+                          {/* Native Hex Color Dropper */}
+                          <label className="relative cursor-pointer ml-1" title="Pick custom color">
+                            <input
+                              type="color"
+                              value={activeCreatorBrandColor}
+                              onChange={(e) => handleSetCreatorBrandColor(e.target.value)}
+                              className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                            />
+                            <div className="px-2 py-1 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold flex items-center gap-1 shadow-2xs transition-colors">
+                              <Palette className="w-3 h-3 text-slate-400" />
+                              <span>Custom</span>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
                   <div className="grid md:grid-cols-3 gap-5">
                     {selectedCreator.productConcepts.map((concept, index) => {
-                      const brandColorObj = getBrandColorObj(concept.brandColor || (index === 0 ? "#10B981" : index === 1 ? "#0F172A" : "#0284C7"));
+                      const activeColorInfo = creatorBrandColorMap[selectedCreator.id] || {
+                        primaryHex: selectedCreator.brand_color || selectedCreator.brandColor || "#16A34A",
+                        colors: getHarmoniousConceptColors(selectedCreator.brand_color || selectedCreator.brandColor || "#16A34A"),
+                      };
+                      const defaultConceptColor = activeColorInfo.colors[index % activeColorInfo.colors.length];
+                      const brandColorObj = getBrandColorObj(concept.brandColor || defaultConceptColor);
                       const accentHex = brandColorObj.hex;
 
                       return (
@@ -10562,8 +10805,13 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                             {/* Dynamic Concept Mockup (Replaces static Unsplash photo with authentic UI canvas!) */}
                             <DynamicConceptMockup
                               concept={concept}
-                              creator={selectedCreator}
+                              creator={{
+                                ...selectedCreator,
+                                brand_color: activeColorInfo.primaryHex,
+                                brandColor: activeColorInfo.primaryHex,
+                              }}
                               conceptIndex={index}
+                              theme={resolveCreatorTheme(accentHex, selectedCreator?.niche, selectedCreator?.name)}
                               onOpenDeck={() => {
                                 setViewingDeckConcept(concept);
                                 setViewingDeckIndex(index);
@@ -12972,7 +13220,11 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
         isOpen={Boolean(editingConcept)}
         concept={editingConcept}
         conceptIndex={editingConceptIndex}
-        creator={selectedCreator}
+        creator={{
+          ...selectedCreator,
+          brand_color: creatorBrandColorMap[selectedCreator?.id]?.primaryHex || selectedCreator?.brand_color,
+          brandColor: creatorBrandColorMap[selectedCreator?.id]?.primaryHex || selectedCreator?.brandColor,
+        }}
         onClose={() => setEditingConcept(null)}
         onSave={handleSaveConcept}
       />
@@ -12982,7 +13234,11 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
         isOpen={Boolean(viewingDeckConcept)}
         concept={viewingDeckConcept}
         conceptIndex={viewingDeckIndex}
-        creator={selectedCreator}
+        creator={{
+          ...selectedCreator,
+          brand_color: creatorBrandColorMap[selectedCreator?.id]?.primaryHex || selectedCreator?.brand_color,
+          brandColor: creatorBrandColorMap[selectedCreator?.id]?.primaryHex || selectedCreator?.brandColor,
+        }}
         audienceIntelligence={selectedCreator?.audienceIntelligence || getCreatorAudienceIntelligence(selectedCreator)}
         onClose={() => setViewingDeckConcept(null)}
         onEditConcept={(c) => {

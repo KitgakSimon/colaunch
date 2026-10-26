@@ -1,3 +1,5 @@
+import { getFriendlyColorName } from './avatarColorExtractor'
+
 /**
  * CoLaunch Dynamic Dashboard Theme System
  *
@@ -228,13 +230,15 @@ export function resolveCreatorTheme(colorInput, niche = '', productName = '') {
   // Custom Hex Support with high-contrast calculated fallbacks
   if (raw.startsWith('#') || raw.length === 6) {
     const hex = raw.startsWith('#') ? raw : `#${raw}`
+    const colorName = getFriendlyColorName ? getFriendlyColorName(hex) : hex
+
     return {
-      id: 'custom',
-      name: 'Custom Brand',
-      subtitle: 'Tailored Creator Brand',
+      id: `custom_${hex.replace('#', '').toLowerCase()}`,
+      name: `${colorName}`,
+      subtitle: 'Creator Avatar Brand Palette',
       primaryHex: hex,
       primaryHover: hex,
-      glow: `${hex}33`,
+      glow: `${hex}38`,
       bgCanvas: '#f8fafc',
       bgCard: '#ffffff',
       bgCardSubtle: '#f1f5f9',
@@ -243,7 +247,7 @@ export function resolveCreatorTheme(colorInput, niche = '', productName = '') {
       textHeading: '#0f172a', // High-contrast dark text
       textBody: '#334155',
       textMuted: '#64748b',
-      badgeBg: '#f1f5f9',
+      badgeBg: '#f8fafc',
       badgeText: '#0f172a',
       badgeBorder: '#cbd5e1',
       accentBtnBg: hex,
@@ -251,6 +255,7 @@ export function resolveCreatorTheme(colorInput, niche = '', productName = '') {
       gradientAccent: `linear-gradient(90deg, ${hex} 0%, #0f172a 100%)`,
       dotColor: '#cbd5e1',
       ringColor: `${hex}40`,
+      isAvatarExtracted: true,
     }
   }
 

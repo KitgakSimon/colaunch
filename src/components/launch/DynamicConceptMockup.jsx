@@ -34,6 +34,7 @@ import {
   BookOpen,
   FolderOpen
 } from "lucide-react";
+import { getFriendlyColorName, hexToRgba } from "../../utils/avatarColorExtractor";
 
 /**
  * CoLaunch Studio Color Scheme
@@ -57,17 +58,22 @@ export function getBrandColorObj(colorInput) {
       c.hex.toLowerCase() === String(colorInput).toLowerCase()
   );
   if (found) return found;
-  // If a legacy purple/violet hex was stored, remap to Emerald/Obsidian
-  if (String(colorInput).toLowerCase().includes("8b5cf6") || String(colorInput).toLowerCase().includes("purple") || String(colorInput).toLowerCase().includes("violet")) {
+  // If a legacy purple/violet hex was stored, remap to Emerald
+  if (String(colorInput).toLowerCase().includes("8b5cf6") || (String(colorInput).toLowerCase().includes("purple") && !String(colorInput).startsWith("#"))) {
     return BRAND_COLORS[0];
   }
+
+  const hex = String(colorInput).startsWith("#") ? colorInput : `#${colorInput}`;
+  const friendlyName = getFriendlyColorName(hex);
+
   return {
-    name: "Studio Custom",
-    hex: colorInput,
-    bg: "bg-emerald-600",
-    text: "text-emerald-500",
-    border: "border-emerald-600/40",
-    glow: "rgba(22, 163, 74, 0.22)",
+    name: friendlyName || "Creator Custom",
+    hex: hex,
+    bg: "bg-slate-900",
+    text: "text-white",
+    border: `${hex}50`,
+    glow: hexToRgba(hex, 0.25),
+    isCustom: true,
   };
 }
 

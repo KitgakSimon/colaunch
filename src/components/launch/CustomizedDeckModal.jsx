@@ -39,11 +39,20 @@ export default function CustomizedDeckModal({
 }) {
   if (!isOpen || !concept) return null;
 
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const creatorBrandHex = creator?.brand_color || creator?.brandColor || null;
   const [activeBrandColor, setActiveBrandColor] = useState(
-    () => concept.brandColor || BRAND_COLORS[conceptIndex % BRAND_COLORS.length].hex
+    () => concept.brandColor || creatorBrandHex || BRAND_COLORS[conceptIndex % BRAND_COLORS.length].hex
   );
   const [copiedDeck, setCopiedDeck] = useState(false);
+
+  // Sync if creatorBrandHex changes
+  useEffect(() => {
+    if (concept.brandColor) {
+      setActiveBrandColor(concept.brandColor);
+    } else if (creatorBrandHex) {
+      setActiveBrandColor(creatorBrandHex);
+    }
+  }, [concept.brandColor, creatorBrandHex]);
 
   const brandColorObj = getBrandColorObj(activeBrandColor);
   const accentHex = brandColorObj.hex;
@@ -144,6 +153,17 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
               <span className="text-[10px] text-slate-400 font-bold mr-1 flex items-center gap-1">
                 <Palette className="w-3 h-3 text-emerald-400" /> Theme:
               </span>
+              {creatorBrandHex && (
+                <button
+                  type="button"
+                  onClick={() => setActiveBrandColor(creatorBrandHex)}
+                  className={`w-4 h-4 rounded-full transition-transform cursor-pointer relative ${
+                    activeBrandColor.toLowerCase() === creatorBrandHex.toLowerCase() ? "scale-125 ring-2 ring-white" : "opacity-75 hover:opacity-100"
+                  }`}
+                  style={{ backgroundColor: creatorBrandHex }}
+                  title="Creator Avatar Extracted Brand Color"
+                />
+              )}
               {BRAND_COLORS.slice(0, 5).map((bc) => (
                 <button
                   key={bc.name}
