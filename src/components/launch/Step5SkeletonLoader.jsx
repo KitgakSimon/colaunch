@@ -198,7 +198,7 @@ export default function Step5SkeletonLoader({ creatorName = 'Creator' }) {
               <div className="space-y-3.5">
                 {/* Header Badge & Opportunity Score */}
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200/60">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-800 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
                     Concept #{num}
                   </span>
                   <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 border border-amber-200/80">
@@ -207,47 +207,72 @@ export default function Step5SkeletonLoader({ creatorName = 'Creator' }) {
                   </div>
                 </div>
 
-                {/* Window Chrome Mockup Preview Skeleton (Matches Concept Card Image Window) */}
-                <div className="rounded-xl bg-slate-950 border border-slate-800 p-3 relative overflow-hidden flex flex-col justify-between shadow-2xs space-y-2.5">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                {/* Window Chrome Mockup Preview Skeleton (Matches Concept Landing Page Window) */}
+                <div className="rounded-xl bg-[#080A0E] border border-slate-800 p-2.5 relative overflow-hidden flex flex-col justify-between shadow-2xs space-y-2.5">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                     <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-rose-500/90" />
-                      <div className="w-2 h-2 rounded-full bg-amber-400/90" />
-                      <div className="w-2 h-2 rounded-full bg-emerald-400/90" />
-                      <div className="h-2.5 w-24 bg-slate-800 rounded-full animate-pulse ml-1" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-rose-500/90" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400/90" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/90" />
+                      <div className="h-3.5 w-28 bg-slate-900 border border-slate-800 rounded animate-pulse ml-1.5" />
                     </div>
-                    <span className="text-[9px] font-bold text-emerald-300 bg-emerald-500/20 px-1.5 py-0.2 rounded border border-emerald-500/30">
-                      MVP Ready
+                    <span className="text-[8.5px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full border border-emerald-500/30">
+                      Landing Page
                     </span>
                   </div>
 
-                  {/* Mockup Canvas Shimmer */}
-                  <div className="relative rounded-lg overflow-hidden border border-slate-800 h-28 bg-[#05070c] flex flex-col items-center justify-center p-3 text-center space-y-2">
-                    <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                      <Cpu className="w-4 h-4 text-purple-400 animate-spin" />
+                  {/* Mockup Landing Page Shimmer Canvas */}
+                  <div className="relative rounded-lg overflow-hidden border border-slate-800/80 min-h-[225px] bg-[#06080C] flex flex-col justify-between p-3 text-center space-y-2">
+                    {/* Mini Nav Wireframe */}
+                    <div className="flex items-center justify-between border-b border-slate-800/70 pb-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-4 h-4 rounded bg-slate-800 animate-pulse" />
+                        <div className="h-2.5 w-16 bg-slate-800 rounded animate-pulse" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-10 bg-slate-800/80 rounded animate-pulse hidden xs:block" />
+                        <div className="h-3 w-12 bg-emerald-500/30 rounded animate-pulse" />
+                      </div>
                     </div>
-                    <div className="h-3 w-32 bg-slate-800 rounded-full animate-pulse" />
-                    <div className="h-2 w-20 bg-slate-800/80 rounded-full animate-pulse" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent animate-pulse" />
+
+                    {/* Hero Badge & Headline Wireframe */}
+                    <div className="space-y-2 py-1 flex flex-col items-center">
+                      <div className="h-3 w-36 bg-slate-800/90 rounded-full animate-pulse" />
+                      <div className="h-4 w-48 bg-slate-700/80 rounded-md animate-pulse" />
+                      <div className="h-2.5 w-40 bg-slate-800/60 rounded-full animate-pulse" />
+                      <div className="flex items-center gap-2 pt-1">
+                        <div className="h-5 w-20 bg-emerald-500/40 rounded-md animate-pulse" />
+                        <div className="h-5 w-16 bg-slate-800 border border-slate-700 rounded-md animate-pulse" />
+                      </div>
+                    </div>
+
+                    {/* Feature Card Strip Wireframe */}
+                    <div className="grid grid-cols-3 gap-1 pt-1 border-t border-slate-800/60">
+                      <div className="h-7 bg-slate-900/90 rounded border border-slate-800 animate-pulse" />
+                      <div className="h-7 bg-slate-900/90 rounded border border-slate-800 animate-pulse" />
+                      <div className="h-7 bg-slate-900/90 rounded border border-slate-800 animate-pulse" />
+                    </div>
+
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent animate-pulse pointer-events-none" />
                   </div>
 
                   {/* 3 Metric Tiles Skeleton */}
                   <div className="grid grid-cols-3 gap-1.5">
-                    <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-center space-y-1">
-                      <span className="text-[8px] text-slate-400 block font-mono">MRR</span>
+                    <div className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-center space-y-1">
+                      <span className="text-[7.5px] text-slate-400 block font-mono">MRR</span>
                       <div className="h-2.5 w-10 mx-auto bg-emerald-500/40 rounded-full animate-pulse" />
                     </div>
-                    <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-center space-y-1">
-                      <span className="text-[8px] text-slate-400 block font-mono">Users</span>
-                      <div className="h-2.5 w-8 mx-auto bg-purple-400/40 rounded-full animate-pulse" />
+                    <div className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-center space-y-1">
+                      <span className="text-[7.5px] text-slate-400 block font-mono">Users</span>
+                      <div className="h-2.5 w-8 mx-auto bg-slate-700 rounded-full animate-pulse" />
                     </div>
-                    <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-center space-y-1">
-                      <span className="text-[8px] text-slate-400 block font-mono">Score</span>
+                    <div className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-center space-y-1">
+                      <span className="text-[7.5px] text-slate-400 block font-mono">Score</span>
                       <div className="h-2.5 w-8 mx-auto bg-cyan-400/40 rounded-full animate-pulse" />
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-[9px] text-slate-400 border-t border-slate-800 pt-1">
+                  <div className="flex items-center justify-between text-[9px] text-slate-400 border-t border-slate-800/80 pt-1">
                     <div className="h-2 w-24 bg-slate-800 rounded-full animate-pulse" />
                     <div className="h-2 w-16 bg-slate-800/70 rounded-full animate-pulse" />
                   </div>

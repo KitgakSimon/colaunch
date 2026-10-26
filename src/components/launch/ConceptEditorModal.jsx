@@ -231,15 +231,15 @@ export default function ConceptEditorModal({
           <div className="space-y-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="font-bold text-slate-700 block">Mockup Canvas Style</label>
+                <label className="font-bold text-slate-700 block">Landing Page Visual Style</label>
                 <select
                   value={formData.mockupType}
                   onChange={(e) => handleTextChange("mockupType", e.target.value)}
                   className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium cursor-pointer"
                 >
-                  <option value="saas_os">SaaS Workspace OS (Dashboard & Trajectory)</option>
-                  <option value="ai_copilot">AI Copilot & Workflow HUD</option>
-                  <option value="knowledge_hub">Private Member Hub & Preset Vault</option>
+                  <option value="saas_os">Modern Dark SaaS Landing Page (Coachly Style)</option>
+                  <option value="ai_copilot">Editorial AI Copilot Landing Page (study100 Style)</option>
+                  <option value="knowledge_hub">Community & Resource Vault Landing Page (Puppy Borrow Style)</option>
                 </select>
               </div>
               <div className="space-y-1">
