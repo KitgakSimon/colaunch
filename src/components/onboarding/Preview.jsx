@@ -551,7 +551,7 @@ export default function Preview() {
           </button>
           <div className="flex items-center gap-2.5">
             <WingLogo size={22} />
-            <span className="text-white font-semibold text-[15px] tracking-tight">Creator Forge</span>
+            <span className="text-white font-semibold text-[15px] tracking-tight">CoLaunch</span>
           </div>
         </div>
         <div className="flex items-center gap-1.5">

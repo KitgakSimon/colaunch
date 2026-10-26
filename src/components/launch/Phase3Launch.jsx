@@ -391,7 +391,7 @@ export default function Phase3Launch({ project, api, onUpdateProject, activeStep
 **AI Recommendation:** ${launchReport?.recommendation || 'Proceed with commercial scale'}
 
 ---
-*Synthesized by Creator Forge Phase 3 OS*
+*Synthesized by CoLaunch Phase 3 OS*
 `
     const blob = new Blob([md], { type: 'text/markdown' })
     const url = URL.createObjectURL(blob)
@@ -403,7 +403,7 @@ export default function Phase3Launch({ project, api, onUpdateProject, activeStep
     showToast('Downloaded Phase 3 Launch Report!')
   }
 
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://creatorforge.app'
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://colaunch.app'
   const productSlug = (project?.slug || project?.productName || 'product').toLowerCase().replace(/[^a-z0-9]/g, '-')
   const conversionRate = telemetry.visitors > 0 ? ((telemetry.customers / telemetry.visitors) * 100).toFixed(1) : '0.0'
   const infra = strategy?.productInfrastructure || null

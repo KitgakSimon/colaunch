@@ -261,7 +261,7 @@ export default function WorkflowWiringTutorial({ isOpen, onClose }) {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-                  Creator Forge Co-Launch Architecture
+                  CoLaunch Co-Launch Architecture
                 </h2>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-300">
                   Wiring Guide
@@ -507,7 +507,7 @@ export default function WorkflowWiringTutorial({ isOpen, onClose }) {
               <div className="space-y-1 pt-1">
                 <div className="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>How to Complete in Creator Forge</span>
+                  <span>How to Complete in CoLaunch</span>
                 </div>
                 <div className="p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 font-medium leading-relaxed">
                   {activeStep.howToFulfill}

@@ -83,7 +83,7 @@ import ActionNotificationToast from "../ui/ActionNotificationToast";
 import ConfirmationModal from "../ui/ConfirmationModal";
 import FormattedMarkdownBody from "./FormattedMarkdownBody";
 import Step5SkeletonLoader from "./Step5SkeletonLoader";
-import CreatorForgeLogo from "../ui/CreatorForgeLogo";
+import CoLaunchLogo from "../ui/CoLaunchLogo";
 import {
   CreatorCardSkeleton,
   ConceptCardSkeleton,
@@ -550,7 +550,7 @@ export default function AcquisitionEngine({
     "Quick idea for {{display_name}} 💡 [#{{handle}}]",
   );
   const [templateBody, setTemplateBody] = useState(
-    `Hi {{first_name}},\n\nI’ve been following your {{niche}} content on {{platform}} and love what you're building with your community! 👋\n\nCreator Forge ⚡ | 50/50 Venture Model\nWe partner 50/50 with creators to build custom software tools and monetization apps for their audience. Our team handles 100% of the engineering, hosting, payment setup, and customer support with zero upfront cost to you.\n\n• Full Delivery: 100% Engineering, UI/UX & QA\n• Zero Risk: $0 Upfront Cost & Co-ownership\n• Hands-Off Ops: Global Hosting, Billing & 24/7 Support\n\nWe analyzed your channel and engineered 3 tailored software product concepts for your {{follower_count}} followers that could drive recurring monthly revenue 🚀\n\nWould you be open to taking a look at a brief 3-concept breakdown this week?\n\nTo reply, simply shoot back a quick response:\n• "I'm interested, let's go ahead with the process" — and I'll send over the 3 custom software concepts and revenue roadmap.\n• Or "I am not interested, sorry" — and I will immediately take you off our list with zero follow-ups.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships · Creator Forge\n\n---\nRef: [CF-STAGE:STEP3_INQUIRY | CF-CID:{{creator_id}} | Handle:@{{handle}}]`,
+    `Hi {{first_name}},\n\nI’ve been following your {{niche}} content on {{platform}} and love what you're building with your community! 👋\n\nCoLaunch ⚡ | 50/50 Venture Model\nWe partner 50/50 with creators to build custom software tools and monetization apps for their audience. Our team handles 100% of the engineering, hosting, payment setup, and customer support with zero upfront cost to you.\n\n• Full Delivery: 100% Engineering, UI/UX & QA\n• Zero Risk: $0 Upfront Cost & Co-ownership\n• Hands-Off Ops: Global Hosting, Billing & 24/7 Support\n\nWe analyzed your channel and engineered 3 tailored software product concepts for your {{follower_count}} followers that could drive recurring monthly revenue 🚀\n\nWould you be open to taking a look at a brief 3-concept breakdown this week?\n\nTo reply, simply shoot back a quick response:\n• "I'm interested, let's go ahead with the process" — and I'll send over the 3 custom software concepts and revenue roadmap.\n• Or "I am not interested, sorry" — and I will immediately take you off our list with zero follow-ups.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships · CoLaunch\n\n---\nRef: [CF-STAGE:STEP3_INQUIRY | CF-CID:{{creator_id}} | Handle:@{{handle}}]`,
   );
   const [showStep3EmailPreview, setShowStep3EmailPreview] = useState(false);
 
@@ -2341,7 +2341,7 @@ export default function AcquisitionEngine({
       addr.startsWith("team@") ||
       addr.startsWith("partnerships@") ||
       addr.startsWith("noreply@") ||
-      addr.startsWith("hello@creatorforge")
+      addr.startsWith("hello@colaunch") || addr.startsWith("hello@creatorforge")
     ) {
       return true;
     }
@@ -2455,8 +2455,10 @@ export default function AcquisitionEngine({
       "creatorforgeweb@gmail.com",
       "creatorforgestudio@gmail.com",
       PARTNERSHIP_EMAIL,
+      "partnerships@colaunch.com",
       "partnerships@creatorforge.com",
       "noreply@creatorforge.com",
+      "hello@colaunch.com",
       "hello@creatorforge.com",
     ];
 
@@ -3209,7 +3211,7 @@ export default function AcquisitionEngine({
         .join("\n\n") +
       `\n\nUnder our 50/50 partnership, our engineering team will build and deploy the complete MVP at zero cost to you.\n\n` +
       `Take a look and let us know which concept you'd be most excited to build and launch with us! To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
-      `Best regards,\nThe Creator Forge Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `Best regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     const subject = (creator.id === selectedCreator?.id && customPitchSubject) ? customPitchSubject : defaultSubject;
     const body = (creator.id === selectedCreator?.id && customPitchBody) ? customPitchBody : defaultBody;
@@ -3392,28 +3394,28 @@ export default function AcquisitionEngine({
     if (angle === "kickoff") {
       return {
         subject: `Kickoff & 2-Week MVP Roadmap: ${conceptName} for @${cleanHandle}`,
-        body: `Hi ${firstName},\n\nThrilled to get moving on ${conceptName}!\n\nHere is our accelerated 2-week launch roadmap under our 50/50 venture co-founding partnership:\n\n1. Week 1 (Engineering & Architecture): Creator Forge engineers the complete full-stack web application, billing via Stripe Connect, and secure user authentication.\n2. Week 2 (Private Preview): We hand you a private test link to preview the product, test core features, and record a quick walkthrough.\n3. Public Launch: We announce to your ${creator.followerStr || (creator.follower_count ? creator.follower_count.toLocaleString() : "audience")} with automated 50/50 profit distributions.\n\nZero technical effort or capital is required from you. Shall we lock in this timeline to initialize the build?\n\nBest regards,\nThe Creator Forge Team`,
+        body: `Hi ${firstName},\n\nThrilled to get moving on ${conceptName}!\n\nHere is our accelerated 2-week launch roadmap under our 50/50 venture co-founding partnership:\n\n1. Week 1 (Engineering & Architecture): CoLaunch engineers the complete full-stack web application, billing via Stripe Connect, and secure user authentication.\n2. Week 2 (Private Preview): We hand you a private test link to preview the product, test core features, and record a quick walkthrough.\n3. Public Launch: We announce to your ${creator.followerStr || (creator.follower_count ? creator.follower_count.toLocaleString() : "audience")} with automated 50/50 profit distributions.\n\nZero technical effort or capital is required from you. Shall we lock in this timeline to initialize the build?\n\nBest regards,\nThe CoLaunch Team`,
       };
     }
 
     if (angle === "terms") {
       return {
         subject: `50/50 Co-Founder Terms & Zero-Cost Model — ${conceptName}`,
-        body: `Hi ${firstName},\n\nTo clarify exactly how our 50/50 venture co-founding works:\n\n• Zero Upfront Cost: Creator Forge covers 100% of engineering, cloud infrastructure, AI models, maintenance, and ongoing customer support.\n• Revenue Share: All subscription revenues are deposited into Stripe Connect, automatically splitting net platform profits 50/50.\n• Your Role: Pure distribution, audience feedback, and co-founder branding. You never touch code, server configurations, or bug fixes.\n\nWe want you doing what you do best while we operate the software machinery. Ready to move forward with ${conceptName}?\n\nBest regards,\nThe Creator Forge Team`,
+        body: `Hi ${firstName},\n\nTo clarify exactly how our 50/50 venture co-founding works:\n\n• Zero Upfront Cost: CoLaunch covers 100% of engineering, cloud infrastructure, AI models, maintenance, and ongoing customer support.\n• Revenue Share: All subscription revenues are deposited into Stripe Connect, automatically splitting net platform profits 50/50.\n• Your Role: Pure distribution, audience feedback, and co-founder branding. You never touch code, server configurations, or bug fixes.\n\nWe want you doing what you do best while we operate the software machinery. Ready to move forward with ${conceptName}?\n\nBest regards,\nThe CoLaunch Team`,
       };
     }
 
     if (angle === "demo_call") {
       return {
         subject: `Quick 15-min alignment call: ${conceptName} for @${cleanHandle}`,
-        body: `Hi ${firstName},\n\nWe would love to show you a quick 15-minute live preview of the architecture we designed for ${conceptName} (${pricing}) and discuss how we can tailor it for your community.\n\nWould you have 15 minutes open this week for a brief walkthrough, or would you prefer a 2-minute Loom screen recording first?\n\nLooking forward to your thoughts!\n\nBest regards,\nThe Creator Forge Team`,
+        body: `Hi ${firstName},\n\nWe would love to show you a quick 15-minute live preview of the architecture we designed for ${conceptName} (${pricing}) and discuss how we can tailor it for your community.\n\nWould you have 15 minutes open this week for a brief walkthrough, or would you prefer a 2-minute Loom screen recording first?\n\nLooking forward to your thoughts!\n\nBest regards,\nThe CoLaunch Team`,
       };
     }
 
     if (angle === "concept_deep_dive") {
       return {
         subject: `Deep-Dive: How ${conceptName} monetizes your ${creator.niche || "content"} audience`,
-        body: `Hi ${firstName},\n\nHere is why ${conceptName} stood out as the highest-converting opportunity for your followers:\n\n• Core Value: ${tagline}\n• The Problem It Solves: ${problem}\n• Monetization Engine: Priced at ${pricing} with automated monthly recurring revenue\n• Target Build Time: Ready in ${mvpTime}\n\nOur engineering team handles the entire technical execution at zero cost to you under our 50/50 revenue share.\n\nWhat do you think of this approach?\n\nBest regards,\nThe Creator Forge Team`,
+        body: `Hi ${firstName},\n\nHere is why ${conceptName} stood out as the highest-converting opportunity for your followers:\n\n• Core Value: ${tagline}\n• The Problem It Solves: ${problem}\n• Monetization Engine: Priced at ${pricing} with automated monthly recurring revenue\n• Target Build Time: Ready in ${mvpTime}\n\nOur engineering team handles the entire technical execution at zero cost to you under our 50/50 revenue share.\n\nWhat do you think of this approach?\n\nBest regards,\nThe CoLaunch Team`,
       };
     }
 
@@ -3428,7 +3430,7 @@ export default function AcquisitionEngine({
       ) {
         return {
           subject: `Awesome! Moving forward with ${conceptName} (@${cleanHandle})`,
-          body: `Hi ${firstName},\n\nFantastic choice! ${conceptName} is an exceptional fit for your audience.\n\nUnder our 50/50 agreement, our engineering team is ready to begin development immediately. We build, host, and maintain 100% of the software with zero cost or technical effort on your end.\n\nOur target is to have a working prototype for you to test in about ${mvpTime}. Shall we lock in the build and get started?\n\nBest regards,\nThe Creator Forge Team`,
+          body: `Hi ${firstName},\n\nFantastic choice! ${conceptName} is an exceptional fit for your audience.\n\nUnder our 50/50 agreement, our engineering team is ready to begin development immediately. We build, host, and maintain 100% of the software with zero cost or technical effort on your end.\n\nOur target is to have a working prototype for you to test in about ${mvpTime}. Shall we lock in the build and get started?\n\nBest regards,\nThe CoLaunch Team`,
         };
       }
       if (
@@ -3440,14 +3442,14 @@ export default function AcquisitionEngine({
       ) {
         return {
           subject: `Re: Zero upfront cost & 50/50 revenue split on ${conceptName}`,
-          body: `Hi ${firstName},\n\nGreat question! There is completely zero upfront cost or financial risk for you.\n\nCreator Forge funds and executes 100% of development, hosting, and support. Once live, all subscription profits are split 50/50 automatically through Stripe Connect.\n\nWould you like us to proceed with building the initial MVP for ${conceptName}?\n\nBest regards,\nThe Creator Forge Team`,
+          body: `Hi ${firstName},\n\nGreat question! There is completely zero upfront cost or financial risk for you.\n\nCoLaunch funds and executes 100% of development, hosting, and support. Once live, all subscription profits are split 50/50 automatically through Stripe Connect.\n\nWould you like us to proceed with building the initial MVP for ${conceptName}?\n\nBest regards,\nThe CoLaunch Team`,
         };
       }
     }
 
     return {
       subject: `Top 3 software concepts tailored for @${cleanHandle}`,
-      body: `Hi ${firstName},\n\nFollowing up on our partnership! Based on our analysis of your ${creator.niche || "content"} audience, we engineered 3 custom software concepts for your community.\n\nOur top recommendation is:\n• ${conceptName} (${pricing}) — ${tagline}\n  Key Focus: Solves ${problem} (Target MVP: ${mvpTime})\n\nUnder our 50/50 model, Creator Forge handles 100% of the engineering and infrastructure at zero cost to you.\n\nTake a look and let us know if ${conceptName} sounds like a winner, or if you'd like to explore the other 2 concepts!\n\nBest regards,\nThe Creator Forge Team`,
+      body: `Hi ${firstName},\n\nFollowing up on our partnership! Based on our analysis of your ${creator.niche || "content"} audience, we engineered 3 custom software concepts for your community.\n\nOur top recommendation is:\n• ${conceptName} (${pricing}) — ${tagline}\n  Key Focus: Solves ${problem} (Target MVP: ${mvpTime})\n\nUnder our 50/50 model, CoLaunch handles 100% of the engineering and infrastructure at zero cost to you.\n\nTake a look and let us know if ${conceptName} sounds like a winner, or if you'd like to explore the other 2 concepts!\n\nBest regards,\nThe CoLaunch Team`,
     };
   };
 
@@ -3482,7 +3484,7 @@ export default function AcquisitionEngine({
       } else {
         const cleanHandle = (selectedCreator.handle || "").replace(/^@/, "").trim();
         const creatorName = selectedCreator.name || selectedCreator.display_name || "Creator";
-        setCustomPitchSubject(`Re: Partnering with Creator Forge - ${creatorName} (@${cleanHandle})`);
+        setCustomPitchSubject(`Re: Partnering with CoLaunch - ${creatorName} (@${cleanHandle})`);
         setCustomPitchBody(""); // Empty when auto-draft disabled
       }
       setIsEditingPitch(false);
@@ -3534,7 +3536,7 @@ export default function AcquisitionEngine({
             `${i + 1}. ${c.name} (${c.pricing}) — ${c.tagline}\n   • Key Feature: ${c.keyFeatures?.[0] || "Automated Workflow"}\n   • Target MVP: ${c.mvpDifficulty || "2 weeks"}`,
         )
         .join("\n\n") +
-      `\n\nWe handle 100% of engineering, hosting, billing, and support under a 50/50 revenue share.\n\nWhich of these concepts feels like the best fit for your audience?\n\nBest regards,\nThe Creator Forge Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${selectedCreator.id} | Handle:@${cleanHandle}]`;
+      `\n\nWe handle 100% of engineering, hosting, billing, and support under a 50/50 revenue share.\n\nWhich of these concepts feels like the best fit for your audience?\n\nBest regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${selectedCreator.id} | Handle:@${cleanHandle}]`;
     setCustomPitchSubject(subject);
     setCustomPitchBody(body);
   };
@@ -3611,7 +3613,7 @@ export default function AcquisitionEngine({
             `${i + 1}. ${c.name} (${c.pricing || "$29/mo"}) — ${c.tagline}\n   • Solves: ${c.problem || c.description} (Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Customized Blueprint]" : ""}`,
         )
         .join("\n\n") +
-      `\n\nUnder our 50/50 partnership, our engineering team will build and deploy the complete MVP at zero cost to you.\n\nTake a look and let us know which concept you'd be most excited to build and launch with us! To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\nBest regards,\nThe Creator Forge Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `\n\nUnder our 50/50 partnership, our engineering team will build and deploy the complete MVP at zero cost to you.\n\nTake a look and let us know which concept you'd be most excited to build and launch with us! To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\nBest regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     // Use custom pitch only if this is the currently selected creator (user may have edited it)
     const subjectToSend =
@@ -3864,7 +3866,7 @@ export default function AcquisitionEngine({
         .join("\n\n") +
       `\n\nUnder our 50/50 partnership, our engineering team will build and deploy the complete MVP at zero cost to you.\n\n` +
       `Take a look and let us know which concept you'd be most excited to build and launch with us! To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
-      `Best regards,\nThe Creator Forge Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`
+      `Best regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`
     );
 
     notify("success", "Concept Saved", `Updated "${enrichedConcept.name}" — email proposal & cards refreshed with modified concept.`);
@@ -4017,15 +4019,15 @@ export default function AcquisitionEngine({
 
     const persuasionBody = isConfused
       ? `Hi ${firstName},\n\nI completely understand! We made it sound far more complicated than it actually is — sorry about that!\n\nHere is the simple 30-second version of why our creator partners love this:\n\n` +
-      `1. Zero Tech Work For You:\n   Creator Forge Studio funds and handles 100% of software engineering, cloud servers, billing, and customer support. You write zero lines of code and handle zero tickets.\n\n` +
+      `1. Zero Tech Work For You:\n   CoLaunch Studio funds and handles 100% of software engineering, cloud servers, billing, and customer support. You write zero lines of code and handle zero tickets.\n\n` +
       `2. Built Specifically for Your Community:\n   Based on audience analysis of your ${creator.followerStr || "100k+"} followers in ${creator.niche}, your community is actively seeking a tool like "${topConcept?.name}".\n\n` +
       `3. Compounding 50% Net Revenue with Zero Capital Risk:\n   You invest zero dollars. We split all monthly recurring profits 50/50 from day one. You only provide feedback and announce the tool during your regular content releases (<2 hours/month).\n\n` +
-      `Would you be open to a quick 2-minute look at the interactive preview before you make a final decision?\n\nBest,\nCreator Forge Studio Team\n\n---\nRef: [CF-CID:${cId} | Handle:@${cleanHandle}]`
+      `Would you be open to a quick 2-minute look at the interactive preview before you make a final decision?\n\nBest,\nCoLaunch Studio Team\n\n---\nRef: [CF-CID:${cId} | Handle:@${cleanHandle}]`
       : `Hi ${firstName},\n\nI completely understand your hesitation! Most creators initially decline because they assume launching a software product requires 20+ hours a week of coding, technical management, and customer support.\n\nHere is why this is completely different and why our partner creators agree to work with us:\n\n` +
-      `1. Zero Time Commitment On Your End:\n   Creator Forge handles 100% of the engineering, product design, cloud hosting, payment billing, and customer support. You write zero lines of code.\n\n` +
+      `1. Zero Time Commitment On Your End:\n   CoLaunch handles 100% of the engineering, product design, cloud hosting, payment billing, and customer support. You write zero lines of code.\n\n` +
       `2. Built Specifically for Your Community:\n   Based on audience analysis of your ${creator.followerStr || "100k+"} subscribers in ${creator.niche}, your community is actively asking for "${topConcept?.name}".\n\n` +
       `3. 50/50 Revenue Split with Zero Capital Risk:\n   You invest zero dollars. You simply announce the finished tool to your community, and we split all monthly recurring revenue 50/50.\n\n` +
-      `Could we do a quick 3-minute look at the interactive preview before you make a final decision?\n\nBest,\nCreator Forge Venture Studio\n\n---\nRef: [CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `Could we do a quick 3-minute look at the interactive preview before you make a final decision?\n\nBest,\nCoLaunch Venture Studio\n\n---\nRef: [CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     try {
       if (targetEmail && targetEmail.includes("@")) {
@@ -4210,8 +4212,8 @@ export default function AcquisitionEngine({
         if (targetEmail && targetEmail.includes("@")) {
           const firstName = (targetCreator.name || targetCreator.display_name || "there").split(" ")[0];
           const handleClean = (targetCreator.handle || "").replace(/^@/, "");
-          const rejectSubject = `Regarding Creator Forge Partnership - ${firstName} [#${handleClean}]`;
-          const rejectBody = `Hi ${firstName},\n\nThank you for getting back to us and for considering a partnership with Creator Forge.\n\nAfter reviewing our current co-launch roster and active category capacity, we won't be able to move forward with a software project at this time.\n\nWe genuinely appreciate your time and wish you continued success with your channel and community.\n\nBest regards,\nCreator Forge Studio Team`;
+          const rejectSubject = `Regarding CoLaunch Partnership - ${firstName} [#${handleClean}]`;
+          const rejectBody = `Hi ${firstName},\n\nThank you for getting back to us and for considering a partnership with CoLaunch.\n\nAfter reviewing our current co-launch roster and active category capacity, we won't be able to move forward with a software project at this time.\n\nWe genuinely appreciate your time and wish you continued success with your channel and community.\n\nBest regards,\nCoLaunch Studio Team`;
 
           try {
             await sendDirectEmail(targetEmail, rejectSubject, rejectBody, targetCreator.id, {
@@ -4302,11 +4304,11 @@ export default function AcquisitionEngine({
 
     const defaultSubject = isApprove
       ? `Partnership Accepted: Advancing to Product Discovery for ${cName}`
-      : `Creator Forge Partnership Update for ${cName}`;
+      : `CoLaunch Partnership Update for ${cName}`;
 
     const defaultBody = isApprove
-      ? `Hi ${firstName},\n\nGreat news! Following our review of your ${niche} content and community engagement on ${platform}, our studio team has officially approved your channel for our Co-Launch Software Incubation batch.\n\nWhat happens next:\n• Our engineering & product team is currently conducting deep audience research across your community.\n• We are designing the top 3 custom software product concepts engineered specifically to monetize your followers.\n• Under our 50/50 revenue-share partnership, Creator Forge covers 100% of engineering, hosting, billing, and support at zero upfront cost to you.\n\nWe'll follow up shortly with your customized 3-concept Opportunity Deck & interactive MVP previews.\n\nExcited to build with you,\nCreator Forge Studio Team`
-      : `Hi ${firstName},\n\nThank you for your response and for taking the time to explore a potential co-launch partnership with us.\n\nAfter reviewing our cohort capacity, we are currently prioritizing specific software verticals for this upcoming batch and will not be proceeding with development at this immediate moment.\n\nWe are big fans of your ${niche} content on ${platform} and will keep your channel on file for future software project opportunities.\n\nWishing you continued growth and success,\nCreator Forge Studio Team`;
+      ? `Hi ${firstName},\n\nGreat news! Following our review of your ${niche} content and community engagement on ${platform}, our studio team has officially approved your channel for our Co-Launch Software Incubation batch.\n\nWhat happens next:\n• Our engineering & product team is currently conducting deep audience research across your community.\n• We are designing the top 3 custom software product concepts engineered specifically to monetize your followers.\n• Under our 50/50 revenue-share partnership, CoLaunch covers 100% of engineering, hosting, billing, and support at zero upfront cost to you.\n\nWe'll follow up shortly with your customized 3-concept Opportunity Deck & interactive MVP previews.\n\nExcited to build with you,\nCoLaunch Studio Team`
+      : `Hi ${firstName},\n\nThank you for your response and for taking the time to explore a potential co-launch partnership with us.\n\nAfter reviewing our cohort capacity, we are currently prioritizing specific software verticals for this upcoming batch and will not be proceeding with development at this immediate moment.\n\nWe are big fans of your ${niche} content on ${platform} and will keep your channel on file for future software project opportunities.\n\nWishing you continued growth and success,\nCoLaunch Studio Team`;
 
     setDecisionModal({
       isOpen: true,
@@ -4519,7 +4521,7 @@ Before kickoff, please select which co-launch path best fits your goals:
 • Upon paying the one-time $${cobuilderPassPrice} USD access fee via Stripe or PayPal, your dedicated DIY ProjectOS Command Center URL will be dispatched to your email immediately.
 
 ### 🤝 Track 2: Studio-Managed Co-Launch Track (50/50 Revenue Split — Free Upfront)
-• **Zero upfront capital**: Creator Forge studio engineering handles 100% of technical development, cloud hosting, and payment infrastructure.
+• **Zero upfront capital**: CoLaunch studio engineering handles 100% of technical development, cloud hosting, and payment infrastructure.
 • **50/50 Net Revenue Split**: We split net revenues equally.
 • You receive our Creator Tracking Portal to monitor the build, review pre-orders, and follow your daily marketing launch kit & scripts.
 
@@ -4533,7 +4535,7 @@ ${magicPortalUrl}&offer=track_choice
 If you have any questions or want to discuss the best path for your audience, reply directly to this email at any time.
 
 Best regards,
-**The Creator Forge Studio Team**
+**The CoLaunch Studio Team**
 ${PARTNERSHIP_EMAIL}
 
 ---
@@ -4665,7 +4667,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
     const magicPortalUrl = `${origin}/portal/${portalSlug}?token=${portalToken}&offer=track_choice`;
 
     const followUpSubject = `⏰ Reminder: Choose Your Co-Launch Track for ${prodName} ($${cobuilderPassPrice} DIY or Studio-Managed)`;
-    const followUpBody = `Hi ${firstName},\n\nJust following up on the co-launch offer for **${prodName}**!\n\nPlease let us know if you would like to proceed with:\n1. 🚀 Track 1: Do-It-Yourself ProjectOS ($${cobuilderPassPrice} USD one-time fee) with 100% revenue retention & full command control\n2. 🤝 Track 2: Studio-Managed Track (50/50 Revenue Split — Free Upfront)\n\nClick the link below to select your track or complete the $${cobuilderPassPrice} payment:\n${magicPortalUrl}\n\nFeel free to reply directly to this email with any questions!\n\nBest regards,\nCreator Forge Studio Team`;
+    const followUpBody = `Hi ${firstName},\n\nJust following up on the co-launch offer for **${prodName}**!\n\nPlease let us know if you would like to proceed with:\n1. 🚀 Track 1: Do-It-Yourself ProjectOS ($${cobuilderPassPrice} USD one-time fee) with 100% revenue retention & full command control\n2. 🤝 Track 2: Studio-Managed Track (50/50 Revenue Split — Free Upfront)\n\nClick the link below to select your track or complete the $${cobuilderPassPrice} payment:\n${magicPortalUrl}\n\nFeel free to reply directly to this email with any questions!\n\nBest regards,\nCoLaunch Studio Team`;
 
     try {
       const { sendDirectEmail } = await import("../../services/opsApi");
@@ -4737,7 +4739,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
         await sendDirectEmail(
           targetEmail,
           `🚀 Your Full DIY ProjectOS Command Center URL`,
-          `Hi ${creator.name || 'there'},\n\nYour DIY ProjectOS Command Center has been activated by the studio with 100% revenue ownership.\n\nAccess your full DIY ProjectOS pipeline here:\n${dedicatedUrl}\n\nBest,\nCreator Forge Studio Team`,
+          `Hi ${creator.name || 'there'},\n\nYour DIY ProjectOS Command Center has been activated by the studio with 100% revenue ownership.\n\nAccess your full DIY ProjectOS pipeline here:\n${dedicatedUrl}\n\nBest,\nCoLaunch Studio Team`,
           creator.id
         ).catch(() => {});
       }
@@ -5563,7 +5565,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
       `• Revenue Split: 50/50 net recurring revenue deposited directly to your bank account.\n` +
       `• Time Commitment: Under 2 hours/month reviewing product roadmaps and sharing with your audience.\n\n` +
       `Which of these 3 resonates most with what your followers ask for? Let us know or feel free to ask any questions!\n\n` +
-      `Best regards,\nCreator Forge Studio Team\n\n---\nRef: [CF-STAGE:STEP6_DIALOG_PREVIEW | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `Best regards,\nCoLaunch Studio Team\n\n---\nRef: [CF-STAGE:STEP6_DIALOG_PREVIEW | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     try {
       if (targetEmail && targetEmail.includes("@")) {
@@ -5645,7 +5647,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
         `1. Compounding 50% Lifetime Net Recurring Revenue:\n` +
         `Unlike one-off sponsorships where a brand pays you once and captures all customer lifetime value, software produces compounding monthly subscription income (MRR). With 50% net revenue equity, just 500 active subscribers at $49/mo yields over $12,000/month in predictable, recurring cashflow to you.\n\n` +
         `2. Zero Upfront Investment & Zero Financial Risk:\n` +
-        `You never invest a dime of your own money. Creator Forge Studio funds 100% of the engineering, server infrastructure, Stripe billing systems, and security compliance.\n\n` +
+        `You never invest a dime of your own money. CoLaunch Studio funds 100% of the engineering, server infrastructure, Stripe billing systems, and security compliance.\n\n` +
         `3. 100% Fully Managed Engineering & Support:\n` +
         `You never write a single line of code or manage customer support tickets. Our in-house engineering team designs, develops, tests, hosts, and maintains the entire application 24/7.\n\n` +
         `4. Minimal Time Commitment (< 2 Hours/Month):\n` +
@@ -5665,7 +5667,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
     if (/split|revenue|money|cost|pay|fee|pricing|expense/i.test(qLower)) {
       sections.push(
         `• 50/50 Revenue Split & Commercial Terms:\n` +
-        `You receive 50% of all net subscription revenue from day one, deposited directly to your bank account via automated Stripe Connect payouts. Creator Forge Studio covers 100% of engineering development, server hosting, and payment processing fees. There are zero upfront fees and zero ongoing expenses charged to you.`
+        `You receive 50% of all net subscription revenue from day one, deposited directly to your bank account via automated Stripe Connect payouts. CoLaunch Studio covers 100% of engineering development, server hosting, and payment processing fees. There are zero upfront fees and zero ongoing expenses charged to you.`
       );
     }
 
@@ -5688,7 +5690,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
         `Here are our strategic thoughts on why this co-founder partnership and these 3 concepts make immense sense for your audience:\n\n` +
         `1. Tailored Community Fit: We analyzed your channel and community discussions, and identified that automated workflow and specialized tools in ${concepts[0]?.tagline || "this niche"} solve their biggest bottleneck.\n\n` +
         `2. Compounding 50% Lifetime Net Recurring Revenue: Unlike one-off sponsorships where payment ends when the video goes live, software produces compounding monthly subscription revenue (MRR) where you receive 50% net share deposited automatically via Stripe.\n\n` +
-        `3. Zero Capital & Zero Technical Management: Creator Forge Studio finances and builds 100% of the software, servers, security, and customer support. You never write code or handle tickets.\n\n` +
+        `3. Zero Capital & Zero Technical Management: CoLaunch Studio finances and builds 100% of the software, servers, security, and customer support. You never write code or handle tickets.\n\n` +
         `4. Minimal Time Commitment (< 2 Hours/Month): Your role is purely strategic product feedback and sharing the launch with your audience during your regular content schedule.\n\n` +
         `We strongly recommend starting with ${concepts[0]?.name} for our 14-day pre-order validation sprint.`
       );
@@ -5697,7 +5699,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
     if (sections.length === 0) {
       sections.push(
         `• 50/50 Net Revenue Partnership:\n` +
-        `Creator Forge Studio funds, builds, and supports 100% of the software product at zero cost to you, while you receive 50% of all net subscription revenue from day one. You provide audience distribution and product feedback under 2 hours/month.`
+        `CoLaunch Studio funds, builds, and supports 100% of the software product at zero cost to you, while you receive 50% of all net subscription revenue from day one. You provide audience distribution and product feedback under 2 hours/month.`
       );
     }
 
@@ -5711,7 +5713,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
       `2. ${concepts[1]?.name} — ${concepts[1]?.tagline} (${concepts[1]?.pricing})\n` +
       `3. ${concepts[2]?.name} — ${concepts[2]?.tagline} (${concepts[2]?.pricing})\n\n` +
       `Which of these 3 concepts do you think solves the biggest bottleneck for your audience? Let us know, and we will initialize your private partner portal and launch validation.\n\n` +
-      `Best regards,\nCreator Forge Studio Team\n\n---\nRef: [CF-STAGE:STEP6_DIALOG_ANSWER | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `Best regards,\nCoLaunch Studio Team\n\n---\nRef: [CF-STAGE:STEP6_DIALOG_ANSWER | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     try {
       if (targetEmail && targetEmail.includes("@")) {
@@ -6967,7 +6969,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                             {/* Value Proposition Hero Card */}
                             <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 md:p-6 shadow-sm" data-purpose="value-proposition-card">
                               <div className="flex items-center space-x-2 text-indigo-900 font-semibold text-base mb-2">
-                                <span className="font-bold">Creator Forge</span>
+                                <span className="font-bold">CoLaunch</span>
                                 <span className="text-amber-500">⚡</span>
                                 <span className="text-slate-400 font-normal">|</span>
                                 <span className="text-slate-700 text-sm font-medium">50/50 Venture Model</span>
@@ -7108,14 +7110,14 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                             <div className="pt-2 text-slate-700 text-sm">
                               <p>Best regards,</p>
                               <p className="font-medium text-slate-900 mt-1">Alex Rivera</p>
-                              <p className="text-slate-500 text-xs">Head of Venture Partnerships · Creator Forge</p>
+                              <p className="text-slate-500 text-xs">Head of Venture Partnerships · CoLaunch</p>
                             </div>
 
                             {/* BEGIN: ProfessionalSignature */}
                             <div className="mt-8 pt-6 border-t border-slate-200/80" data-purpose="corporate-signature-block">
                               <div className="flex items-start space-x-3.5">
-                                {/* 4-tile Creator Forge geometric logo */}
-                                <div aria-label="Creator Forge Logo" className="w-9 h-9 grid grid-cols-2 gap-1 p-1 bg-white rounded-lg border border-slate-200 shadow-xs flex-shrink-0">
+                                {/* 4-tile CoLaunch geometric logo */}
+                                <div aria-label="CoLaunch Logo" className="w-9 h-9 grid grid-cols-2 gap-1 p-1 bg-white rounded-lg border border-slate-200 shadow-xs flex-shrink-0">
                                   <div className="bg-slate-800 rounded-sm"></div>
                                   <div className="bg-indigo-600 rounded-sm"></div>
                                   <div className="bg-emerald-500 rounded-sm"></div>
@@ -7124,13 +7126,13 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                                 {/* Representative Credentials */}
                                 <div className="text-xs min-w-0">
                                   <div className="font-bold text-slate-900 text-sm tracking-tight">Alex Rivera</div>
-                                  <div className="text-slate-500 font-medium mt-0.5">Head of Venture Partnerships • Creator Forge</div>
+                                  <div className="text-slate-500 font-medium mt-0.5">Head of Venture Partnerships • CoLaunch</div>
                                   <div className="mt-2 text-slate-600 flex flex-wrap items-center gap-x-2.5 gap-y-1">
                                     <a className="font-medium text-slate-900 hover:text-indigo-600 underline decoration-slate-300" href={`mailto:${PARTNERSHIP_EMAIL}`}>
                                       {PARTNERSHIP_EMAIL}
                                     </a>
                                     <span className="text-slate-300">•</span>
-                                    <a className="hover:text-indigo-600" href="https://creatorforge.com" target="_blank" rel="noreferrer">creatorforge.com</a>
+                                    <a className="hover:text-indigo-600" href="https://colaunch.app" target="_blank" rel="noreferrer">colaunch.app</a>
                                     <span className="text-slate-300">•</span>
                                     <span className="text-slate-500">San Francisco, CA</span>
                                   </div>
@@ -8255,7 +8257,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                       </p>
                       <div className="bg-white p-3 rounded-lg border border-slate-200/80 space-y-1.5">
                         <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-                          <span>Creator Forge</span>
+                          <span>CoLaunch</span>
                           <span className="text-amber-500">⚡</span>
                           <span className="text-slate-400">|</span>
                           <span className="text-slate-600 font-medium">50/50 Venture Model</span>
@@ -8295,7 +8297,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                       <div className="pt-2 text-xs text-slate-600">
                         <p>Best regards,</p>
                         <p className="font-bold text-slate-900 mt-0.5">Alex Rivera</p>
-                        <p className="text-slate-500">Head of Venture Partnerships · Creator Forge</p>
+                        <p className="text-slate-500">Head of Venture Partnerships · CoLaunch</p>
                       </div>
                     </div>
                   </div>
@@ -10210,7 +10212,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                 const pitchSent = Boolean(
                   pitchSentMap[c.id] ||
                   (c.status || "").toLowerCase() === "pitched" ||
-                  msgs.some((m) => /blueprint|opportunity deck|software concepts|concept pitch|concepts for|partnering with creator forge|concept 1|concept 2|concept 3|co-founder portal/i.test(`${m.subject || ""} ${m.body || ""}`))
+                  msgs.some((m) => /blueprint|opportunity deck|software concepts|concept pitch|concepts for|partnering with creator forge|partnering with colaunch|concept 1|concept 2|concept 3|co-founder portal/i.test(`${m.subject || ""} ${m.body || ""}`))
                 );
 
                 return (
@@ -11009,7 +11011,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                             <p className={`text-[11px] leading-relaxed ${isSelectedRejected ? "text-slate-500" : "text-slate-600"}`}>
                               {isSelectedRejected
                                 ? "This lead is currently archived. Re-open or restore the lead to re-activate 50/50 venture terms and resume launch incubation."
-                                : "Creator Forge builds, hosts, and supports 100% of the MVP. Creator provides distribution and feedback. Net subscription profits split 50/50 via automated Stripe payouts."
+                                : "CoLaunch builds, hosts, and supports 100% of the MVP. Creator provides distribution and feedback. Net subscription profits split 50/50 via automated Stripe payouts."
                               }
                             </p>
                           </div>
@@ -11152,7 +11154,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                             >
                               <div className="flex items-center justify-between text-[11px]">
                                 <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                                  <span>{isFromCreator ? (selectedCreator.name || msg.from_address) : "Creator Forge Studio"}</span>
+                                  <span>{isFromCreator ? (selectedCreator.name || msg.from_address) : "CoLaunch Studio"}</span>
                                   {isFromCreator ? (
                                     <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                                       Creator Reply
@@ -11994,7 +11996,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                     <div className="flex items-center gap-2">
                       <span className="text-slate-500 font-bold w-14">From:</span>
                       <span className="text-slate-800 font-mono text-[11px]">
-                        Creator Forge Studio &lt;{PARTNERSHIP_EMAIL}&gt;
+                        CoLaunch Studio &lt;{PARTNERSHIP_EMAIL}&gt;
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -12434,7 +12436,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
             <div className="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 shrink-0">
               <span className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Legally Binding Mutual Operating Spec · Creator Forge Studio</span>
+                <span>Legally Binding Mutual Operating Spec · CoLaunch Studio</span>
               </span>
               <button
                 type="button"

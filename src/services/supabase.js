@@ -1,5 +1,5 @@
 /**
- * Creator Forge — Supabase client
+ * CoLaunch — Supabase client
  *
  * Set these in your .env.local (dev) and Vercel env vars (prod):
  *   VITE_SUPABASE_URL=https://xxxx.supabase.co

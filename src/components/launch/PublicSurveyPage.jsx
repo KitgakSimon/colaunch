@@ -61,7 +61,7 @@ export default function PublicSurveyPage({ slug }) {
 
   useEffect(() => {
     updatePageSEO({
-      title: project?.productName ? `Audience Survey — ${project.productName} | Creator Forge` : "Audience Discovery & Research Survey | Creator Forge",
+      title: project?.productName ? `Audience Survey — ${project.productName} | CoLaunch` : "Audience Discovery & Research Survey | CoLaunch",
       description: "Help shape our next software product! Share your biggest workflow challenges in 60 seconds.",
       image: "/og-image.svg"
     });
@@ -285,7 +285,7 @@ export default function PublicSurveyPage({ slug }) {
 
         {/* Footer */}
         <div className="text-center text-slate-500 text-xs">
-          Powered by CreatorForge Co-Launch OS · Confidential Discovery Research
+          Powered by CoLaunch Co-Launch OS · Confidential Discovery Research
         </div>
       </div>
     </div>

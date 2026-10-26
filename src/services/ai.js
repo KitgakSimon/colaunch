@@ -1,5 +1,5 @@
 /**
- * Creator Forge — AI Generation Service
+ * CoLaunch — AI Generation Service
  *
  * Text:  Google Gemini 2.5 Flash  via /api/gemini proxy   (Gemini key: AIzaSy...)
  * Image: Together.ai FLUX Free    via /api/together proxy  (Together key: free at together.ai)
@@ -1634,7 +1634,7 @@ export function getBaseAppOrigin() {
   if (typeof window !== 'undefined' && window.location?.origin) {
     return window.location.origin.replace(/\/$/, '')
   }
-  return 'https://creator-forge-frontend.vercel.app'
+  return 'https://colaunch-frontend.vercel.app'
 }
 
 export function buildSmartFallbackCampaignKit(source, options = {}) {
@@ -1718,7 +1718,7 @@ export function buildSmartFallbackCampaignKit(source, options = {}) {
       effort: "~10 mins",
       spacingNotice: "Mid-Sprint Milestone · Day 8",
       description:
-        `Send personal 1:1 founder letter explaining why ${creator} is co-founding ${product} with Creator Forge, inviting 50 Founding Members.`,
+        `Send personal 1:1 founder letter explaining why ${creator} is co-founding ${product} with CoLaunch, inviting 50 Founding Members.`,
     },
     {
       id: "milestone-4",
@@ -1749,7 +1749,7 @@ export function buildSmartFallbackCampaignKit(source, options = {}) {
       draftKey: "storySequence",
       effort: "~10 mins",
       spacingNotice: "Community Update · Day 6",
-      description: "Share the technical design sprint with Creator Forge engineering.",
+      description: "Share the technical design sprint with CoLaunch engineering.",
     },
     lowBurdenSchedule[2],
     lowBurdenSchedule[3]
@@ -1825,7 +1825,7 @@ export function buildSmartFallbackCampaignKit(source, options = {}) {
       effort: "~10 mins",
       spacingNotice: "Primary Inbox Broadcast · Day 8",
       description:
-        `Send personal 1:1 founder letter explaining why ${creator} is co-founding ${product} with Creator Forge, inviting 50 Founding Members.`,
+        `Send personal 1:1 founder letter explaining why ${creator} is co-founding ${product} with CoLaunch, inviting 50 Founding Members.`,
     },
     {
       id: "milestone-6-int",
@@ -1871,7 +1871,7 @@ export function buildSmartFallbackCampaignKit(source, options = {}) {
     fallbackAnnouncement = `✨ Major community project update: Rather than public spam, we're building ${product} privately with 50 core community members.\n\nCheck your email newsletter or our story sequence for the Founding Member reservation link ($${unitPrice}/yr · $${depositVal} hold):\n${origin}/preorder/${slug}?ref=community_update`;
   }
 
-  let fallbackVideoScript = `60-SECOND NATIVE VIDEO INTEGRATION / SHORT DEMO\n\nHOOK (0:00 - 0:08):\n(Direct to camera, natural peer tone)\n"If you saw our recent breakdown on ${primaryVideoTitle}, you saw how painful the manual bottleneck really is in ${niche}."\n\nPROBLEM (0:08 - 0:22):\n(Screen recording showing the messy manual steps or spreadsheet chaos)\n"Most existing tools are built by corporate teams who don't actually do this work. We lose hours every single week just dealing with fragmented tools and manual errors."\n\nSOLUTION (0:22 - 0:42):\n(Previewing ${product} interface and smooth workflow)\n"That's why we teamed up with Creator Forge Studio to engineer ${product} — ${tagline}. It automates the entire workflow in one seamless workspace."\n\nCTA & FOUNDING PERK (0:42 - 0:60):\n(Showing Founding Pass badge & reservation link)\n"Before we finish building the MVP, we are opening just 50 Founding Member spots at 50% off ($${unitPrice}/yr) with a $${depositVal} refundable deposit. Link in bio/description to grab your spot!"`;
+  let fallbackVideoScript = `60-SECOND NATIVE VIDEO INTEGRATION / SHORT DEMO\n\nHOOK (0:00 - 0:08):\n(Direct to camera, natural peer tone)\n"If you saw our recent breakdown on ${primaryVideoTitle}, you saw how painful the manual bottleneck really is in ${niche}."\n\nPROBLEM (0:08 - 0:22):\n(Screen recording showing the messy manual steps or spreadsheet chaos)\n"Most existing tools are built by corporate teams who don't actually do this work. We lose hours every single week just dealing with fragmented tools and manual errors."\n\nSOLUTION (0:22 - 0:42):\n(Previewing ${product} interface and smooth workflow)\n"That's why we teamed up with CoLaunch Studio to engineer ${product} — ${tagline}. It automates the entire workflow in one seamless workspace."\n\nCTA & FOUNDING PERK (0:42 - 0:60):\n(Showing Founding Pass badge & reservation link)\n"Before we finish building the MVP, we are opening just 50 Founding Member spots at 50% off ($${unitPrice}/yr) with a $${depositVal} refundable deposit. Link in bio/description to grab your spot!"`;
   if (isEmailStoriesOnly) {
     fallbackVideoScript = `(Strategy Note: Zero Video Filming Required per operator guidance. Optional backup short below):\n\nHOOK (0:00 - 0:10):\n"Hey everyone! Quick 30-second update on the software tool we're building for ${niche}."\n\nSOLUTION & CTA (0:10 - 0:30):\n"Head to the link in my bio or check my latest Instagram story to join our 50 Founding Members and lock your 50% lifetime discount (${origin}/preorder/${slug})."`;
   }
@@ -3954,7 +3954,7 @@ pytest tests/test_suite.py
 \`\`\`
 
 ---
-*Generated autonomously by Creator Forge Cloud Code Studio & synced to Cloudinary CDN.*
+*Generated autonomously by CoLaunch Cloud Code Studio & synced to Cloudinary CDN.*
 `
 
   return [

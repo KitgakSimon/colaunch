@@ -2,7 +2,7 @@
   <!-- Rounded Base Tile -->
   <rect width="32" height="32" rx="8" fill="#0F172A"/>
   
-  <!-- Creator Forge 4-Node Catalyst Mark -->
+  <!-- CoLaunch 4-Node Catalyst Mark -->
   <!-- Node 1: Creator (Base Anchor) -->
   <rect x="5.5" y="17" width="9" height="9" rx="2" fill="#F8FAFC"/>
   <!-- Node 2: Audience Signal (Elevation) -->

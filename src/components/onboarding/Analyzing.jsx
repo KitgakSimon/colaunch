@@ -351,7 +351,7 @@ export default function Analyzing() {
             </button>
             <div className="flex items-center gap-2.5">
               <WingLogo size={22} />
-              <span className="text-white/50 font-semibold text-[13px] tracking-tight">Creator Forge</span>
+              <span className="text-white/50 font-semibold text-[13px] tracking-tight">CoLaunch</span>
             </div>
           </div>
           {scrapeError && (

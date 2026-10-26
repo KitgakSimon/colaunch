@@ -18,7 +18,7 @@ import { getFrontendUrl, recordGateDecision } from '../../services/opsApi'
 import { ProjectOSSkeleton } from './Section2Skeletons'
 import CreatorWhatsAppChat from './CreatorWhatsAppChat'
 import ProjectFileExplorer from './ProjectFileExplorer'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 import AudienceGroundingModal from './AudienceGroundingModal'
 import { getProjectAudienceGrounding, enrichTasksWithGrounding } from '../../utils/audienceGrounding'
 import { getPhase1StepGuards, getPhase2StepGuards, getPhase3StepGuards, getProjectActiveStep } from '../../utils/stepGuards'
@@ -180,7 +180,7 @@ export default function ProjectOS({
   const [shareNotice, setShareNotice] = useState('')
   const [shareTab, setShareTab] = useState('email') // 'email' | 'preview' | 'link'
   const [portalRecipientEmail, setPortalRecipientEmail] = useState(() => (project?.creatorEmail || project?.email_public || project?.email || '').trim())
-  const [portalEmailSubject, setPortalEmailSubject] = useState(() => `Co-Founder Portal Live: Developing ${project?.productName || 'our software'} with Creator Forge`)
+  const [portalEmailSubject, setPortalEmailSubject] = useState(() => `Co-Founder Portal Live: Developing ${project?.productName || 'our software'} with CoLaunch`)
   const [portalEmailBody, setPortalEmailBody] = useState(() => {
     const firstName = (project?.creatorName || 'there').split(' ')[0]
     const prodName = project?.productName || 'your custom software platform'
@@ -199,7 +199,7 @@ Your private, passwordless **Co-Founder Portal** is now live. Through your porta
 • **Product Name:** ${prodName}
 • **Value Proposition:** ${tagline}
 • **Pricing Tier:** ${pricing} (50/50 Net Revenue Split)
-• **Financial Risk:** Zero upfront capital — Creator Forge covers 100% of engineering, hosting, payment setup, and customer operations.
+• **Financial Risk:** Zero upfront capital — CoLaunch covers 100% of engineering, hosting, payment setup, and customer operations.
 
 ---
 
@@ -218,8 +218,8 @@ ${mUrl}
 We are thrilled to partner with you on this venture. Feel free to reply directly to this email at any time.
 
 Best regards,
-**The Creator Forge Studio Team**
-partnerships@creatorforge.com`
+**The CoLaunch Studio Team**
+partnerships@colaunch.com`
   })
   const [isSendingPortalEmail, setIsSendingPortalEmail] = useState(false)
   const [portalEmailSuccess, setPortalEmailSuccess] = useState(false)
@@ -2431,7 +2431,7 @@ partnerships@creatorforge.com`
             <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
-                  <CreatorForgeLogo size={20} showText={false} theme="light" />
+                  <CoLaunchLogo size={20} showText={false} theme="light" />
                 </div>
                 <div>
                   <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -2705,7 +2705,7 @@ partnerships@creatorforge.com`
                       <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 shadow-2xs">
                         {/* Simulated Email Client Bar */}
                         <div className="p-2.5 rounded-lg bg-white border border-slate-200 text-[11px] space-y-1 font-mono text-slate-600">
-                          <div><strong className="text-slate-900">From:</strong> Creator Forge Venture Studio &lt;partnerships@creatorforge.com&gt;</div>
+                          <div><strong className="text-slate-900">From:</strong> CoLaunch Venture Studio &lt;partnerships@colaunch.com&gt;</div>
                           <div><strong className="text-slate-900">To:</strong> {portalRecipientEmail || 'creator@example.com'}</div>
                           <div><strong className="text-slate-900">Subject:</strong> {portalEmailSubject}</div>
                         </div>
@@ -2715,7 +2715,7 @@ partnerships@creatorforge.com`
                           <div className="p-4 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <Rocket className="w-4 h-4 text-slate-800" />
-                              <span className="font-extrabold text-slate-950 text-sm">CREATOR FORGE</span>
+                              <span className="font-extrabold text-slate-950 text-sm">COLAUNCH</span>
                             </div>
                             <span className="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
                               Verified Invite
@@ -2752,7 +2752,7 @@ partnerships@creatorforge.com`
 
                           {/* Email Footer */}
                           <div className="p-4 bg-slate-50 border-t border-slate-200 text-center text-[10px] text-slate-500 space-y-0.5">
-                            <div className="font-bold text-slate-700">Creator Forge Venture Studio</div>
+                            <div className="font-bold text-slate-700">CoLaunch Venture Studio</div>
                             <div>Co-launching software empires with leading digital creators.</div>
                           </div>
                         </div>

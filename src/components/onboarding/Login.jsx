@@ -10,7 +10,7 @@ import {
   ArrowLeft,
   ArrowRight
 } from 'lucide-react'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 
 export default function Login() {
   const { goTo, updateCreator, setUserProfile, updateAiKeys } = useForge()
@@ -107,8 +107,8 @@ export default function Login() {
       .catch((err) => {
         // Fallback local auth for demo/offline
         if (
-          (identifier.trim() === 'admin' && password === 'creatorforge2026') ||
-          (identifier.trim() === 'creatorforgeweb@gmail.com' && (password === 'Upworkproject' || password === 'creatorforge2026'))
+          (identifier.trim() === 'admin' && (password === 'creatorforge2026' || password === 'colaunch2026')) ||
+          (identifier.trim() === 'creatorforgeweb@gmail.com' && (password === 'Upworkproject' || (password === 'creatorforge2026' || password === 'colaunch2026')))
         ) {
           localStorage.setItem('forge_active_session', 'true')
           localStorage.setItem('forge_login_timestamp', Date.now().toString())
@@ -142,9 +142,9 @@ export default function Login() {
         {/* Dark overlay with soft gradient */}
         <div className="login-image-overlay" />
 
-        {/* Creator Forge branding */}
+        {/* CoLaunch branding */}
         <div className="login-image-brand">
-          <CreatorForgeLogo size={24} theme="dark" showWordmark={true} />
+          <CoLaunchLogo size={24} theme="dark" showWordmark={true} />
         </div>
 
         {/* Caption text */}
@@ -173,7 +173,7 @@ export default function Login() {
           {/* Heading */}
           <div className="login-form-heading">
             <h1>Welcome back</h1>
-            <p>Sign in to your Creator Forge workspace</p>
+            <p>Sign in to your CoLaunch workspace</p>
           </div>
 
           {/* Error */}
@@ -264,7 +264,7 @@ export default function Login() {
 
         {/* Footer */}
         <div className="login-form-footer">
-          <span>© 2026 Creator Forge · 256-Bit Encrypted</span>
+          <span>© 2026 CoLaunch · 256-Bit Encrypted</span>
         </div>
 
       </div>

@@ -375,7 +375,7 @@ export const resetWorkflowState = async () => {
 
 export const uploadMediaToCloudinary = (data) => req('POST', '/upload', data)
 
-export const uploadFormFileToCloudinary = async (file, folder = 'creator_forge', projectId = null) => {
+export const uploadFormFileToCloudinary = async (file, folder = 'colaunch', projectId = null) => {
   const formData = new FormData()
   formData.append('file', file)
   if (folder) formData.append('folder', folder)
@@ -425,7 +425,7 @@ export const getFrontendUrl = () => {
   if (typeof window !== 'undefined' && window.location?.origin) {
     return window.location.origin.replace(/\/$/, '')
   }
-  return 'https://creator-forge-frontend.vercel.app'
+  return 'https://colaunch-frontend.vercel.app'
 }
 
 // ── Target Niches Database Operations ─────────────────────────────────────────

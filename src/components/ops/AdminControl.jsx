@@ -570,7 +570,7 @@ export default function AdminControl() {
                       value={editFromName}
                       onChange={e => setEditFromName(e.target.value)}
                       className="bg-[#070707]/60 border border-white/8 rounded-xl px-3 py-2 outline-none text-white text-[11px]"
-                      placeholder="Creator Forge Team"
+                      placeholder="CoLaunch Team"
                     />
                   ) : (
                     <span className="text-[11px] text-white/50">{sysSettings?.from_name || 'Not Set'}</span>

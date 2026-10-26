@@ -1,5 +1,5 @@
 /**
- * Creator Forge — Real Profile Scraper
+ * CoLaunch — Real Profile Scraper
  *
  * ONE Apify token covers all 4 platforms:
  *   YouTube   → Apify: streamers~youtube-channel-scraper  (4.3★, 12K users)

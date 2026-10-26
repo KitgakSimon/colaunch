@@ -159,7 +159,7 @@ export default function Signup() {
       <header className="flex items-center justify-between max-w-4xl mx-auto w-full">
         <button onClick={() => goTo('welcome')} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
           <WingLogo size={22} />
-          <span className="text-white font-semibold text-[15px] tracking-tight">Creator Forge</span>
+          <span className="text-white font-semibold text-[15px] tracking-tight">CoLaunch</span>
         </button>
         <div className="flex items-center gap-1.5">
           {[1,2,3,4,5,6,7,8,9].map(i => (
@@ -361,7 +361,7 @@ export default function Signup() {
 
       <footer className="text-center max-w-md mx-auto w-full flex-shrink-0 pb-6">
         <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
-          © 2026 Creator Forge. All rights reserved.
+          © 2026 CoLaunch. All rights reserved.
         </p>
       </footer>
     </div>

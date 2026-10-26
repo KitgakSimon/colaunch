@@ -146,7 +146,7 @@ Stop creating for free. Start building what your audience will actually pay for.
 [Product Name] is the [type] built for creators who are ready to turn their audience into a real business.
 
 **The ask**
-You've built the audience. Forge built the engine.
+You've built the audience. CoLaunch built the engine.
 
 Here's what's inside:
 → [Feature / module 1 with outcome]

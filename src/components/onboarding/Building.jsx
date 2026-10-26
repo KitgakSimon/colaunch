@@ -192,7 +192,7 @@ export default function Building() {
       <header className="flex items-center justify-between px-8 py-6 flex-shrink-0">
         <div className="flex items-center gap-2.5">
           <WingLogo size={22} />
-          <span className="text-white font-semibold text-[15px] tracking-tight">Creator Forge</span>
+          <span className="text-white font-semibold text-[15px] tracking-tight">CoLaunch</span>
         </div>
         <div className="flex items-center gap-1.5">
           {[1,2,3,4,5,6,7,8].map(i => (

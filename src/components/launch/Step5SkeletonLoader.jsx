@@ -15,7 +15,7 @@ import {
  * Step5SkeletonLoader
  * Light-theme animated skeleton state shown while AI synthesizes deep audience intelligence
  * and engineers the top 3 co-launch software product concepts for the creator.
- * Matches the exact clean white/slate design system of Creator Forge.
+ * Matches the exact clean white/slate design system of CoLaunch.
  */
 export default function Step5SkeletonLoader({ creatorName = 'Creator' }) {
   return (

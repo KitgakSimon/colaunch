@@ -95,7 +95,7 @@ export default function PostVisualMockup({
     project?.transcripts?.[0]?.title ||
     'Recent Channel Upload'
 
-  const targetUrl = preorderUrl || (typeof window !== 'undefined' ? `${window.location.origin}/preorder/${(productName || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : 'https://creatorforge.app/preorder')
+  const targetUrl = preorderUrl || (typeof window !== 'undefined' ? `${window.location.origin}/preorder/${(productName || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : 'https://colaunch.app/preorder')
 
   const scriptText = copyText || project?.campaignKit?.videoScript || ''
 
@@ -304,7 +304,7 @@ export default function PostVisualMockup({
             {/* Clickable Card Link Metadata Footer */}
             <div className="px-4 py-2.5 bg-black border-t border-[#2f3336] flex items-center justify-between text-xs">
               <div className="min-w-0">
-                <span className="text-[10px] text-[#71767b] font-mono block truncate" style={{ color: '#71767b' }}>creatorforge.app/preorder</span>
+                <span className="text-[10px] text-[#71767b] font-mono block truncate" style={{ color: '#71767b' }}>colaunch.app/preorder</span>
                 <span className="font-bold text-white text-xs truncate block" style={{ color: '#ffffff' }}>{productName} — Official Co-Launch</span>
               </div>
               <span className="px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-200 text-black font-extrabold text-xs shrink-0 flex items-center gap-1.5 transition-colors shadow-sm">

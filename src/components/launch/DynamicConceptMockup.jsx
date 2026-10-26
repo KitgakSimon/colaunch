@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 /**
- * Creator Forge Studio Color Scheme
+ * CoLaunch Studio Color Scheme
  * Clean, human, prestigious venture studio palettes (Obsidian, Emerald, Forge Lime, Ocean Cyan, Venture Amber, Steel)
  * Zero non-human AI purple gradients.
  */
@@ -63,7 +63,7 @@ export function getBrandColorObj(colorInput) {
 /**
  * Dynamic Concept Mockup
  * Renders authentic, high-res simulated software interfaces tailored to Concept 1, Concept 2, and Concept 3
- * using Creator Forge's human studio color scheme (Dark Obsidian, Forest Emerald, Cyan, Slate).
+ * using CoLaunch's human studio color scheme (Dark Obsidian, Forest Emerald, Cyan, Slate).
  */
 export default function DynamicConceptMockup({
   concept,

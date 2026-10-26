@@ -10,7 +10,7 @@ const INSIGHTS = [
     type: 'action',
     icon: AlertCircle,
     label: 'No members yet - your product is live',
-    detail: 'Share your launch link to get your first 10 signups. Forge suggests posting today.',
+    detail: 'Share your launch link to get your first 10 signups. CoLaunch suggests posting today.',
     cta: 'Generate launch post',
     color: 'rgba(255,255,255,0.06)',
   },
@@ -91,7 +91,7 @@ export default function Revenue() {
           Revenue overview
         </h2>
         <p className="text-[14px]" style={{ color: 'rgba(255,255,255,0.38)' }}>
-          Forge tracks your revenue and tells you what to do next.
+          CoLaunch tracks your revenue and tells you what to do next.
         </p>
       </div>
 
@@ -169,7 +169,7 @@ export default function Revenue() {
       {/* Forge insights - action-tied */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <p className="forge-label">Forge guidance</p>
+          <p className="forge-label">CoLaunch guidance</p>
           <Sparkles size={13} className="text-white/25" />
         </div>
         <div className="space-y-2">

@@ -109,7 +109,7 @@ const INITIAL_AUTOMATIONS = [
     id: 'weekly-content',
     icon: Calendar,
     label: 'Weekly content plan',
-    description: 'Every Monday, Forge generates a full week of posts tailored to your launch goals and drops them into your calendar as drafts.',
+    description: 'Every Monday, CoLaunch generates a full week of posts tailored to your launch goals and drops them into your calendar as drafts.',
     cadence: 'Every Monday',
     mode: 'draft',
     active: false,
@@ -127,7 +127,7 @@ const INITIAL_AUTOMATIONS = [
     id: 'repurpose',
     icon: RefreshCw,
     label: 'Repurpose YouTube uploads',
-    description: 'When you upload a YouTube video, Forge automatically generates 5 short-form posts adapted for Instagram, X, TikTok, and your email list.',
+    description: 'When you upload a YouTube video, CoLaunch automatically generates 5 short-form posts adapted for Instagram, X, TikTok, and your email list.',
     cadence: 'On each upload',
     mode: 'draft',
     active: false,
@@ -136,7 +136,7 @@ const INITIAL_AUTOMATIONS = [
     id: 'launch-reminders',
     icon: AlertCircle,
     label: 'Launch reminder drafts',
-    description: 'Before key launch dates, Forge auto-drafts countdown posts and emails so you never go dark during your most important moments.',
+    description: 'Before key launch dates, CoLaunch auto-drafts countdown posts and emails so you never go dark during your most important moments.',
     cadence: '3 days before dates',
     mode: 'draft',
     active: false,
@@ -145,7 +145,7 @@ const INITIAL_AUTOMATIONS = [
     id: 'product-update-copy',
     icon: Upload,
     label: 'Product update copy',
-    description: 'When you make changes to your product, Forge drafts an announcement post and email to keep your audience informed.',
+    description: 'When you make changes to your product, CoLaunch drafts an announcement post and email to keep your audience informed.',
     cadence: 'On product changes',
     mode: 'draft',
     active: false,
@@ -154,7 +154,7 @@ const INITIAL_AUTOMATIONS = [
     id: 'milestone-posts',
     icon: Radio,
     label: 'Milestone celebration posts',
-    description: 'When you hit milestones (10 members, $1K, first sale), Forge auto-drafts a celebration post to share your momentum.',
+    description: 'When you hit milestones (10 members, $1K, first sale), CoLaunch auto-drafts a celebration post to share your momentum.',
     cadence: 'On milestone hit',
     mode: 'draft',
     active: false,
@@ -369,7 +369,7 @@ export default function Settings() {
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = 'creator_forge_api_keys.pdf'
+        a.download = 'colaunch_api_keys.pdf'
         document.body.appendChild(a)
         a.click()
         a.remove()
@@ -511,7 +511,7 @@ export default function Settings() {
           <div className="space-y-6">
             <div>
               <h2 className="forge-heading mb-1" style={{ fontSize: '22px', letterSpacing: '-0.03em' }}>Profile</h2>
-              <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.38)' }}>Your creator identity inside Forge.</p>
+              <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.38)' }}>Your creator identity inside CoLaunch.</p>
             </div>
 
             <div className="space-y-3">
@@ -844,7 +844,7 @@ export default function Settings() {
             <div>
               <h2 className="forge-heading mb-1" style={{ fontSize: '22px', letterSpacing: '-0.03em' }}>Automations</h2>
               <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.38)', lineHeight: '1.5' }}>
-                Let Forge handle recurring work automatically. All automations create drafts by default - you approve before anything posts.
+                Let CoLaunch handle recurring work automatically. All automations create drafts by default - you approve before anything posts.
               </p>
             </div>
 
@@ -857,7 +857,7 @@ export default function Settings() {
                 <Radio size={14} className="text-white/50" />
                 <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
                   <strong className="text-white">{activeAutomationCount} automation{activeAutomationCount > 1 ? 's' : ''} active.</strong>{' '}
-                  Forge will create drafts automatically - you'll be notified before anything posts.
+                  CoLaunch will create drafts automatically - you'll be notified before anything posts.
                 </p>
               </div>
             )}
@@ -883,7 +883,7 @@ export default function Settings() {
                 <div>
                   <p className="text-[13px] font-semibold text-white mb-0.5">Always require approval</p>
                   <p className="text-[12px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                    Forge will never auto-post without your review. Automations create drafts only.
+                    CoLaunch will never auto-post without your review. Automations create drafts only.
                   </p>
                 </div>
                 <Toggle value={true} onChange={() => {}} />
@@ -898,7 +898,7 @@ export default function Settings() {
             <div>
               <h2 className="forge-heading mb-1" style={{ fontSize: '22px', letterSpacing: '-0.03em' }}>Notifications</h2>
               <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.38)' }}>
-                Choose what Forge notifies you about.
+                Choose what CoLaunch notifies you about.
               </p>
             </div>
 
@@ -933,7 +933,7 @@ export default function Settings() {
             <div>
               <h2 className="forge-heading mb-1" style={{ fontSize: '22px', letterSpacing: '-0.03em' }}>Billing</h2>
               <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.38)' }}>
-                Manage your Forge subscription.
+                Manage your CoLaunch subscription.
               </p>
             </div>
 

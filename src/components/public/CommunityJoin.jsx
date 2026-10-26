@@ -18,7 +18,7 @@ export default function CommunityJoin({ handle }) {
 
   useEffect(() => {
     updatePageSEO({
-      title: `Join @${cleanHandle}'s VIP Community | Creator Forge`,
+      title: `Join @${cleanHandle}'s VIP Community | CoLaunch`,
       description: `Join the official community and get early access to exclusive software tools built with @${cleanHandle}.`,
       image: "/og-image.svg"
     });
@@ -220,7 +220,7 @@ export default function CommunityJoin({ handle }) {
         {/* Powered by */}
         <div className="mt-10 flex items-center justify-center gap-2">
           <WingLogo size={14} color="rgba(255,255,255,0.15)" />
-          <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.15)' }}>Powered by Creator Forge</span>
+          <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.15)' }}>Powered by CoLaunch</span>
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ import {
   Cpu,
   ChevronUp
 } from 'lucide-react'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 import FloatingPolygons, { HeroShallowPolygons } from '../ui/FloatingPolygons'
 import ShippedLiveCanvas from '../ui/ShippedLiveCanvas'
 
@@ -199,7 +199,7 @@ const PORTFOLIO_PRODUCTS = [
     id: 'crm',
     title: 'Creator CRM OS',
     category: 'BRAND DEALS & SPONSORS',
-    url: 'crm.creatorforge.app',
+    url: 'crm.colaunch.app',
     creator: 'Ali Abdaal Ecosystem',
     mrr: '$42,300 MRR',
     badge: 'LIVE PARTNERSHIP',
@@ -210,7 +210,7 @@ const PORTFOLIO_PRODUCTS = [
     id: 'intel',
     title: 'Audience Intelligence',
     category: 'COMMENT REQUEST FINDER',
-    url: 'intel.creatorforge.app',
+    url: 'intel.colaunch.app',
     creator: 'Elena Rostova Studio',
     mrr: '$31,800 MRR',
     badge: 'LIVE PARTNERSHIP',
@@ -221,7 +221,7 @@ const PORTFOLIO_PRODUCTS = [
     id: 'community',
     title: 'Community OS Hub',
     category: 'MEMBER WORKSPACE',
-    url: 'community.creatorforge.app',
+    url: 'community.colaunch.app',
     creator: 'Marcus Vance Network',
     mrr: '$54,200 MRR',
     badge: 'LIVE PARTNERSHIP',
@@ -232,7 +232,7 @@ const PORTFOLIO_PRODUCTS = [
     id: 'finance',
     title: 'Creator Finance Treasury',
     category: 'AUTOMATIC PAYOUTS',
-    url: 'treasury.creatorforge.app',
+    url: 'treasury.colaunch.app',
     creator: 'Jamal Rivera Co-Launch',
     mrr: '$28,600 MRR',
     badge: 'LIVE PARTNERSHIP',
@@ -248,11 +248,11 @@ const FAQS = [
     category: 'Partnership & Model',
     badge: '$0 Upfront vs $120k',
     q: "Couldn't I just hire a software agency or sell another course?",
-    a: "Agencies charge $60,000 to $120,000 upfront with zero skin in the game. If users cancel or things break, they bill you more hourly fees. Digital courses burn out audiences with low completion rates. Creator Forge does 100% of the engineering and 24/7 maintenance for $0 upfront. We only make money when your software succeeds.",
+    a: "Agencies charge $60,000 to $120,000 upfront with zero skin in the game. If users cancel or things break, they bill you more hourly fees. Digital courses burn out audiences with low completion rates. CoLaunch does 100% of the engineering and 24/7 maintenance for $0 upfront. We only make money when your software succeeds.",
     comparison: [
       { label: 'Software Agency', detail: '$60k–$120k upfront + hourly maintenance fees with zero skin in the game', type: 'negative' },
       { label: 'Selling Courses', detail: 'High audience burnout, one-off payment spikes, <8% completion rates', type: 'negative' },
-      { label: 'Creator Forge (50/50)', detail: '$0 upfront cost, 100% managed engineering & servers, 50/50 profit split only when you win', type: 'positive' }
+      { label: 'CoLaunch (50/50)', detail: '$0 upfront cost, 100% managed engineering & servers, 50/50 profit split only when you win', type: 'positive' }
     ]
   },
   {
@@ -463,7 +463,7 @@ export default function Welcome() {
             className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer shrink-0" 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <CreatorForgeLogo size={20} showText={true} theme="light" />
+            <CoLaunchLogo size={20} showText={true} theme="light" />
           </div>
 
           {/* Navigation Links (Desktop — Clean Essential Anchors) */}
@@ -618,7 +618,7 @@ export default function Welcome() {
 
             <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs text-slate-500 font-mono">
-                <span className="font-bold text-slate-800">CreatorForge</span> · We code & run the app. You split profits 50/50.
+                <span className="font-bold text-slate-800">CoLaunch</span> · We code & run the app. You split profits 50/50.
               </p>
               <button
                 type="button"
@@ -639,7 +639,7 @@ export default function Welcome() {
         )}
       </header>
 
-      {/* ── HERO SECTION (S1: STRUCTURED LIKE REFERENCE DESIGN, CREATORFORGE PALETTE, LARGE 3D HERO) ── */}
+      {/* ── HERO SECTION (S1: STRUCTURED LIKE REFERENCE DESIGN, COLAUNCH PALETTE, LARGE 3D HERO) ── */}
       <section className="relative w-full px-4 sm:px-6 md:px-8 lg:px-[10%] min-h-[82vh] lg:min-h-[88vh] flex flex-col justify-center py-8 sm:py-16 lg:py-20 overflow-hidden border-b border-slate-200/60">
         
         {/* Ambient Light Green Conic Gradient Glow Aura */}
@@ -754,7 +754,7 @@ export default function Welcome() {
               {/* Transparent 3D Hero Astronaut Rocket (No background box) */}
               <img
                 src="/images/hero_astronaut_rocket.png"
-                alt="Creator Forge 3D Rocket Launch"
+                alt="CoLaunch 3D Rocket Launch"
                 className="w-full h-auto object-contain drop-shadow-[0_28px_56px_rgba(15,23,42,0.20)] transform hover:scale-[1.03] transition-transform duration-500"
               />
 
@@ -1443,7 +1443,7 @@ export default function Welcome() {
             Loved by creators. Proven by numbers.
           </h2>
           <p className="mt-2.5 text-base sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed sm:leading-8 font-normal">
-            Real creators who partnered with CreatorForge to turn their community into high-retention software equity.
+            Real creators who partnered with CoLaunch to turn their community into high-retention software equity.
           </p>
         </div>
 
@@ -1502,7 +1502,7 @@ export default function Welcome() {
 
                 {/* Body Quote */}
                 <p className="mt-5 text-sm sm:text-[14.5px] text-slate-700 font-normal leading-relaxed italic">
-                  “Planning a luxury wedding used to stress me out. CreatorForge gave me complete confidence — their team and coordinators handled the entire flow flawlessly, and we never looked back.”
+                  “Planning a luxury wedding used to stress me out. CoLaunch gave me complete confidence — their team and coordinators handled the entire flow flawlessly, and we never looked back.”
                 </p>
               </div>
 
@@ -1543,7 +1543,7 @@ export default function Welcome() {
 
                 {/* Body Quote */}
                 <p className="mt-5 text-sm sm:text-[14.5px] text-slate-700 font-normal leading-relaxed italic">
-                  “I’ve worked with many service providers, but CreatorForge truly understands the luxury event industry. Clean coordination, bespoke presentation, and pure excellence from start to finish.”
+                  “I’ve worked with many service providers, but CoLaunch truly understands the luxury event industry. Clean coordination, bespoke presentation, and pure excellence from start to finish.”
                 </p>
               </div>
 
@@ -1584,7 +1584,7 @@ export default function Welcome() {
 
                 {/* Body Quote */}
                 <p className="mt-5 text-sm sm:text-[14.5px] text-slate-700 font-normal leading-relaxed italic">
-                  “From executive ushers to cinematic visual coverage, CreatorForge managed our flagship gala with unmatched professionalism. Every attendee remarked on the standard of hospitality.”
+                  “From executive ushers to cinematic visual coverage, CoLaunch managed our flagship gala with unmatched professionalism. Every attendee remarked on the standard of hospitality.”
                 </p>
               </div>
 
@@ -1862,7 +1862,7 @@ export default function Welcome() {
                   </div>
                   <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold text-slate-900 uppercase">CREATOR FORGE</span>
+                      <span className="text-xs font-mono font-bold text-slate-900 uppercase">COLAUNCH</span>
                       <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">50% STUDIO SHARE</span>
                     </div>
                     <div className="h-2 rounded-full bg-slate-200 w-2/3" />
@@ -1995,7 +1995,7 @@ export default function Welcome() {
         {/* ── OBJECTION BUSTER COMPARISON (Premium Modern Redesign) ────────── */}
         <div className="mt-10 sm:mt-12 max-w-3xl mx-auto p-6 sm:p-8 bg-white border border-slate-200/90 rounded-3xl text-center shadow-[0_12px_32px_-8px_rgba(15,23,42,0.06)] relative overflow-hidden">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-mono font-bold text-slate-700 uppercase mb-3">
-            <span>AGENCY VS COURSES VS CREATOR FORGE</span>
+            <span>AGENCY VS COURSES VS COLAUNCH</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-display font-black text-slate-950 tracking-tight">
             "Couldn’t I just hire a software agency or sell another course?"
@@ -2026,7 +2026,7 @@ export default function Welcome() {
 
             <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5 shadow-xs ring-1 ring-emerald-500/20">
               <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded inline-block">
-                Creator Forge (50/50)
+                CoLaunch (50/50)
               </span>
               <p className="text-xs text-slate-900 font-medium leading-snug">
                 $0 upfront cost. 100% full-stack managed. We only make money when your subscribers pay.
@@ -2409,7 +2409,7 @@ export default function Welcome() {
                         {faq.a}
                       </p>
 
-                      {/* Comparison Pill Matrix (e.g. Agency vs Courses vs Creator Forge) */}
+                      {/* Comparison Pill Matrix (e.g. Agency vs Courses vs CoLaunch) */}
                       {faq.comparison && (
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
                           {faq.comparison.map((comp, cIdx) => (
@@ -2592,7 +2592,7 @@ export default function Welcome() {
                 className="cursor-pointer inline-block"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
-                <CreatorForgeLogo size={22} showText={true} theme="dark" />
+                <CoLaunchLogo size={22} showText={true} theme="dark" />
               </div>
 
               <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
@@ -2744,7 +2744,7 @@ export default function Welcome() {
           {/* Bottom Bar */}
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <span>© {new Date().getFullYear()} CREATOR FORGE STUDIO INC.</span>
+              <span>© {new Date().getFullYear()} COLAUNCH STUDIO INC.</span>
               <span>·</span>
               <span>ZERO CAPITAL CO-FOUNDERS</span>
               <span>·</span>
@@ -2906,7 +2906,7 @@ export default function Welcome() {
                     <div className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
                       <div>
                         <span className="text-slate-400 block text-[10px]">AUTOMATED STRIPE SPLIT ENGINE</span>
-                        <span className="font-bold text-emerald-400 text-sm">$32,400 to Marques Brownlee / $32,400 to Creator Forge</span>
+                        <span className="font-bold text-emerald-400 text-sm">$32,400 to Marques Brownlee / $32,400 to CoLaunch</span>
                       </div>
                       <span className="text-emerald-400 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-[11px] font-bold self-start sm:self-auto">
                         100% PASS-THROUGH ACCURACY
@@ -2958,7 +2958,7 @@ export default function Welcome() {
                     <div className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
                       <div>
                         <span className="text-slate-400 block text-[10px]">AUTOMATED STRIPE CONNECT DISTRIBUTION</span>
-                        <span className="font-bold text-emerald-400 text-sm">$24,100 to Ali Abdaal / $24,100 to Creator Forge</span>
+                        <span className="font-bold text-emerald-400 text-sm">$24,100 to Ali Abdaal / $24,100 to CoLaunch</span>
                       </div>
                       <span className="text-emerald-400 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-[11px] font-bold self-start sm:self-auto">
                         4.2-DAY DEAL VELOCITY
@@ -3009,7 +3009,7 @@ export default function Welcome() {
                     <div className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
                       <div>
                         <span className="text-slate-400 block text-[10px]">MONTHLY RUN-RATE TELEMETRY</span>
-                        <span className="font-bold text-emerald-400 text-sm">$36,050 to Arun Maini / $36,050 to Creator Forge</span>
+                        <span className="font-bold text-emerald-400 text-sm">$36,050 to Arun Maini / $36,050 to CoLaunch</span>
                       </div>
                       <span className="text-emerald-400 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-[11px] font-bold self-start sm:self-auto">
                         380+ DEVICES TESTED
@@ -3060,7 +3060,7 @@ export default function Welcome() {
                     <div className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
                       <div>
                         <span className="text-slate-400 block text-[10px]">MONTHLY RUN-RATE TELEMETRY</span>
-                        <span className="font-bold text-emerald-400 text-sm">$19,750 to Lex Fridman / $19,750 to Creator Forge</span>
+                        <span className="font-bold text-emerald-400 text-sm">$19,750 to Lex Fridman / $19,750 to CoLaunch</span>
                       </div>
                       <span className="text-emerald-400 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-[11px] font-bold self-start sm:self-auto">
                         1.2M VECTOR EMBEDDINGS
@@ -3111,7 +3111,7 @@ export default function Welcome() {
                     <div className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
                       <div>
                         <span className="text-slate-400 block text-[10px]">MONTHLY RUN-RATE TELEMETRY</span>
-                        <span className="font-bold text-emerald-400 text-sm">$15,700 to Cleo Abram / $15,700 to Creator Forge</span>
+                        <span className="font-bold text-emerald-400 text-sm">$15,700 to Cleo Abram / $15,700 to CoLaunch</span>
                       </div>
                       <span className="text-emerald-400 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-[11px] font-bold self-start sm:self-auto">
                         85 MILESTONES VERIFIED
@@ -3162,7 +3162,7 @@ export default function Welcome() {
                     <div className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
                       <div>
                         <span className="text-slate-400 block text-[10px]">MONTHLY RUN-RATE TELEMETRY</span>
-                        <span className="font-bold text-emerald-400 text-sm">$22,300 to Peter McKinnon / $22,300 to Creator Forge</span>
+                        <span className="font-bold text-emerald-400 text-sm">$22,300 to Peter McKinnon / $22,300 to CoLaunch</span>
                       </div>
                       <span className="text-emerald-400 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-[11px] font-bold self-start sm:self-auto">
                         100% WASM ACCELERATED

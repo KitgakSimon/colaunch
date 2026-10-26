@@ -13,8 +13,8 @@ export default function AdminErrorLogPage() {
 
   useEffect(() => {
     updatePageSEO({
-      title: "Pipeline Intelligence & Exception Logs | Creator Forge",
-      description: "Real-time error monitoring, scraper audit trails, and API diagnostics for Creator Forge platform.",
+      title: "Pipeline Intelligence & Exception Logs | CoLaunch",
+      description: "Real-time error monitoring, scraper audit trails, and API diagnostics for CoLaunch platform.",
       image: "/og-image.svg"
     });
   }, []);
@@ -88,7 +88,7 @@ export default function AdminErrorLogPage() {
       await sendDirectEmail(
         email,
         `Quick check-in regarding software partnership — ${creator.name || creator.display_name || creator.handle}`,
-        `Hi ${creator.name || creator.display_name || "there"},\n\nJust following up on our previous note about engineering a custom software venture for your audience with zero upfront cost.\n\nLet us know if you'd like to see the preliminary build plan!\n\nBest,\nCreator Forge Team`,
+        `Hi ${creator.name || creator.display_name || "there"},\n\nJust following up on our previous note about engineering a custom software venture for your audience with zero upfront cost.\n\nLet us know if you'd like to see the preliminary build plan!\n\nBest,\nCoLaunch Team`,
         creator.id
       );
       await loadData(true);
@@ -113,7 +113,7 @@ export default function AdminErrorLogPage() {
             </div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-white tracking-tight text-sm">
-                Creator Forge
+                CoLaunch
               </span>
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">
                 AUDIT LOGS

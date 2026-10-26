@@ -4,7 +4,7 @@ describe('Combined Multi-URL Launch & Operations Suite', () => {
     cy.url().should('include', 'project=proj_1790690869474')
     cy.url().should('include', 'creator=0321fbdf-3df0-4855-800a-a6ed5e9ddbaa')
     cy.contains('PROJECT OS').should('be.visible')
-    cy.contains('CREATOR FORGE').should('be.visible')
+    cy.contains('COLAUNCH').should('be.visible')
   })
 
   it('2. Loads Follow-Up CRM & Inbound Replies console', () => {

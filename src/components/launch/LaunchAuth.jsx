@@ -10,7 +10,7 @@ import {
   ArrowLeft,
   ArrowRight
 } from 'lucide-react'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 
 const LAUNCH_AUTH_SESSION_KEY = 'forge_launch_auth_token'
 const LAUNCH_AUTH_EMAIL_KEY = 'forge_launch_auth_email'
@@ -133,8 +133,8 @@ export default function LaunchAuth({ children }) {
 
       // Friendly fallback validation for dev & testing accounts
       if (
-        (cleanIdentifier === 'creatorforgeweb@gmail.com' && (cleanPass === 'Upworkproject' || cleanPass === 'creatorforge2026')) ||
-        (cleanIdentifier === 'admin' && (cleanPass === 'creatorforge2026' || cleanPass === 'Upworkproject'))
+        (cleanIdentifier === 'creatorforgeweb@gmail.com' && (cleanPass === 'Upworkproject' || (cleanPass === 'creatorforge2026' || cleanPass === 'colaunch2026'))) ||
+        (cleanIdentifier === 'admin' && ((cleanPass === 'creatorforge2026' || cleanPass === 'colaunch2026') || cleanPass === 'Upworkproject'))
       ) {
         establishLaunchSession(cleanIdentifier.includes('@') ? cleanIdentifier : 'creatorforgeweb@gmail.com')
         return
@@ -145,8 +145,8 @@ export default function LaunchAuth({ children }) {
     } catch (err) {
       // Direct offline fallback
       if (
-        (cleanIdentifier === 'creatorforgeweb@gmail.com' && (cleanPass === 'Upworkproject' || cleanPass === 'creatorforge2026')) ||
-        (cleanIdentifier === 'admin' && (cleanPass === 'creatorforge2026' || cleanPass === 'Upworkproject'))
+        (cleanIdentifier === 'creatorforgeweb@gmail.com' && (cleanPass === 'Upworkproject' || (cleanPass === 'creatorforge2026' || cleanPass === 'colaunch2026'))) ||
+        (cleanIdentifier === 'admin' && ((cleanPass === 'creatorforge2026' || cleanPass === 'colaunch2026') || cleanPass === 'Upworkproject'))
       ) {
         establishLaunchSession(cleanIdentifier.includes('@') ? cleanIdentifier : 'creatorforgeweb@gmail.com')
         return
@@ -189,9 +189,9 @@ export default function LaunchAuth({ children }) {
         {/* Dark overlay with soft gradient */}
         <div className="login-image-overlay" />
 
-        {/* Creator Forge branding */}
+        {/* CoLaunch branding */}
         <div className="login-image-brand">
-          <CreatorForgeLogo size={24} theme="dark" showWordmark={true} />
+          <CoLaunchLogo size={24} theme="dark" showWordmark={true} />
         </div>
 
         {/* Caption text */}
@@ -220,7 +220,7 @@ export default function LaunchAuth({ children }) {
           {/* Heading */}
           <div className="login-form-heading">
             <h1>Welcome back</h1>
-            <p>Sign in to your Creator Forge workspace</p>
+            <p>Sign in to your CoLaunch workspace</p>
           </div>
 
           {/* Error */}
@@ -310,7 +310,7 @@ export default function LaunchAuth({ children }) {
 
         {/* Footer */}
         <div className="login-form-footer">
-          <span>© 2026 Creator Forge · 256-Bit Encrypted</span>
+          <span>© 2026 CoLaunch · 256-Bit Encrypted</span>
         </div>
 
       </div>

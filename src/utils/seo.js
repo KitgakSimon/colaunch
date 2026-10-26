@@ -1,8 +1,8 @@
 /**
- * SEO & Dynamic Page Title / Metadata Manager for Creator Forge
+ * SEO & Dynamic Page Title / Metadata Manager for CoLaunch
  */
 
-const DEFAULT_TITLE = 'Creator Forge — Turn Your Audience Into a Software Business'
+const DEFAULT_TITLE = 'CoLaunch — Turn Your Audience Into a Software Business'
 const DEFAULT_DESCRIPTION = 'AI-powered venture studio platform that discovers high-leverage creators, conducts audience intelligence, builds custom SaaS MVPs, and launches 50/50 co-founder partnerships.'
 const DEFAULT_IMAGE = '/og-image.svg'
 
@@ -13,7 +13,7 @@ export function updatePageSEO({
   url,
   keywords,
 }) {
-  const fullTitle = title ? (title.includes('Creator Forge') ? title : `${title} | Creator Forge`) : DEFAULT_TITLE
+  const fullTitle = title ? (title.includes('CoLaunch') ? title : `${title} | CoLaunch`) : DEFAULT_TITLE
 
   // Update title
   document.title = fullTitle
@@ -65,7 +65,7 @@ export function getRouteSEO(pathname, step, creatorData) {
   if (path.startsWith('/portal') || path.startsWith('/co-launch/')) {
     return {
       title: 'Partner Co-Founder Portal — Creator Studio Agreement & Roadmap',
-      description: 'Review your tailored software concepts, 50/50 revenue split dashboard, and launch roadmap with Creator Forge Studio.',
+      description: 'Review your tailored software concepts, 50/50 revenue split dashboard, and launch roadmap with CoLaunch Studio.',
     }
   }
 
@@ -95,7 +95,7 @@ export function getRouteSEO(pathname, step, creatorData) {
   if (path.startsWith('/admin-error-log') || path.startsWith('/error-log') || path === '/errors') {
     return {
       title: 'Pipeline Intelligence & Exception Logs Dashboard',
-      description: 'Real-time error monitoring, scraper audit trails, and API diagnostics for Creator Forge platform.',
+      description: 'Real-time error monitoring, scraper audit trails, and API diagnostics for CoLaunch platform.',
     }
   }
 
@@ -116,28 +116,28 @@ export function getRouteSEO(pathname, step, creatorData) {
   if (path === '/dashboard' || step === 'dashboard') {
     return {
       title: `${creatorData?.name || 'Creator'} Studio Dashboard`,
-      description: `Manage your software product, early access members, analytics, and marketing launch pack in Creator Forge.`,
+      description: `Manage your software product, early access members, analytics, and marketing launch pack in CoLaunch.`,
     }
   }
 
   if (path === '/login' || step === 'login') {
     return {
-      title: 'Sign In to Creator Forge',
+      title: 'Sign In to CoLaunch',
       description: 'Log into your creator studio account to access your product dashboard, analytics, and roadmap.',
     }
   }
 
   if (path === '/signup' || step === 'signup') {
     return {
-      title: 'Create Your Account — Creator Forge',
-      description: 'Join Creator Forge to turn your audience into a high-growth software business with 50/50 venture backing.',
+      title: 'Create Your Account — CoLaunch',
+      description: 'Join CoLaunch to turn your audience into a high-growth software business with 50/50 venture backing.',
     }
   }
 
   // Onboarding Steps
   const stepTitles = {
     'welcome': {
-      title: 'Creator Forge — Turn Your Audience Into a Software Business',
+      title: 'CoLaunch — Turn Your Audience Into a Software Business',
       description: 'Discover your audience opportunities, generate custom SaaS concepts, and launch 50/50 co-founder partnerships.',
     },
     'creator-link': {
@@ -165,7 +165,7 @@ export function getRouteSEO(pathname, step, creatorData) {
       description: 'Preparing your promotional assets, email announcement templates, and early access landing page.',
     },
     'celebration': {
-      title: 'Software Suite Ready — Launch with Creator Forge',
+      title: 'Software Suite Ready — Launch with CoLaunch',
       description: 'Your customized software product and launch suite are ready. Take full ownership of your SaaS venture.',
     },
   }

@@ -96,7 +96,7 @@ export default function PreorderLandingPage({ slug }) {
   useEffect(() => {
     const title = productName
       ? `VIP Early Access — ${productName} | Co-Built with ${creatorName}`
-      : "VIP Early Access & Pre-Order | Creator Forge";
+      : "VIP Early Access & Pre-Order | CoLaunch";
     updatePageSEO({
       title,
       description: tagline || "Lock in founder pricing and early access to our exclusive software tool.",
@@ -621,7 +621,7 @@ export default function PreorderLandingPage({ slug }) {
             </div>
             <h3 className="text-sm font-bold text-[#F5F3EA]">Direct Co-Founder Line</h3>
             <p className="text-xs text-[#969DA6] leading-relaxed">
-              Join the private VIP Slack & direct alpha advisory channels with {creatorName} & Creator Forge.
+              Join the private VIP Slack & direct alpha advisory channels with {creatorName} & CoLaunch.
             </p>
           </div>
         </div>

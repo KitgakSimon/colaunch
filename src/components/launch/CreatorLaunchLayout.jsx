@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Rocket, Target, Layers, ExternalLink, LogOut, User, X, ShieldAlert, Lock, Users, ChevronDown, Check, Plus, Loader2, Menu, Search, Send, MessageSquare, Sparkles, Award, Zap } from 'lucide-react'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 import AcquisitionEngine from './AcquisitionEngine'
 import ProjectOS from './ProjectOS'
 import { ProjectOSSkeleton } from './Section2Skeletons'
@@ -21,7 +21,7 @@ export default function CreatorLaunchLayout({
 }) {
   useEffect(() => {
     updatePageSEO({
-      title: "Operator Master Studio — Acquisition Engine & Launch OS | Creator Forge",
+      title: "Operator Master Studio — Acquisition Engine & Launch OS | CoLaunch",
       description: "End-to-end creator discovery, audience intelligence, autonomous outreach, and 50/50 venture launch pipeline.",
       image: "/og-image.svg"
     });
@@ -415,7 +415,7 @@ export default function CreatorLaunchLayout({
       const rawName = creatorProfile?.name || creatorProfile?.display_name || creatorProfile?.handle || ''
       const creatorName = rawName && !isUuid(rawName) ? rawName : 'Creator Partner'
       const creatorHandle = (creatorProfile?.handle && !isUuid(creatorProfile.handle)) ? creatorProfile.handle : 'partner'
-      const creatorEmail = creatorProfile?.email || creatorProfile?.email_public || targetEmail || 'partner@creatorforge.com'
+      const creatorEmail = creatorProfile?.email || creatorProfile?.email_public || targetEmail || 'partner@colaunch.com'
       const creatorAvatar = creatorProfile?.avatar || creatorProfile?.avatar_url || ''
       const creatorFollowers = creatorProfile?.followerStr || creatorProfile?.follower_count || '50k+'
       const creatorNiche = creatorProfile?.niche || 'Software & Tech'
@@ -983,7 +983,7 @@ export default function CreatorLaunchLayout({
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => (window.location.href = '/')}
           >
-            <CreatorForgeLogo size={28} showWordmark={true} theme="light" />
+            <CoLaunchLogo size={28} showWordmark={true} theme="light" />
             <div className="hidden xl:flex items-center">
               <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                 OPERATOR STUDIO
@@ -1594,7 +1594,7 @@ export default function CreatorLaunchLayout({
 
       {/* Footer */}
       <footer className="border-t border-slate-200/80 py-4 text-center text-xs text-slate-500 bg-white">
-        <p>Creator Forge Launch Engine OS &copy; {new Date().getFullYear()}</p>
+        <p>CoLaunch Launch Engine OS &copy; {new Date().getFullYear()}</p>
       </footer>
 
       {/* Admin Pipeline Oversight & Error Lookup Modal */}

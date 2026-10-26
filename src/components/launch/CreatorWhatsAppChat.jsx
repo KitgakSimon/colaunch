@@ -155,7 +155,7 @@ export default function CreatorWhatsAppChat({ project = {}, onUpdateProject }) {
             collected.push({
               id: `thread-outreach-${t.id}`,
               sender: 'admin',
-              senderName: 'Creator Forge Studio',
+              senderName: 'CoLaunch Studio',
               subject: t.subject || 'Partnership Proposal',
               text: t.initial_body || t.body,
               time: t.created_at ? new Date(t.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Section 1',
@@ -173,7 +173,7 @@ export default function CreatorWhatsAppChat({ project = {}, onUpdateProject }) {
             collected.push({
               id: `reply-${r.id || Math.random()}`,
               sender: isFromStudio ? 'admin' : 'creator',
-              senderName: isFromStudio ? 'Creator Forge Studio' : creatorName,
+              senderName: isFromStudio ? 'CoLaunch Studio' : creatorName,
               subject: r.subject || '',
               text: r.body || '',
               time: r.received_at || r.created_at ? new Date(r.received_at || r.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Section 1',
@@ -280,7 +280,7 @@ export default function CreatorWhatsAppChat({ project = {}, onUpdateProject }) {
     const newMsg = {
       id: `msg-${Date.now()}`,
       sender: 'admin',
-      senderName: 'Creator Forge Studio',
+      senderName: 'CoLaunch Studio',
       text: trimmed,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       status: destEmail ? 'delivering' : 'sent',
@@ -298,7 +298,7 @@ export default function CreatorWhatsAppChat({ project = {}, onUpdateProject }) {
       setEmailStatusNotice(`Dispatching email to ${destEmail}...`)
       try {
         const emailSubject = `💬 Studio Update for ${project?.productName || 'Software Venture'}: ${trimmed.slice(0, 45)}...`
-        const emailBody = `Hi ${creatorFirstName},\n\nYou have a new message from the Creator Forge Studio team regarding **${project?.productName || 'our software venture'}**:\n\n---\n"${trimmed}"\n---\n\nYou can reply directly to this email to respond to the team, or access your private Co-Founder Portal here:\n${portalUrl}\n\nBest regards,\n**The Creator Forge Studio Team**\npartnerships@creatorforge.com`
+        const emailBody = `Hi ${creatorFirstName},\n\nYou have a new message from the CoLaunch Studio team regarding **${project?.productName || 'our software venture'}**:\n\n---\n"${trimmed}"\n---\n\nYou can reply directly to this email to respond to the team, or access your private Co-Founder Portal here:\n${portalUrl}\n\nBest regards,\n**The CoLaunch Studio Team**\npartnerships@creatorforge.com`
 
         await sendDirectEmail(destEmail, emailSubject, emailBody, project?.creatorId || project?.id)
 
@@ -505,7 +505,7 @@ export default function CreatorWhatsAppChat({ project = {}, onUpdateProject }) {
                   >
                     <div className="flex items-center justify-between gap-2 pb-0.5 text-[11px]">
                       <span className={`font-extrabold ${isOutgoing ? 'text-emerald-300' : 'text-emerald-400'}`}>
-                        {isOutgoing ? 'Creator Forge Studio' : (msg.senderName || creatorName)}
+                        {isOutgoing ? 'CoLaunch Studio' : (msg.senderName || creatorName)}
                       </span>
                       {msg.isSection1 && (
                         <span className="text-[9px] px-1.5 py-0.2 rounded bg-black/20 text-slate-300 font-mono">
@@ -719,7 +719,7 @@ export default function CreatorWhatsAppChat({ project = {}, onUpdateProject }) {
         <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-between p-8 text-white animate-in fade-in">
           <div className="text-center space-y-2 pt-8">
             <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest block">
-              {callType === 'video' ? 'Creator Forge Video Meeting' : 'WhatsApp Audio Call'}
+              {callType === 'video' ? 'CoLaunch Video Meeting' : 'WhatsApp Audio Call'}
             </span>
             <h3 className="text-xl font-black">{creatorName}</h3>
             <p className="text-xs text-slate-400 font-mono">{creatorHandle} • {niche}</p>

@@ -215,7 +215,7 @@ function ThreadDetail({ thread, onClose, onReload }) {
 
         {/* Replies */}
         {thread.replies?.map((reply, i) => {
-          const isOutbound = reply.from_address?.toLowerCase().includes('creatorforge') || reply.ai_summary?.includes('Outgoing');
+          const isOutbound = (reply.from_address?.toLowerCase().includes('creatorforge') || reply.from_address?.toLowerCase().includes('colaunch')) || reply.ai_summary?.includes('Outgoing');
           return (
             <div key={i}>
               <div className="flex items-center gap-2 mb-2">

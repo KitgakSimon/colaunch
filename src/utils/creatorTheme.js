@@ -1,5 +1,5 @@
 /**
- * Creator Forge Dynamic Dashboard Theme System
+ * CoLaunch Dynamic Dashboard Theme System
  *
  * Provides harmonious, cohesive, high-contrast color palettes for the Creator & Admin Dashboards.
  * Designed to ensure maximum readability (dark, crisp text on clean, tinted light canvases)

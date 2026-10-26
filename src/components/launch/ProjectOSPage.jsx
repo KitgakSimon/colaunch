@@ -8,7 +8,7 @@ import { ProjectOSSkeleton } from './Section2Skeletons'
 import DIYSubscriptionModal from './DIYSubscriptionModal'
 import WorkflowWiringTutorial from './WorkflowWiringTutorial'
 import { startSection2Tour } from '../../utils/driverTour'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 import {
   getCoLaunchProjects,
   getCoLaunchProject,
@@ -78,7 +78,7 @@ export default function ProjectOSPage() {
   // Update SEO on mount
   useEffect(() => {
     updatePageSEO({
-      title: 'Project OS — Co-Launch Operations Center | Creator Forge',
+      title: 'Project OS — Co-Launch Operations Center | CoLaunch',
       description: 'Dedicated operator command center for validating, building, and launching partner software ventures.',
       image: '/og-image.svg'
     })
@@ -436,11 +436,11 @@ export default function ProjectOSPage() {
           {/* Studio Brand & Section Indicator */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center shadow-xs shrink-0">
-              <CreatorForgeLogo size={16} showText={false} theme="light" />
+              <CoLaunchLogo size={16} showText={false} theme="light" />
             </div>
             <div className="hidden xs:block">
               <div className="flex items-center gap-1 sm:gap-1.5">
-                <span className="text-xs font-black text-slate-950 tracking-tight uppercase hidden sm:inline">CREATOR FORGE</span>
+                <span className="text-xs font-black text-slate-950 tracking-tight uppercase hidden sm:inline">COLAUNCH</span>
                 <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">
                   PROJECT OS
                 </span>

@@ -167,7 +167,7 @@ export default function OpsLayout() {
             <Shield size={13} className="text-white" />
           </div>
           <div>
-            <p className="text-[13px] font-bold text-white tracking-wider uppercase">Creator Forge</p>
+            <p className="text-[13px] font-bold text-white tracking-wider uppercase">CoLaunch</p>
             <p className="text-[8px] uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>Internal Ops</p>
           </div>
         </div>

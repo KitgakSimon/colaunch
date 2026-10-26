@@ -3,8 +3,8 @@ import fs from 'fs';
 import path from 'path';
 
 async function removeBackground() {
-  const inputPath = '/Users/mac/Documents/creator-forge/frontend/public/images/hero_astronaut_rocket.jpg';
-  const outputPath = '/Users/mac/Documents/creator-forge/frontend/public/images/hero_astronaut_rocket.png';
+  const inputPath = '/Users/mac/Documents/colaunch/frontend/public/images/hero_astronaut_rocket.jpg';
+  const outputPath = '/Users/mac/Documents/colaunch/frontend/public/images/hero_astronaut_rocket.png';
 
   const image = sharp(inputPath);
   const metadata = await image.metadata();

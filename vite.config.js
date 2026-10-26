@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api\/together/, ''),
         },
-        // FastAPI backend — Creator Forge ops pipeline
+        // FastAPI backend — CoLaunch ops pipeline
         // All other /api/* calls route to the specified Python backend target
         '/api': {
           target: backendTarget,

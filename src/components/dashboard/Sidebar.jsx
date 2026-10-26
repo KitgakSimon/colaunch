@@ -72,7 +72,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }) 
               <div className="flex items-center gap-3">
                 <WingLogo size={22} />
                 <span className="text-white font-semibold text-[14px] tracking-tight">
-                  Creator Forge
+                  CoLaunch
                 </span>
               </div>
               <button
@@ -214,7 +214,7 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }) 
               className="text-white font-semibold text-[14px] tracking-tight whitespace-nowrap"
               style={{ opacity: isOpen ? 1 : 0, transition: 'opacity 0.15s' }}
             >
-              Creator Forge
+              CoLaunch
             </span>
           )}
         </div>

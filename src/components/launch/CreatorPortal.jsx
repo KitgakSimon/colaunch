@@ -12,7 +12,7 @@ import { CreatorPortalSkeleton } from './Section2Skeletons'
 import { deduplicateAndSortMessages } from './CreatorWhatsAppChat'
 import ProjectOS from './ProjectOS'
 import DIYSubscriptionModal from './DIYSubscriptionModal'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 import PostVisualMockup from './PostVisualMockup'
 import { getPhase1StepGuards, getPhase2StepGuards, getPhase3StepGuards } from '../../utils/stepGuards'
 import { parseMainPricingAmount, parseConceptPricing } from '../../utils/pricing'
@@ -95,8 +95,8 @@ export default function CreatorPortal({ portalId }) {
 
   useEffect(() => {
     updatePageSEO({
-      title: project?.creatorName ? `${project.creatorName} — Partner Co-Founder Portal | Creator Forge` : "Partner Co-Founder Portal — Creator Forge",
-      description: "Review your tailored software concepts, 50/50 revenue split dashboard, and launch roadmap with Creator Forge Studio.",
+      title: project?.creatorName ? `${project.creatorName} — Partner Co-Founder Portal | CoLaunch` : "Partner Co-Founder Portal — CoLaunch",
+      description: "Review your tailored software concepts, 50/50 revenue split dashboard, and launch roadmap with CoLaunch Studio.",
       image: "/og-image.svg"
     });
   }, [project?.creatorName]);
@@ -390,7 +390,7 @@ export default function CreatorPortal({ portalId }) {
               collected.push({
                 id: `thread-outreach-${t.id}`,
                 sender: 'admin',
-                senderName: 'Creator Forge Studio',
+                senderName: 'CoLaunch Studio',
                 subject: t.subject || 'Partnership Proposal',
                 text: t.initial_body || t.body,
                 time: t.created_at ? new Date(t.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Section 1',
@@ -406,7 +406,7 @@ export default function CreatorPortal({ portalId }) {
               collected.push({
                 id: `reply-${r.id || Math.random()}`,
                 sender: isFromStudio ? 'admin' : 'creator',
-                senderName: isFromStudio ? 'Creator Forge Studio' : (project?.creatorName || 'You'),
+                senderName: isFromStudio ? 'CoLaunch Studio' : (project?.creatorName || 'You'),
                 subject: r.subject || '',
                 text: r.body || '',
                 time: r.received_at || r.created_at ? new Date(r.received_at || r.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Section 1',
@@ -739,11 +739,11 @@ export default function CreatorPortal({ portalId }) {
                     onError={() => setAvatarLoadError(true)}
                   />
                   <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#0F172A] border border-slate-700 flex items-center justify-center p-0.5 shadow-xs z-10">
-                    <CreatorForgeLogo size={8} showText={false} theme="dark" />
+                    <CoLaunchLogo size={8} showText={false} theme="dark" />
                   </div>
                 </>
               ) : (
-                <CreatorForgeLogo size={18} showText={false} theme="dark" />
+                <CoLaunchLogo size={18} showText={false} theme="dark" />
               )}
             </div>
 
@@ -1613,7 +1613,7 @@ export default function CreatorPortal({ portalId }) {
                       ProjectOS Progress Tracker: {productName}
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
-                      You chose the Studio-Managed Co-Launch track. The Creator Forge studio engineering team handles 100% of software development, architecture, and deployments for you. You can track all sprint progress, pre-orders, and telemetry below.
+                      You chose the Studio-Managed Co-Launch track. The CoLaunch studio engineering team handles 100% of software development, architecture, and deployments for you. You can track all sprint progress, pre-orders, and telemetry below.
                     </p>
                   </div>
 
@@ -2036,7 +2036,7 @@ export default function CreatorPortal({ portalId }) {
                               post: campaignKit.announcementPost || `🚨 Sourced from our recent channel discussions, we're officially co-founding ${productName} — ${project?.productTagline || 'the new workspace'}. Reserve your early founding pass here: ${preorderUrl}`,
                               story: campaignKit.storySequence || `STORY 1:\n"Quick poll for everyone watching my channel..."\n\nSTORY 2:\n"We have been secretly engineering ${productName}..."\n\nSTORY 3:\n"Grab founding access here: ${preorderUrl}"`,
                               video: campaignKit.videoScript || `HOOK (0-8s): "If you saw our recent channel breakdown, you know how painful manual bottlenecks are..."\nDEMO (8-40s): "Here is how ${productName} handles it automatically..."\nCTA (40-60s): "Founding pass link in bio: ${preorderUrl}"`,
-                              email: campaignKit.newsletterDraft || `Subject: Why I'm co-founding ${productName} (private invite)\n\nHey everyone,\n\nWe are officially partnering with Creator Forge Studio to engineer ${productName}...\n\nReserve your pass: ${preorderUrl}`,
+                              email: campaignKit.newsletterDraft || `Subject: Why I'm co-founding ${productName} (private invite)\n\nHey everyone,\n\nWe are officially partnering with CoLaunch Studio to engineer ${productName}...\n\nReserve your pass: ${preorderUrl}`,
                               dm: campaignKit.directMessageScript || `Hey! Saw your thoughts on our channel earlier — we just launched early founding access for ${productName}: ${preorderUrl}`
                             }
                             copyToClipboard(map[activeScriptTab], activeScriptTab)
@@ -2078,7 +2078,7 @@ export default function CreatorPortal({ portalId }) {
                           value={
                             activeScriptTab === 'story' ? (campaignKit.storySequence || `STORY 1:\n"Quick question for everyone..."\n\nSTORY 2:\n"We have been secretly engineering ${productName}..."\n\nSTORY 3:\n"Grab founding access here: ${preorderUrl}"`) :
                             activeScriptTab === 'video' ? (campaignKit.videoScript || `HOOK (0-8s): "If you saw our recent channel breakdown, you know how painful manual bottlenecks are..."\nDEMO (8-40s): "Here is how ${productName} handles it automatically..."\nCTA (40-60s): "Link in bio for pre-order access: ${preorderUrl}"`) :
-                            activeScriptTab === 'email' ? (campaignKit.newsletterDraft || `Subject: Why I'm co-founding ${productName} (private invite)\n\nHey everyone,\n\nWe are officially partnering with Creator Forge Studio to engineer ${productName}...\n\nReserve: ${preorderUrl}`) :
+                            activeScriptTab === 'email' ? (campaignKit.newsletterDraft || `Subject: Why I'm co-founding ${productName} (private invite)\n\nHey everyone,\n\nWe are officially partnering with CoLaunch Studio to engineer ${productName}...\n\nReserve: ${preorderUrl}`) :
                             activeScriptTab === 'dm' ? (campaignKit.directMessageScript || `Hey! Saw you were asking about this on our channel — we just launched early founding access for ${productName}: ${preorderUrl}`) :
                             (campaignKit.announcementPost || `🚨 Big announcement! After hearing so many comments across our channel about the nightmare of manual workflows, we're officially building ${productName}.\n\nReserve your early pass now: ${preorderUrl}`)
                           }
@@ -2140,7 +2140,7 @@ export default function CreatorPortal({ portalId }) {
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                       <div>
                         <h3 className="font-bold text-slate-900 text-sm">Studio Chat & Co-Founder Dispatch</h3>
-                        <p className="text-xs text-slate-500">Direct operational communication channel with Creator Forge Studio.</p>
+                        <p className="text-xs text-slate-500">Direct operational communication channel with CoLaunch Studio.</p>
                       </div>
                       <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
                         ● Studio Online
@@ -2150,7 +2150,7 @@ export default function CreatorPortal({ portalId }) {
                     <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
                       {portalDisplayMessages.length === 0 ? (
                         <div className="text-center py-8 text-slate-400 text-xs">
-                          No messages yet. Send a note to Creator Forge Studio below.
+                          No messages yet. Send a note to CoLaunch Studio below.
                         </div>
                       ) : (
                         portalDisplayMessages.map(msg => {
@@ -2181,7 +2181,7 @@ export default function CreatorPortal({ portalId }) {
                         type="text"
                         value={creatorReplyText}
                         onChange={(e) => setCreatorReplyText(e.target.value)}
-                        placeholder="Reply to Creator Forge Studio..."
+                        placeholder="Reply to CoLaunch Studio..."
                         className="flex-1 px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 outline-none focus:border-slate-400 transition-all font-sans"
                       />
                       <button
@@ -2416,7 +2416,7 @@ export default function CreatorPortal({ portalId }) {
             <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200">
               <div>
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase block">PARTNER A (STUDIO)</span>
-                <span className="font-bold text-slate-900 block mt-0.5">Creator Forge Studio</span>
+                <span className="font-bold text-slate-900 block mt-0.5">CoLaunch Studio</span>
                 <span className="text-[11px] text-slate-500 block">Engineering, Hosting, AI Architecture</span>
               </div>
               <div>
@@ -2430,7 +2430,7 @@ export default function CreatorPortal({ portalId }) {
               <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
                 <span className="font-bold text-slate-900">1. Equal 50/50 Gross Net Revenue Division</span>
                 <p className="text-[11px] text-slate-600 leading-relaxed">
-                  All gross revenue generated from founding presales, monthly/annual software subscriptions, and add-on modules is divided exactly 50% to Creator Forge Studio and 50% to {creatorName}.
+                  All gross revenue generated from founding presales, monthly/annual software subscriptions, and add-on modules is divided exactly 50% to CoLaunch Studio and 50% to {creatorName}.
                 </p>
               </div>
               <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">

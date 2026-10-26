@@ -536,7 +536,7 @@ export default function Phase2BuildMVP({
   }
 
   const getTaskDefaultCode = (task) => {
-    const prod = project?.productName || 'Creator Forge'
+    const prod = project?.productName || 'CoLaunch'
     const name = (task.title || 'Task').replace(/[^a-zA-Z0-9]/g, '')
     if (task.category === 'Frontend') {
       return `import React, { useState, useEffect } from 'react';

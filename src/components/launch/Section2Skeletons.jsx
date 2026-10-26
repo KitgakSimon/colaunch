@@ -658,7 +658,7 @@ export function PreorderLandingSkeleton({ slug }) {
       <main className="flex-1 max-w-4xl w-full mx-auto p-6 sm:p-12 text-center space-y-7 flex flex-col items-center justify-center my-auto">
         <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#101419] border border-[#C8FF3D]/30 text-[#C8FF3D] text-xs font-mono font-bold shadow-lg shadow-[#C8FF3D]/5">
           <Loader2 className="w-4 h-4 animate-spin text-[#C8FF3D]" />
-          <span>Connecting to Creator Forge Registry for {displaySlug}...</span>
+          <span>Connecting to CoLaunch Registry for {displaySlug}...</span>
         </div>
 
         <div className="space-y-3 w-full max-w-2xl mx-auto">

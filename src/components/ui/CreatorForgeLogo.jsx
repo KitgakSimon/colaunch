@@ -1,4 +1,4 @@
-export default function CreatorForgeLogo({ size = 22, className = '', showText = true, showWordmark = undefined, theme = 'dark' }) {
+export default function CoLaunchLogo({ size = 22, className = '', showText = true, showWordmark = undefined, theme = 'dark' }) {
   const isLight = theme === 'light'
   const displayWordmark = showWordmark !== undefined ? showWordmark : showText
   return (
@@ -25,7 +25,7 @@ export default function CreatorForgeLogo({ size = 22, className = '', showText =
       {displayWordmark && (
         <div className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0">
           <span className={`font-display font-bold text-xs sm:text-[14px] tracking-tight uppercase whitespace-nowrap ${isLight ? 'text-[#0F172A]' : 'text-[#F5F3EA]'}`}>
-            CREATOR FORGE
+            COLAUNCH
           </span>
           <span className={`text-[8.5px] sm:text-[9px] font-mono tracking-widest px-1.5 py-0.5 rounded uppercase whitespace-nowrap hidden xs:inline-block ${
             isLight
@@ -39,3 +39,5 @@ export default function CreatorForgeLogo({ size = 22, className = '', showText =
     </div>
   )
 }
+
+export { CoLaunchLogo as CreatorForgeLogo, CoLaunchLogo }

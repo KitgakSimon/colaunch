@@ -95,7 +95,7 @@ export default function BetaTestingPortal({ slug }) {
           } else {
             setCurrentBacker({
               name: 'Verified Beta Tester',
-              email: 'backer@creatorforge.com',
+              email: 'backer@colaunch.com',
               tier: 'Founding Member Access',
               totalPledged: 48
             })
@@ -118,8 +118,8 @@ export default function BetaTestingPortal({ slug }) {
     if (project) {
       updatePageSEO({
         title: `${project.productName || 'MVP'} | Beta Testing & Code Workspace`,
-        description: `Source code review, local testing guide, and feedback portal for ${project.productName || 'Creator Forge'}.`,
-        keywords: 'beta testing, source code, mvp, creator forge'
+        description: `Source code review, local testing guide, and feedback portal for ${project.productName || 'CoLaunch'}.`,
+        keywords: 'beta testing, source code, mvp, colaunch'
       })
     }
   }, [project])

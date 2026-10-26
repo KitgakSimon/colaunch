@@ -222,7 +222,7 @@ export default function Accounts() {
           Social connections
         </h2>
         <p className="text-[14px]" style={{ color: 'rgba(255,255,255,0.38)' }}>
-          Connect your accounts to generate, schedule, and auto-post directly from Forge.
+          Connect your accounts to generate, schedule, and auto-post directly from CoLaunch.
         </p>
       </div>
 
@@ -457,7 +457,7 @@ export default function Accounts() {
       </section>
 
       <p className="text-[12px] text-center" style={{ color: 'rgba(255,255,255,0.18)' }}>
-        Forge uses OAuth by default, with manual key fallback for testing.
+        CoLaunch uses OAuth by default, with manual key fallback for testing.
       </p>
 
       {/* Instagram setup modal */}

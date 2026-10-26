@@ -399,7 +399,7 @@ export default function OutreachQueue({ onCountChange }) {
         {
           id: 'm1', creator_id: 'c1', creator_name: 'MKBHD', status: 'review_pending', send_method: 'email',
           subject: 'A product idea for your 18M tech audience',
-          body: `Hi Marques,\n\nI've been watching your channel for years — the way you explain complex tech simply is genuinely rare.\n\nWe've been building Creator Forge, a platform that turns your audience signals into revenue-ready products. Based on your comment section, we think a "MKBHD Camera Masterclass" would convert exceptionally well — your audience is constantly asking about your exact gear setup and workflow.\n\nWould you be open to a 30-minute call this week to explore this?\n\nBest,\n[Your Name]\n\nP.S. Reply STOP if you'd prefer not to hear from us.`,
+          body: `Hi Marques,\n\nI've been watching your channel for years — the way you explain complex tech simply is genuinely rare.\n\nWe've been building CoLaunch, a platform that turns your audience signals into revenue-ready products. Based on your comment section, we think a "MKBHD Camera Masterclass" would convert exceptionally well — your audience is constantly asking about your exact gear setup and workflow.\n\nWould you be open to a 30-minute call this week to explore this?\n\nBest,\n[Your Name]\n\nP.S. Reply STOP if you'd prefer not to hear from us.`,
           created_at: new Date().toISOString(),
         },
         {

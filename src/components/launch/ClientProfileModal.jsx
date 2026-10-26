@@ -413,7 +413,7 @@ export default function ClientProfileModal({
               {activeMessages.length > 0 ? (
                 <div className="space-y-3">
                   {activeMessages.map((msg, idx) => {
-                    const isFromCreator = !/partnerships@creatorforge\.com/i.test(
+                    const isFromCreator = !/partnerships@(creatorforge|colaunch)\.com/i.test(
                       msg.from_address || ""
                     );
                     return (
@@ -430,7 +430,7 @@ export default function ClientProfileModal({
                             <span>
                               {isFromCreator
                                 ? creator.name || msg.from_address
-                                : "Creator Forge Team"}
+                                : "CoLaunch Team"}
                             </span>
                             {isFromCreator && (
                               <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">

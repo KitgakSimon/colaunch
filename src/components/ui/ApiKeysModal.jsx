@@ -91,7 +91,7 @@ export default function ApiKeysModal({ onClose, platform, defaultTab = 'ai' }) {
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = 'creator_forge_api_keys.pdf'
+        a.download = 'colaunch_api_keys.pdf'
         document.body.appendChild(a)
         a.click()
         a.remove()

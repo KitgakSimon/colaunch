@@ -4,7 +4,7 @@ import { getCreators, getThreads, pollInboxReplies, updateCreatorDetails, delete
 import { updatePageSEO } from "../../utils/seo";
 import { Users, ExternalLink, RefreshCw, Rocket, ShieldCheck, CheckCircle, AlertCircle, X, Target, Layers, Zap, MessageSquare, ShieldAlert, Loader2 } from "lucide-react";
 import { CRMSkeleton } from "./Section2Skeletons";
-import CreatorForgeLogo from "../ui/CreatorForgeLogo";
+import CoLaunchLogo from "../ui/CoLaunchLogo";
 import { HeroShallowPolygons } from "../ui/FloatingPolygons";
 
 export default function FollowUpCRMPage() {
@@ -39,7 +39,7 @@ export default function FollowUpCRMPage() {
 
   useEffect(() => {
     updatePageSEO({
-      title: "Creator Follow-Up CRM & Inbound Replies | Creator Forge",
+      title: "Creator Follow-Up CRM & Inbound Replies | CoLaunch",
       description: "Directory list, audience score breakdown, AI sentiment analysis, and response tracking for partner creators.",
       image: "/og-image.svg"
     });
@@ -254,7 +254,7 @@ export default function FollowUpCRMPage() {
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => (window.location.href = "/launch")}
           >
-            <CreatorForgeLogo size={28} showWordmark={true} theme="light" />
+            <CoLaunchLogo size={28} showWordmark={true} theme="light" />
             <div className="hidden xl:flex items-center">
               <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                 OPERATOR STUDIO

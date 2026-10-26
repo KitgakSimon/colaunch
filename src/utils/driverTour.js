@@ -95,7 +95,7 @@ function createManagedTour({ steps, dismissKey, onDoneText = 'Done ✓' }) {
     overlayClickBehavior: 'close',
     stagePadding: 8,
     stageRadius: 14,
-    popoverClass: 'creator-forge-driver-popover',
+    popoverClass: 'colaunch-driver-popover',
     nextBtnText: 'Next Step →',
     prevBtnText: '← Back',
     doneBtnText: onDoneText,
@@ -493,7 +493,7 @@ export function startCreatorPortalPostPaymentTour(force = false) {
       element: '#tour-portal-chat',
       popover: {
         title: 'Direct Studio Team Line',
-        description: 'Collaborate directly with Creator Forge engineers via your private WhatsApp/direct chat line.',
+        description: 'Collaborate directly with CoLaunch engineers via your private WhatsApp/direct chat line.',
         side: 'top',
         align: 'end'
       }
@@ -563,7 +563,7 @@ export function highlightTourElement(selector, title, description) {
     overlayColor: 'rgba(15, 23, 42, 0.78)',
     stagePadding: 8,
     stageRadius: 14,
-    popoverClass: 'creator-forge-driver-popover',
+    popoverClass: 'colaunch-driver-popover',
     doneBtnText: 'Got It ✓',
     onDoneClick: (element, step, { driver }) => {
       driver.destroy()

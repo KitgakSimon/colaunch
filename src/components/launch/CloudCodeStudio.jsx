@@ -222,7 +222,7 @@ export default function CloudCodeStudio({
   executingTaskId,
   showToast
 }) {
-  const prodName = project?.productName || 'Creator Forge Engine'
+  const prodName = project?.productName || 'CoLaunch Engine'
   const prodSlug = (project?.slug || project?.productName || 'app').toLowerCase().replace(/[^a-z0-9]/g, '-')
 
   // Detect Phase 1 marketing media assets (promo graphics, teaser videos)

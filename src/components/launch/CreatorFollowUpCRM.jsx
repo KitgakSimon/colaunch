@@ -266,7 +266,7 @@ export default function CreatorFollowUpCRM({
       (t.replies || []).forEach((r) => {
         const fromAddr = (r.from_address || "").toLowerCase().trim();
         const isAdmin =
-          fromAddr.includes("partnerships@creatorforge.com") ||
+          fromAddr.includes("partnerships@colaunch.com") ||
           fromAddr.includes("creatorforgeweb@gmail.com") ||
           fromAddr.includes("brevosend.com") ||
           fromAddr.includes("google.com") ||
@@ -607,8 +607,8 @@ export default function CreatorFollowUpCRM({
         items.push({
           id: `outreach_${t.id}`,
           type: "outbound_email",
-          sender: "Creator Forge Studio Team (Admin)",
-          from_address: "partnerships@creatorforge.com",
+          sender: "CoLaunch Studio Team (Admin)",
+          from_address: "partnerships@colaunch.com",
           to_address: c.email || c.email_public || t.creator_email,
           subject: t.original_subject || `Co-founder partnership inquiry for ${c.name || c.display_name}`,
           body: t.original_body,
@@ -621,7 +621,7 @@ export default function CreatorFollowUpCRM({
       // 2. Inbound replies from creator (or outbound follow-ups) in t.replies
       (t.replies || []).forEach((r) => {
         const fromAddr = (r.from_address || "").toLowerCase().trim();
-        const isAdmin = fromAddr.includes("partnerships@creatorforge.com") || fromAddr.includes("admin") || r.direction === "outbound";
+        const isAdmin = fromAddr.includes("partnerships@colaunch.com") || fromAddr.includes("admin") || r.direction === "outbound";
         
         if (!isAdmin) {
           const bodyLower = (r.body || "").toLowerCase();
@@ -648,9 +648,9 @@ export default function CreatorFollowUpCRM({
         items.push({
           id: r.id || `reply_${Math.random()}`,
           type: isAdmin ? "outbound_email" : "inbound_reply",
-          sender: isAdmin ? "Creator Forge Studio Team (Admin)" : (c.name || c.display_name || r.from_address),
-          from_address: r.from_address || (isAdmin ? "partnerships@creatorforge.com" : (c.email || c.email_public)),
-          to_address: isAdmin ? (c.email || c.email_public) : "partnerships@creatorforge.com",
+          sender: isAdmin ? "CoLaunch Studio Team (Admin)" : (c.name || c.display_name || r.from_address),
+          from_address: r.from_address || (isAdmin ? "partnerships@colaunch.com" : (c.email || c.email_public)),
+          to_address: isAdmin ? (c.email || c.email_public) : "partnerships@colaunch.com",
           subject: r.subject || (isAdmin ? "Re: Partnership Update" : "Creator Reply"),
           body: r.body,
           timestamp: r.received_at || r.created_at || t.last_activity,
@@ -666,8 +666,8 @@ export default function CreatorFollowUpCRM({
         items.push({
           id: m.id || `msg_${Math.random()}`,
           type: isInbound ? "inbound_reply" : "outbound_email",
-          sender: isInbound ? (c.name || c.display_name || m.from_address) : "Creator Forge Studio Team (Admin)",
-          from_address: m.from_address || (isInbound ? (c.email || c.email_public) : "partnerships@creatorforge.com"),
+          sender: isInbound ? (c.name || c.display_name || m.from_address) : "CoLaunch Studio Team (Admin)",
+          from_address: m.from_address || (isInbound ? (c.email || c.email_public) : "partnerships@colaunch.com"),
           subject: m.subject || "Email Message",
           body: m.body,
           timestamp: m.received_at || m.sent_at || m.created_at,
@@ -697,8 +697,8 @@ export default function CreatorFollowUpCRM({
       items.push({
         id: `pitch_activity_${c.id}`,
         type: "pitch_sent",
-        sender: "Creator Forge Studio Team (Admin)",
-        from_address: "partnerships@creatorforge.com",
+        sender: "CoLaunch Studio Team (Admin)",
+        from_address: "partnerships@colaunch.com",
         to_address: c.email || c.email_public,
         subject: `Re: 3 Engineered Software Concepts & Opportunity Deck for ${c.name || c.display_name}`,
         body: `Step 6 Opportunity Deck with 3 tailored SaaS concepts & 50/50 net revenue agreement terms sent to ${c.name || c.display_name}.`,
@@ -820,7 +820,7 @@ export default function CreatorFollowUpCRM({
 
       for (const m of allMsgs) {
         const text = `${m.subject || ""} ${m.body || ""}`.toLowerCase();
-        if (text.includes("concept 1") || text.includes("concept 2") || text.includes("concept 3") || text.includes("go for concept") || text.includes("choose concept") || text.includes("partnering with creator forge") || text.includes("3 concepts") || text.includes("proposal deck")) {
+        if (text.includes("concept 1") || text.includes("concept 2") || text.includes("concept 3") || text.includes("go for concept") || text.includes("choose concept") || text.includes("partnering with colaunch") || text.includes("3 concepts") || text.includes("proposal deck")) {
           hasConceptInThread = true;
         }
         if (text.includes("co-founder portal live") || text.includes("project os initialized") || text.includes("kick-off confirmed")) {
@@ -1168,7 +1168,7 @@ export default function CreatorFollowUpCRM({
     setIsSendingReply(true);
     try {
       const { sendDirectEmail } = await import("../../services/opsApi");
-      const subj = replySubject.trim() || `Re: Partnering with Creator Forge - ${detailCreator.name || detailCreator.handle}`;
+      const subj = replySubject.trim() || `Re: Partnering with CoLaunch - ${detailCreator.name || detailCreator.handle}`;
       await Promise.race([
         sendDirectEmail(recipientEmail, subj, replyText.trim(), detailCreator.id),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Dispatch timeout')), 3500))
@@ -1422,7 +1422,7 @@ export default function CreatorFollowUpCRM({
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `creator_forge_crm_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute("download", `colaunch_crm_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -1794,7 +1794,7 @@ export default function CreatorFollowUpCRM({
                         {c.bio ||
                           c.relevantContent ||
                           c.summary ||
-                          `Don't just learn AI. Engineer it. Implement it. Welcome to ${c.name || c.display_name || "Creator Forge"}, your bridge from notebooks to production AI.`}
+                          `Don't just learn AI. Engineer it. Implement it. Welcome to ${c.name || c.display_name || "CoLaunch"}, your bridge from notebooks to production AI.`}
                       </p>
                     </div>
 
@@ -2333,7 +2333,7 @@ export default function CreatorFollowUpCRM({
                                       </div>
                                     )}
                                     <span className="font-bold text-slate-900 text-xs">
-                                      {isInbound ? (detailCreator.name || event.sender) : "Creator Forge Studio Team (Admin)"}
+                                      {isInbound ? (detailCreator.name || event.sender) : "CoLaunch Studio Team (Admin)"}
                                     </span>
                                     {isInbound && (
                                       <span className="px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-200 text-[10px] text-emerald-800 font-mono flex items-center gap-1 font-bold">
@@ -2388,7 +2388,7 @@ export default function CreatorFollowUpCRM({
                       <div className="space-y-2">
                         <input
                           type="text"
-                          placeholder={`Subject: Re: Partnering with Creator Forge - ${detailCreator.name || detailCreator.handle}`}
+                          placeholder={`Subject: Re: Partnering with CoLaunch - ${detailCreator.name || detailCreator.handle}`}
                           value={replySubject}
                           onChange={(e) => setReplySubject(e.target.value)}
                           className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:bg-white font-mono shadow-2xs"

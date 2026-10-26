@@ -318,7 +318,7 @@ export default function DashboardLayout() {
                   </span>
                 </h4>
                 <p className="text-[12px] leading-relaxed" style={{ color: 'var(--theme-text-muted)' }}>
-                  You are currently exploring Creator Forge in a temporary guest session. Register your permanent profile to protect and preserve your transient API keys, calendar configurations, and launch assets.
+                  You are currently exploring CoLaunch in a temporary guest session. Register your permanent profile to protect and preserve your transient API keys, calendar configurations, and launch assets.
                 </p>
               </div>
             </div>

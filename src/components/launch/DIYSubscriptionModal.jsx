@@ -116,7 +116,7 @@ export default function DIYSubscriptionModal({
         )
         await new Promise((r) => setTimeout(r, 1100))
 
-        setProcessingStep('Provisioning autonomous Creator Forge license...')
+        setProcessingStep('Provisioning autonomous CoLaunch license...')
         await new Promise((r) => setTimeout(r, 800))
       }
 
@@ -165,7 +165,7 @@ export default function DIYSubscriptionModal({
         setProcessingStep(`Dispatching dedicated URL to ${targetEmail}...`)
         try {
           const emailSubject = `🚀 Your Interactive Co-Builder ProjectOS URL: ${productName}`
-          const emailBody = `Hi ${project?.creatorName || 'there'},\n\nThank you for your $${amountToCharge} payment! Your Interactive Co-Builder ProjectOS Workspace for ${productName} has been officially unlocked.\n\nYou now have full authority to directly participate and build alongside the studio across all 3 phases:\n• Phase 1: Market Validation & Pre-order Campaign\n• Phase 2: AI MVP Sprints, Architecture & Database\n• Phase 3: Launch & Production Telemetry\n• 50/50 Co-Founder Equity Partnership\n\nClick the link below to access your interactive workspace:\n${generatedUrl}\n\nBest regards,\nThe Creator Forge Studio Team`
+          const emailBody = `Hi ${project?.creatorName || 'there'},\n\nThank you for your $${amountToCharge} payment! Your Interactive Co-Builder ProjectOS Workspace for ${productName} has been officially unlocked.\n\nYou now have full authority to directly participate and build alongside the studio across all 3 phases:\n• Phase 1: Market Validation & Pre-order Campaign\n• Phase 2: AI MVP Sprints, Architecture & Database\n• Phase 3: Launch & Production Telemetry\n• 50/50 Co-Founder Equity Partnership\n\nClick the link below to access your interactive workspace:\n${generatedUrl}\n\nBest regards,\nThe CoLaunch Studio Team`
 
           await sendDirectEmail(targetEmail, emailSubject, emailBody, project?.creatorId || project?.id)
           setEmailNotice(`Dedicated URL dispatched to ${targetEmail}`)

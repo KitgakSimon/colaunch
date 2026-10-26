@@ -275,7 +275,7 @@ export default function LaunchStudioHero({
                   <FileText className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-950">Creator Forge Co-Launch Artifacts</h3>
+                  <h3 className="text-sm font-bold text-slate-950">CoLaunch Co-Launch Artifacts</h3>
                   <p className="text-xs text-slate-500">Tangible deliverables, partnership contracts & software blueprints</p>
                 </div>
               </div>
@@ -331,7 +331,7 @@ export default function LaunchStudioHero({
                       50/50 Creator Software Partnership & Revenue Split Agreement
                     </h4>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Binding venture studio terms between Creator Forge (Engineering Co-Founder) and the Partner Creator (Distribution Co-Founder).
+                      Binding venture studio terms between CoLaunch (Engineering Co-Founder) and the Partner Creator (Distribution Co-Founder).
                     </p>
                   </div>
 
@@ -342,7 +342,7 @@ export default function LaunchStudioHero({
                         <span>Term 1: Zero Upfront Cost ($0)</span>
                       </span>
                       <p className="text-slate-600 text-[11px] leading-relaxed">
-                        Creator Forge covers 100% of engineering development, server hosting, databases, AI inference, and maintenance costs.
+                        CoLaunch covers 100% of engineering development, server hosting, databases, AI inference, and maintenance costs.
                       </p>
                     </div>
 
@@ -450,7 +450,7 @@ export default function LaunchStudioHero({
             {/* Modal Footer */}
             <div className="px-6 py-3.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
               <span className="text-xs text-slate-500 font-mono">
-                Creator Forge Studio OS • 100% Managed Co-Launch
+                CoLaunch Studio OS • 100% Managed Co-Launch
               </span>
               <button
                 type="button"

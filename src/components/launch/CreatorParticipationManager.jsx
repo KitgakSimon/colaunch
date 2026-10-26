@@ -48,7 +48,7 @@ import {
 } from '../../services/opsApi'
 import { updatePageSEO } from '../../utils/seo'
 import { getExpiringItem, removeExpiringItem } from '../../utils/expiringStorage'
-import CreatorForgeLogo from '../ui/CreatorForgeLogo'
+import CoLaunchLogo from '../ui/CoLaunchLogo'
 import DIYSubscriptionModal from './DIYSubscriptionModal'
 import { resolveCreatorTheme } from '../../utils/creatorTheme'
 import { startParticipationTour } from '../../utils/driverTour'
@@ -310,7 +310,7 @@ export default function CreatorParticipationManager() {
   // SEO Update
   useEffect(() => {
     updatePageSEO({
-      title: 'Creator Co-Builder & Participation Manager | Creator Forge',
+      title: 'Creator Co-Builder & Participation Manager | CoLaunch',
       description: 'Dedicated real-time operator console for tracking creator participation tracks, Co-Builder passes, dynamic pricing, and follow-ups.',
       image: '/og-image.svg'
     })
@@ -500,9 +500,9 @@ export default function CreatorParticipationManager() {
       setEmailSubject(`Your Co-Builder Pass Invoice & Setup ($${passFee} USD) — ${productName}`)
       setEmailBody(
         `Hi ${creatorName},\n\nHere is your official invite and payment invoice for the Interactive Co-Builder Pass ($${passFee} USD flat fee) for ${productName}.\n\n` +
-        `As a reminder, our partnership is a 50/50 Co-Founder Equity Split. This $${passFee} pass gives you full hands-on access inside Creator Forge ProjectOS to run AI MVP tasks, test features, and participate directly in every build phase instead of waiting for us to do it alone.\n\n` +
+        `As a reminder, our partnership is a 50/50 Co-Founder Equity Split. This $${passFee} pass gives you full hands-on access inside CoLaunch ProjectOS to run AI MVP tasks, test features, and participate directly in every build phase instead of waiting for us to do it alone.\n\n` +
         `👉 Access your Co-Builder Workspace here:\n${workspaceUrl}\n\n` +
-        `Looking forward to building this together!\n\nBest,\nCreator Forge Studio Operations`
+        `Looking forward to building this together!\n\nBest,\nCoLaunch Studio Operations`
       )
     } else if (templateType === 'portal_link') {
       setEmailSubject(`Your Co-Builder ProjectOS Workspace Link — ${productName}`)
@@ -510,7 +510,7 @@ export default function CreatorParticipationManager() {
         `Hi ${creatorName},\n\nYour Co-Builder ProjectOS workspace is ready for ${productName}!\n\n` +
         `You have full interactive co-builder access to Phase 1, Phase 2, and Phase 3 sprints.\n\n` +
         `👉 Open Your Workspace:\n${workspaceUrl}\n\n` +
-        `Best,\nCreator Forge Studio Team`
+        `Best,\nCoLaunch Studio Team`
       )
     } else {
       // Standard Follow-up
@@ -523,7 +523,7 @@ export default function CreatorParticipationManager() {
         `2. Studio-Managed Track ($0 upfront):\n` +
         `Our studio engineering team completes all technical phases and hosting for you while you monitor progress in real-time.\n\n` +
         `👉 Review and select your track here:\n${workspaceUrl}\n\n` +
-        `Let me know if you have any questions!\n\nBest,\nCreator Forge Operations`
+        `Let me know if you have any questions!\n\nBest,\nCoLaunch Operations`
       )
     }
   }
@@ -795,7 +795,7 @@ export default function CreatorParticipationManager() {
             <div className={`h-5 w-[1px] ${isLight ? 'bg-slate-200' : 'bg-white/[0.1]'} hidden sm:block`} />
 
             <div className="flex items-center gap-2.5">
-              <CreatorForgeLogo size={24} theme={isLight ? 'light' : 'dark'} />
+              <CoLaunchLogo size={24} theme={isLight ? 'light' : 'dark'} />
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className={`text-sm sm:text-base font-extrabold ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight`}>

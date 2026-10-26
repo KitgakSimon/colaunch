@@ -3463,7 +3463,7 @@ export default function Phase1Validate({
                             </span>
                           </div>
                           <p className="text-[11px] text-slate-600 leading-relaxed max-w-2xl font-normal">
-                            Zero friction. Creator Forge automatically emails each day's ready-to-post caption + direct download link for the high-res graphic or video directly to the creator's inbox every 24 hours on schedule. No app login required.
+                            Zero friction. CoLaunch automatically emails each day's ready-to-post caption + direct download link for the high-res graphic or video directly to the creator's inbox every 24 hours on schedule. No app login required.
                           </p>
                         </div>
                       </div>

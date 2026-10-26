@@ -213,7 +213,7 @@ ${(concept.keyFeatures || []).map((f) => `  - ${f}`).join("\n")}
                     }}
                   >
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Creator Forge 50/50 Co-Founder Venture</span>
+                    <span>CoLaunch 50/50 Co-Founder Venture</span>
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                     {concept.name}

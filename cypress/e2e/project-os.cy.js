@@ -11,7 +11,7 @@ describe('Project OS Operations Suite', () => {
     cy.url().should('include', 'creator=0321fbdf-3df0-4855-800a-a6ed5e9ddbaa')
 
     // Header assertions
-    cy.contains('CREATOR FORGE').should('be.visible')
+    cy.contains('COLAUNCH').should('be.visible')
     cy.contains('PROJECT OS').should('be.visible')
     
     // Back navigation to Acquisition OS
