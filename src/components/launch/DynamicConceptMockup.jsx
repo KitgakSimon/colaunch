@@ -437,16 +437,20 @@ export default function DynamicConceptMockup({
             <span className="truncate">{concept.name || "Product Preview"}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span
-              className="text-[8.5px] font-bold px-2 py-0.5 rounded-md border"
+            <button
+              type="button"
+              onClick={() => setIsPreviewOpen(true)}
+              className="text-[8.5px] font-bold px-2 py-0.5 rounded-md border cursor-pointer hover:opacity-80 transition-all flex items-center gap-1"
               style={{
                 color: accentHex,
                 backgroundColor: `${accentHex}1a`,
                 borderColor: `${accentHex}45`
               }}
+              title="Click to view interactive full landing page preview"
             >
-              Landing Page
-            </span>
+              <span>Landing Page</span>
+              <ExternalLink className="w-2.5 h-2.5" />
+            </button>
           </div>
         </div>
 

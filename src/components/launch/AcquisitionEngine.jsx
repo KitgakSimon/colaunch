@@ -104,35 +104,53 @@ import { formatConceptPricing } from "../../utils/pricing";
 
 export const PARTNERSHIP_EMAIL = import.meta.env.VITE_PARTNERSHIP_EMAIL || "creatorforgeweb@gmail.com";
 
-// Category-tailored high-res visual mockup screenshots for creator proposals
+// Category and archetype-tailored visual mockup screenshots for creator proposals
+export const CONCEPT_ARCHETYPE_IMAGES = {
+  saas_os: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&auto=format&fit=crop&q=80",
+  ai_copilot: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000&auto=format&fit=crop&q=80",
+  knowledge_hub: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1000&auto=format&fit=crop&q=80",
+};
+
 export const CONCEPT_CATEGORY_IMAGES = {
-  productivity: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000&auto=format&fit=crop&q=80",
-  tech: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&auto=format&fit=crop&q=80",
+  productivity: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&auto=format&fit=crop&q=80",
+  tech: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1000&auto=format&fit=crop&q=80",
+  ai: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000&auto=format&fit=crop&q=80",
+  community: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1000&auto=format&fit=crop&q=80",
   finance: "https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=1000&auto=format&fit=crop&q=80",
   video_editing: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1000&auto=format&fit=crop&q=80",
   game_dev: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1000&auto=format&fit=crop&q=80",
-  data_ai: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000&auto=format&fit=crop&q=80",
   cybersecurity: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1000&auto=format&fit=crop&q=80",
   business_founder: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000&auto=format&fit=crop&q=80",
   podcast_audio: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1000&auto=format&fit=crop&q=80",
   default: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&auto=format&fit=crop&q=80",
 };
 
-export const getConceptImageUrl = (concept, fallbackNiche = "tech") => {
+export const getConceptImageUrl = (concept, fallbackNiche = "tech", brandColor = null) => {
   if (concept?.customImageUrl) return concept.customImageUrl;
   if (concept?.imageUrl) return concept.imageUrl;
   if (concept?.mockup?.imageUrl) return concept.mockup.imageUrl;
   if (concept?.mockup_image) return concept.mockup_image;
+
+  const colorParam = brandColor || concept?.brandColor || "";
+  const mockupType = concept?.mockupType || (concept?.name?.toLowerCase().includes("ai") || concept?.name?.toLowerCase().includes("copilot") ? "ai_copilot" : concept?.name?.toLowerCase().includes("vault") || concept?.name?.toLowerCase().includes("mastermind") || concept?.name?.toLowerCase().includes("hub") ? "knowledge_hub" : "saas_os");
+
   if (concept?.name || concept?.mockup?.appUrl) {
     const name = encodeURIComponent(concept?.name || "Concept");
     const appUrl = encodeURIComponent(concept?.mockup?.appUrl || `${(concept?.name || "app").toLowerCase().replace(/\s+/g, "")}.app`);
     const mrr = encodeURIComponent(concept?.mockup?.primaryMetric || concept?.primaryMetric || "$22.4K MRR");
-    const users = encodeURIComponent(concept?.mockup?.activeMetric || concept?.activeMetric || "1,200");
-    const retention = encodeURIComponent(concept?.mockup?.efficiencyMetric || concept?.efficiencyMetric || "91%");
+    const users = encodeURIComponent(concept?.mockup?.activeMetric || concept?.activeMetric || (mockupType === "ai_copilot" ? "1,420 Copilot Runs" : mockupType === "knowledge_hub" ? "420 Active" : "1,200"));
+    const retention = encodeURIComponent(concept?.mockup?.efficiencyMetric || concept?.efficiencyMetric || (mockupType === "ai_copilot" ? "98% Precision" : mockupType === "knowledge_hub" ? "94% Renewal" : "91%"));
     const cust = encodeURIComponent(concept?.customer || concept?.demographicAlignment || "Target Users");
     const price = encodeURIComponent(concept?.pricing || "$49/mo");
-    return `/api/outreach/concept-card-image?name=${name}&app_url=${appUrl}&mrr=${mrr}&active_users=${users}&retention=${retention}&customer=${cust}&pricing=${price}`;
+    const bColor = encodeURIComponent(colorParam);
+    const mType = encodeURIComponent(mockupType);
+    return `/api/outreach/concept-card-image?name=${name}&app_url=${appUrl}&mrr=${mrr}&active_users=${users}&retention=${retention}&customer=${cust}&pricing=${price}&brand_color=${bColor}&mockup_type=${mType}`;
   }
+
+  if (CONCEPT_ARCHETYPE_IMAGES[mockupType]) {
+    return CONCEPT_ARCHETYPE_IMAGES[mockupType];
+  }
+
   const n = (Array.isArray(fallbackNiche) ? fallbackNiche.join(" ") : String(fallbackNiche || "")).toLowerCase();
   for (const [k, url] of Object.entries(CONCEPT_CATEGORY_IMAGES)) {
     if (n.includes(k) || (concept?.tagline && concept.tagline.toLowerCase().includes(k))) {
@@ -3218,6 +3236,24 @@ export default function AcquisitionEngine({
             } catch (e) {}
             return next;
           });
+
+          // Dynamically sync creator concepts with the newly detected signature brand color
+          setCreators((prev) =>
+            prev.map((c) => {
+              if (c.id !== cId) return c;
+              const currentConcepts = c.productConcepts || ensureCreatorConcepts(c);
+              const updatedConcepts = currentConcepts.map((cp, idx) => ({
+                ...cp,
+                brandColor: cp.isCustomColor ? cp.brandColor : harmonious[idx % harmonious.length],
+              }));
+              return {
+                ...c,
+                brandColor: primaryHex,
+                brand_color: primaryHex,
+                productConcepts: updatedConcepts,
+              };
+            })
+          );
 
           // Sync with Creator Dashboard and Operator Studio theme
           if (typeof window !== "undefined") {
@@ -10197,11 +10233,12 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                   <div className="grid md:grid-cols-3 gap-5">
                     {selectedCreator.productConcepts.map((concept, index) => {
                       const activeColorInfo = creatorBrandColorMap[selectedCreator.id] || {
-                        primaryHex: selectedCreator.brand_color || selectedCreator.brandColor || "#16A34A",
-                        colors: getHarmoniousConceptColors(selectedCreator.brand_color || selectedCreator.brandColor || "#16A34A"),
+                        primaryHex: selectedCreator.brand_color || selectedCreator.brandColor || "#10B981",
+                        colors: getHarmoniousConceptColors(selectedCreator.brand_color || selectedCreator.brandColor || "#10B981"),
                       };
-                      const defaultConceptColor = activeColorInfo.colors[index % activeColorInfo.colors.length];
-                      const brandColorObj = getBrandColorObj(concept.brandColor || defaultConceptColor);
+                      const defaultConceptColor = activeColorInfo.colors[index % activeColorInfo.colors.length] || activeColorInfo.primaryHex;
+                      const effectiveConceptColor = concept.isCustomColor ? concept.brandColor : defaultConceptColor;
+                      const brandColorObj = getBrandColorObj(effectiveConceptColor);
                       const accentHex = brandColorObj.hex;
 
                       return (
@@ -10265,7 +10302,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
 
                             {/* Dynamic Concept Mockup (Replaces static Unsplash photo with authentic UI canvas!) */}
                             <DynamicConceptMockup
-                              concept={concept}
+                              concept={{ ...concept, brandColor: accentHex }}
                               creator={{
                                 ...selectedCreator,
                                 brand_color: activeColorInfo.primaryHex,

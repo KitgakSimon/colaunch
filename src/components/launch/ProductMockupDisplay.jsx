@@ -20,7 +20,7 @@ import {
   FileText
 } from 'lucide-react'
 
-export default function ProductMockupDisplay({ project, theme = 'lime' }) {
+export default function ProductMockupDisplay({ project, theme = 'lime', brandColor = null }) {
   const productName = project?.productName || 'The DataLab Hub System'
   const creatorName = project?.creatorName || 'Keith Galli'
   const niche = project?.niche || 'Data Science & Machine Learning'
@@ -263,6 +263,7 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
     }
   }
   const currentTheme = themeMap[theme] || themeMap.lime
+  const accentHex = brandColor || (theme === 'emerald' ? '#78E08F' : '#C8FF3D')
 
   return (
     <div className={`w-full rounded-2xl bg-[#101419] border ${currentTheme.border} p-4 sm:p-6 shadow-2xl ${currentTheme.glow} transition-all space-y-4 text-left select-none keep-dark product-mockup-display`}>
@@ -274,13 +275,16 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
             <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
             <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
           </div>
-          <div className="px-2.5 py-1 rounded-lg bg-[#0D1014] border border-[#252B32] text-[10px] font-mono text-[#C8FF3D] flex items-center gap-1.5 max-w-[200px] sm:max-w-xs truncate">
+          <div className="px-2.5 py-1 rounded-lg bg-[#0D1014] border border-[#252B32] text-[10px] font-mono flex items-center gap-1.5 max-w-[200px] sm:max-w-xs truncate" style={{ color: accentHex }}>
             <span className="truncate font-semibold">{productName || 'Software Architecture'}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold whitespace-nowrap ${currentTheme.badge}`}>
+          <span
+            className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold whitespace-nowrap ${currentTheme.badge}`}
+            style={brandColor ? { backgroundColor: `${accentHex}18`, color: accentHex, borderColor: `${accentHex}40` } : {}}
+          >
             {config.badgeText}
           </span>
           <span className="text-[10px] font-mono text-[#969DA6] whitespace-nowrap hidden lg:inline">
@@ -295,13 +299,16 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
         <div className="md:col-span-3 bg-[#0D1014] border border-[#252B32] rounded-xl p-3 space-y-3">
           {/* Brand Header */}
           <div className="flex items-center gap-2 px-1">
-            <div className={`w-8 h-8 rounded-lg ${currentTheme.primaryBg} flex items-center justify-center font-black text-xs shadow-md shrink-0`}>
+            <div
+              className={`w-8 h-8 rounded-lg ${currentTheme.primaryBg} flex items-center justify-center font-black text-xs shadow-md shrink-0`}
+              style={brandColor ? { backgroundColor: accentHex, color: '#080A0C' } : {}}
+            >
               <Code2 className="w-4 h-4" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="font-bold text-[#F5F3EA] text-xs truncate">{productName}</div>
-              <div className="text-[9px] text-[#78E08F] font-mono flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#78E08F] animate-pulse" />
+              <div className="text-[9px] font-mono flex items-center gap-1" style={{ color: accentHex }}>
+                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: accentHex }} />
                 <span>Active Session</span>
               </div>
             </div>
@@ -319,9 +326,10 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
                   onClick={() => setActiveTab(idx)}
                   className={`w-full px-2.5 py-2 rounded-lg text-left transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
-                      ? 'bg-[#C8FF3D] text-[#080A0C] shadow-sm font-bold'
+                      ? 'shadow-sm font-bold'
                       : 'text-[#969DA6] hover:text-[#F5F3EA] hover:bg-[#171C22]'
                   }`}
+                  style={isSelected ? { backgroundColor: accentHex, color: '#080A0C' } : {}}
                 >
                   <div className="flex items-center gap-2 truncate">
                     <NavIcon className="w-3.5 h-3.5 shrink-0" />
@@ -339,7 +347,7 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
             {config.specs.map((sp, i) => (
               <div key={i} className="space-y-0.5 border-b border-[#252B32] pb-1.5 last:border-0 last:pb-0">
                 <div className="text-[#686F78] font-mono text-[9px] uppercase">{sp.label}</div>
-                <div className="text-[#78E08F] font-mono font-bold text-[10px] break-words">{sp.value}</div>
+                <div className="font-mono font-bold text-[10px] break-words" style={{ color: accentHex }}>{sp.value}</div>
               </div>
             ))}
           </div>
@@ -351,7 +359,10 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
           <div className="p-4 rounded-xl bg-[#0D1014] border border-[#252B32] flex items-center justify-between gap-3">
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-[#C8FF3D]/10 text-[#C8FF3D] border border-[#C8FF3D]/30">
+                <span
+                  className="px-2 py-0.5 rounded text-[9px] font-mono font-bold border"
+                  style={{ backgroundColor: `${accentHex}15`, color: accentHex, borderColor: `${accentHex}40` }}
+                >
                   {activeTab === 0 ? 'SOURCE CODE & ENGINE' : activeTab === 1 ? 'VISUAL WIDGET TREE' : activeTab === 2 ? 'LOGIC & STATE GRAPH' : 'NATIVE DEVICE SIMULATOR'}
                 </span>
                 <span className="text-xs font-bold text-[#F5F3EA] truncate">
@@ -366,7 +377,8 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
               type="button"
               onClick={handleRun}
               disabled={isRunningCode}
-              className="px-3.5 py-2 rounded-xl bg-[#C8FF3D] hover:bg-[#d8ff66] text-[#080A0C] font-bold text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer shrink-0"
+              className="px-3.5 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer shrink-0"
+              style={{ backgroundColor: accentHex, color: '#080A0C' }}
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>{isRunningCode ? `Compiling (${buildProgress}%)...` : isCompiled ? 'Re-Run Build' : 'Run Pipeline'}</span>
@@ -378,7 +390,7 @@ export default function ProductMockupDisplay({ project, theme = 'lime' }) {
             <div className="rounded-xl bg-[#080A0C] border border-[#252B32] overflow-hidden font-mono text-xs shadow-inner animate-fade-in">
               <div className="px-3 py-2 bg-[#0D1014] border-b border-[#252B32] flex items-center justify-between text-[11px] text-[#969DA6]">
                 <div className="flex items-center gap-2">
-                  <FileCode className="w-3.5 h-3.5 text-[#C8FF3D]" />
+                  <FileCode className="w-3.5 h-3.5" style={{ color: accentHex }} />
                   <span className="text-[#F5F3EA] font-bold">{config.fileName}</span>
                   <span className="text-[10px] text-[#686F78]">(Auto-Saved)</span>
                 </div>

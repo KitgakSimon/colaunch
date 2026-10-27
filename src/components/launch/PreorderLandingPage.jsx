@@ -13,6 +13,8 @@ import {
   sanitizePricingConfig,
   parseConceptPricing
 } from '../../utils/pricing'
+import { sanitizeAccentColor, getContrastTextColor } from './DynamicConceptMockup'
+import { hexToRgba } from '../../utils/avatarColorExtractor'
 import { PreorderLandingSkeleton } from './Section2Skeletons'
 
 export default function PreorderLandingPage({ slug }) {
@@ -44,6 +46,30 @@ export default function PreorderLandingPage({ slug }) {
 
     return project.selectedConcept || (conceptsList.length > 0 ? conceptsList.find(c => c.selected) || conceptsList[0] : null)
   })()
+
+  // Derive dynamic brand color
+  const brandColor = (() => {
+    if (selectedConcept?.brandColor) return sanitizeAccentColor(selectedConcept.brandColor)
+    if (project?.brandColor || project?.brand_color) return sanitizeAccentColor(project.brandColor || project.brand_color)
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('forge_creator_brand_color_map')
+        if (stored) {
+          const map = JSON.parse(stored)
+          const cId = project?.creatorId || project?.id
+          if (cId && map[cId]?.primaryHex) return sanitizeAccentColor(map[cId].primaryHex)
+          const matchEntry = Object.entries(map).find(([key]) => {
+            const cleanKey = key.toLowerCase().replace(/[^a-z0-9]/g, '')
+            const cleanSlug = (slug || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+            return cleanKey === cleanSlug || cleanSlug.includes(cleanKey)
+          })
+          if (matchEntry && matchEntry[1]?.primaryHex) return sanitizeAccentColor(matchEntry[1].primaryHex)
+        }
+      } catch (e) {}
+    }
+    return '#10B981'
+  })()
+  const brandContrastText = getContrastTextColor(brandColor)
 
   const productName = project?.productName || selectedConcept?.name || project?.title || 'Software Co-Launch'
   const creatorName = project?.creatorName || project?.creatorHandle || 'Creator Partner'
@@ -205,6 +231,7 @@ export default function PreorderLandingPage({ slug }) {
                     creatorName: matchedCreator.name || matchedCreator.display_name || 'Creator Partner',
                     creatorHandle: matchedCreator.handle,
                     creatorAvatar: matchedCreator.avatar_url || matchedCreator.avatar,
+                    brandColor: targetConcept?.brandColor || matchedCreator.brand_color || matchedCreator.brandColor || null,
                     niche: matchedCreator.niche,
                     productName: targetConcept?.name || `${matchedCreator.name || 'Creator'} OS`,
                     productTagline: targetConcept?.tagline || `The automated operating system for ${matchedCreator.niche || 'tech'} professionals`,
@@ -425,16 +452,22 @@ export default function PreorderLandingPage({ slug }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#080A0C] text-[#F5F3EA] selection:bg-[#C8FF3D] selection:text-[#080A0C] font-sans antialiased overflow-x-hidden relative">
+    <div className="min-h-screen bg-[#080A0C] text-[#F5F3EA] selection:bg-[#10B981] selection:text-[#080A0C] font-sans antialiased overflow-x-hidden relative">
       {/* Top Dynamic API Loading Indicator Bar */}
       {isLoading && (
-        <div className="fixed top-0 left-0 right-0 z-[9999] h-1 bg-gradient-to-r from-[#C8FF3D] via-[#78E08F] to-[#C8FF3D] animate-pulse shadow-sm" />
+        <div
+          className="fixed top-0 left-0 right-0 z-[9999] h-1 animate-pulse shadow-sm"
+          style={{ background: `linear-gradient(to right, ${brandColor}, ${hexToRgba(brandColor, 0.4)}, ${brandColor})` }}
+        />
       )}
 
       {/* Floating Backend Sync Status Pill */}
       {isLoading && (
-        <div className="fixed top-4 right-4 z-[9999] flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#101419]/90 border border-[#C8FF3D]/40 backdrop-blur-md shadow-lg shadow-black/50 text-xs font-mono text-[#C8FF3D] animate-pulse">
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-[#C8FF3D]" />
+        <div
+          className="fixed top-4 right-4 z-[9999] flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#101419]/90 border backdrop-blur-md shadow-lg shadow-black/50 text-xs font-mono animate-pulse"
+          style={{ borderColor: `${brandColor}60`, color: brandColor }}
+        >
+          <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: brandColor }} />
           <span>Syncing backend data...</span>
         </div>
       )}
@@ -442,10 +475,18 @@ export default function PreorderLandingPage({ slug }) {
       {/* Top Launch Notification Banner */}
       <div className="bg-[#0D1014] border-b border-[#252B32] py-2.5 px-3 sm:px-4 text-center text-xs">
         <div className="flex items-center justify-center gap-1.5 sm:gap-2 font-medium flex-wrap">
-          <span className="w-2 h-2 rounded-full bg-[#78E08F] shrink-0" />
+          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: brandColor }} />
           <span className="text-[#969DA6]">Exclusive Co-Founder Early Launch by</span>
           <span className="text-[#F5F3EA] font-semibold">{creatorName}</span>
-          <span className="bg-[#C8FF3D]/10 text-[#C8FF3D] border border-[#C8FF3D]/25 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider shrink-0">
+          <span
+            className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider shrink-0"
+            style={{
+              backgroundColor: `${brandColor}18`,
+              color: brandColor,
+              borderColor: `${brandColor}40`,
+              borderWidth: '1px'
+            }}
+          >
             50% Off Lifetime Tier
           </span>
         </div>
@@ -461,7 +502,10 @@ export default function PreorderLandingPage({ slug }) {
               className="w-8 sm:w-9 h-8 sm:h-9 rounded-xl object-cover border border-[#252B32] shrink-0"
             />
           ) : (
-            <div className="w-8 sm:w-9 h-8 sm:h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center text-[#C8FF3D] font-display font-black text-xs sm:text-sm shadow-sm shrink-0">
+            <div
+              className="w-8 sm:w-9 h-8 sm:h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center font-display font-black text-xs sm:text-sm shadow-sm shrink-0"
+              style={{ color: brandColor }}
+            >
               {productName.slice(0, 2).toUpperCase()}
             </div>
           )}
@@ -474,7 +518,8 @@ export default function PreorderLandingPage({ slug }) {
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={() => openCheckout({ name: `Founding Annual Pass ($${foundingPrice})`, price: foundingPrice, deposit: false })}
-            className="px-3.5 sm:px-4 py-2 rounded-xl bg-[#C8FF3D] hover:bg-[#d8ff66] text-[#080A0C] font-bold text-xs shadow-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 sm:px-4 py-2 rounded-xl font-bold text-xs shadow-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer hover:opacity-90"
+            style={{ backgroundColor: brandColor, color: brandContrastText }}
           >
             <CreditCard className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Claim Access</span>
@@ -485,8 +530,11 @@ export default function PreorderLandingPage({ slug }) {
 
       {/* Hero Section */}
       <main className="max-w-5xl mx-auto px-6 pt-10 pb-24 text-center space-y-8">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#101419] border border-[#252B32] text-[#C8FF3D] text-xs font-mono font-bold tracking-wider uppercase">
-          <Sparkles className="w-3.5 h-3.5 text-[#C8FF3D]" />
+        <div
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#101419] border text-xs font-mono font-bold tracking-wider uppercase"
+          style={{ borderColor: `${brandColor}40`, color: brandColor }}
+        >
+          <Sparkles className="w-3.5 h-3.5" style={{ color: brandColor }} />
           <span>Co-Created with {creatorName}’s Community</span>
         </div>
 
@@ -503,7 +551,12 @@ export default function PreorderLandingPage({ slug }) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
             <button
               onClick={() => openCheckout({ name: `Founding Annual Pass ($${foundingPrice})`, price: foundingPrice, deposit: false })}
-              className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#C8FF3D] hover:bg-[#d8ff66] text-[#080A0C] font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#C8FF3D]/10 transition-all active:scale-95 cursor-pointer"
+              className="w-full sm:w-auto px-7 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 cursor-pointer hover:opacity-90"
+              style={{
+                backgroundColor: brandColor,
+                color: brandContrastText,
+                boxShadow: `0 8px 24px -4px ${hexToRgba(brandColor, 0.35)}`
+              }}
             >
               <CreditCard className="w-4 h-4" />
               <span>Claim Founding Access (${foundingPrice})</span>
@@ -513,7 +566,7 @@ export default function PreorderLandingPage({ slug }) {
               onClick={() => openCheckout({ name: `VIP Deposit ($${depositPrice})`, price: depositPrice, deposit: true })}
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#101419] hover:bg-[#171C22] text-[#F5F3EA] border border-[#252B32] font-semibold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
-              <ShieldCheck className="w-4 h-4 text-[#78E08F]" />
+              <ShieldCheck className="w-4 h-4" style={{ color: brandColor }} />
               <span>Reserve with ${depositPrice} Deposit</span>
             </button>
           </div>
@@ -521,15 +574,15 @@ export default function PreorderLandingPage({ slug }) {
           {/* Perks Indicators */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#969DA6] pt-2">
             <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-[#78E08F]" />
+              <CheckCircle2 className="w-4 h-4" style={{ color: brandColor }} />
               <span>100% Refundable Guarantee</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-[#78E08F]" />
+              <CheckCircle2 className="w-4 h-4" style={{ color: brandColor }} />
               <span>{perksText}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-[#78E08F]" />
+              <CheckCircle2 className="w-4 h-4" style={{ color: brandColor }} />
               <span>Direct Co-Founder Access</span>
             </div>
           </div>
@@ -537,7 +590,7 @@ export default function PreorderLandingPage({ slug }) {
 
         {/* Visual Designed Mockup Showcase (Full, Non-Editable UI Frame) */}
         <div className="pt-6">
-          <ProductMockupDisplay project={project} theme="lime" />
+          <ProductMockupDisplay project={project} theme="lime" brandColor={brandColor} />
         </div>
 
         {/* Creator's Approved Blueprint Spotlight Card */}
@@ -546,15 +599,28 @@ export default function PreorderLandingPage({ slug }) {
             {/* Top Badge */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#252B32] pb-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#171C22] border border-[#C8FF3D]/30 flex items-center justify-center text-[#C8FF3D] font-bold">
+                <div
+                  className="w-10 h-10 rounded-2xl bg-[#171C22] border flex items-center justify-center font-bold"
+                  style={{ borderColor: `${brandColor}40`, color: brandColor }}
+                >
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#C8FF3D] font-bold">
+                    <span
+                      className="text-[10px] font-mono uppercase tracking-widest font-bold"
+                      style={{ color: brandColor }}
+                    >
                       Creator's Selected Co-Launch Concept
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-[#78E08F]/10 border border-[#78E08F]/30 text-[#78E08F] text-[9px] font-mono font-bold">
+                    <span
+                      className="px-2 py-0.5 rounded-full border text-[9px] font-mono font-bold"
+                      style={{
+                        backgroundColor: `${brandColor}15`,
+                        borderColor: `${brandColor}35`,
+                        color: brandColor
+                      }}
+                    >
                       Verified
                     </span>
                   </div>
@@ -564,14 +630,17 @@ export default function PreorderLandingPage({ slug }) {
 
               <div className="px-3.5 py-1.5 rounded-xl bg-[#171C22] border border-[#252B32] text-xs font-mono text-[#F5F3EA]">
                 <span className="text-[#969DA6] mr-1.5">Model:</span>
-                <span className="text-[#C8FF3D] font-bold">{conceptPricing}</span>
+                <span className="font-bold" style={{ color: brandColor }}>{conceptPricing}</span>
               </div>
             </div>
 
             {/* Target Audience & Core Problem Solved Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 rounded-2xl bg-[#080A0C] border border-[#252B32] space-y-2">
-                <div className="flex items-center gap-2 text-xs font-mono text-[#78E08F] font-bold uppercase tracking-wider">
+                <div
+                  className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider"
+                  style={{ color: brandColor }}
+                >
                   <Target className="w-3.5 h-3.5" />
                   <span>Target Audience & Demographic</span>
                 </div>
@@ -581,7 +650,10 @@ export default function PreorderLandingPage({ slug }) {
               </div>
 
               <div className="p-4 rounded-2xl bg-[#080A0C] border border-[#252B32] space-y-2">
-                <div className="flex items-center gap-2 text-xs font-mono text-[#C8FF3D] font-bold uppercase tracking-wider">
+                <div
+                  className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider"
+                  style={{ color: brandColor }}
+                >
                   <Zap className="w-3.5 h-3.5" />
                   <span>Core Problem Solved</span>
                 </div>
@@ -602,7 +674,7 @@ export default function PreorderLandingPage({ slug }) {
                     key={idx}
                     className="p-3 rounded-xl bg-[#080A0C] border border-[#252B32] flex items-center gap-2.5 text-xs text-[#F5F3EA]"
                   >
-                    <CheckCircle className="w-4 h-4 text-[#78E08F] shrink-0" />
+                    <CheckCircle className="w-4 h-4 shrink-0" style={{ color: brandColor }} />
                     <span className="font-medium">{feat}</span>
                   </div>
                 ))}
@@ -631,21 +703,40 @@ export default function PreorderLandingPage({ slug }) {
                   onClick={() => openCheckout({ name: t.name, price: t.price, deposit: t.deposit })}
                   className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between relative overflow-hidden group ${
                     isSelected || t.highlight
-                      ? 'bg-gradient-to-b from-[#14181E] to-[#101419] border-[#C8FF3D] shadow-lg shadow-[#C8FF3D]/10'
-                      : 'bg-[#101419] border-[#252B32] hover:border-[#78E08F]/50'
+                      ? 'bg-gradient-to-b from-[#14181E] to-[#101419]'
+                      : 'bg-[#101419] border-[#252B32] hover:border-[#252B32]/80'
                   }`}
+                  style={
+                    isSelected || t.highlight
+                      ? {
+                          borderColor: brandColor,
+                          boxShadow: `0 8px 24px -4px ${hexToRgba(brandColor, 0.2)}`
+                        }
+                      : {}
+                  }
                 >
                   {/* Top Badge */}
                   <div className="flex items-center justify-between gap-2 pb-3">
-                    <span className={`text-[9px] font-mono font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-                      t.highlight
-                        ? 'bg-[#C8FF3D]/15 text-[#C8FF3D] border-[#C8FF3D]/30'
-                        : 'bg-[#171C22] text-[#969DA6] border-[#252B32]'
-                    }`}>
+                    <span
+                      className="text-[9px] font-mono font-black uppercase tracking-wider px-2 py-0.5 rounded-full border"
+                      style={
+                        t.highlight
+                          ? {
+                              backgroundColor: `${brandColor}20`,
+                              color: brandColor,
+                              borderColor: `${brandColor}40`
+                            }
+                          : {
+                              backgroundColor: '#171C22',
+                              color: '#969DA6',
+                              borderColor: '#252B32'
+                            }
+                      }
+                    >
                       {t.badge}
                     </span>
                     {isSelected && (
-                      <span className="w-2 h-2 rounded-full bg-[#C8FF3D] shrink-0" />
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: brandColor }} />
                     )}
                   </div>
 
@@ -665,9 +756,17 @@ export default function PreorderLandingPage({ slug }) {
                     }}
                     className={`w-full mt-4 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       t.highlight || isSelected
-                        ? 'bg-[#C8FF3D] hover:bg-[#d8ff66] text-[#080A0C] shadow-md'
+                        ? 'shadow-md hover:opacity-90'
                         : 'bg-[#171C22] hover:bg-[#252B32] text-[#F5F3EA] border border-[#252B32]'
                     }`}
+                    style={
+                      t.highlight || isSelected
+                        ? {
+                            backgroundColor: brandColor,
+                            color: brandContrastText
+                          }
+                        : {}
+                    }
                   >
                     <span>Pre-Order (${t.price})</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -680,8 +779,11 @@ export default function PreorderLandingPage({ slug }) {
 
         {/* Value Pillars Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-12 text-left">
-          <div className="p-6 rounded-2xl bg-[#101419] border border-[#252B32] hover:border-[#C8FF3D]/40 space-y-2.5 transition-all">
-            <div className="w-9 h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center text-[#C8FF3D]">
+          <div className="p-6 rounded-2xl bg-[#101419] border border-[#252B32] hover:border-[#252B32]/90 space-y-2.5 transition-all">
+            <div
+              className="w-9 h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center"
+              style={{ color: brandColor }}
+            >
               <Zap className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-[#F5F3EA]">Built for Your Workflow</h3>
@@ -690,8 +792,11 @@ export default function PreorderLandingPage({ slug }) {
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#101419] border border-[#252B32] hover:border-[#78E08F]/40 space-y-2.5 transition-all">
-            <div className="w-9 h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center text-[#78E08F]">
+          <div className="p-6 rounded-2xl bg-[#101419] border border-[#252B32] hover:border-[#252B32]/90 space-y-2.5 transition-all">
+            <div
+              className="w-9 h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center"
+              style={{ color: brandColor }}
+            >
               <Star className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-[#F5F3EA]">Lifetime Founder Perks</h3>
@@ -700,8 +805,11 @@ export default function PreorderLandingPage({ slug }) {
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#101419] border border-[#252B32] hover:border-[#C8FF3D]/40 space-y-2.5 transition-all">
-            <div className="w-9 h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center text-[#C8FF3D]">
+          <div className="p-6 rounded-2xl bg-[#101419] border border-[#252B32] hover:border-[#252B32]/90 space-y-2.5 transition-all">
+            <div
+              className="w-9 h-9 rounded-xl bg-[#171C22] border border-[#252B32] flex items-center justify-center"
+              style={{ color: brandColor }}
+            >
               <Lock className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-[#F5F3EA]">Direct Co-Founder Line</h3>
@@ -734,7 +842,15 @@ export default function PreorderLandingPage({ slug }) {
             <div className="overflow-y-auto pr-1 pt-3 space-y-3.5">
               {isSuccess && successReceipt ? (
                 <div className="text-center py-2 space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-[#78E08F]/20 border border-[#78E08F]/40 text-[#78E08F] flex items-center justify-center mx-auto shadow-lg shadow-[#78E08F]/20">
+                  <div
+                    className="w-12 h-12 rounded-full border flex items-center justify-center mx-auto shadow-lg"
+                    style={{
+                      backgroundColor: `${brandColor}20`,
+                      borderColor: `${brandColor}40`,
+                      color: brandColor,
+                      boxShadow: `0 8px 20px -4px ${hexToRgba(brandColor, 0.3)}`
+                    }}
+                  >
                     <Check className="w-6 h-6" />
                   </div>
                   <div>
@@ -748,7 +864,7 @@ export default function PreorderLandingPage({ slug }) {
                   <div className="p-3.5 rounded-2xl bg-[#0D1014] border border-[#252B32] text-xs space-y-1.5 text-left">
                     <div className="flex items-center justify-between pb-1.5 border-b border-[#252B32]">
                       <span className="text-[#969DA6] text-[11px]">Transaction ID</span>
-                      <span className="font-mono text-[#C8FF3D] font-bold text-[11px]">{successReceipt.txId}</span>
+                      <span className="font-mono font-bold text-[11px]" style={{ color: brandColor }}>{successReceipt.txId}</span>
                     </div>
                     <div className="flex items-center justify-between text-[11px]">
                       <span className="text-[#969DA6]">Payer Name</span>
@@ -764,7 +880,7 @@ export default function PreorderLandingPage({ slug }) {
                     </div>
                     <div className="flex items-center justify-between pt-1.5 border-t border-[#252B32] font-bold text-[11px]">
                       <span className="text-[#969DA6]">Amount Paid</span>
-                      <span className="text-[#78E08F] text-sm font-mono">+${successReceipt.amount}</span>
+                      <span className="text-sm font-mono" style={{ color: brandColor }}>+${successReceipt.amount}</span>
                     </div>
                   </div>
 
@@ -774,7 +890,12 @@ export default function PreorderLandingPage({ slug }) {
 
                   <button
                     onClick={() => setCheckoutModalOpen(false)}
-                    className="w-full py-2.5 rounded-xl bg-[#C8FF3D] hover:bg-[#d8ff66] text-[#080A0C] font-bold text-xs transition-colors shadow-lg shadow-[#C8FF3D]/10 cursor-pointer"
+                    className="w-full py-2.5 rounded-xl font-bold text-xs transition-colors shadow-lg cursor-pointer hover:opacity-90"
+                    style={{
+                      backgroundColor: brandColor,
+                      color: brandContrastText,
+                      boxShadow: `0 8px 20px -4px ${hexToRgba(brandColor, 0.25)}`
+                    }}
                   >
                     Done
                   </button>
@@ -803,12 +924,20 @@ export default function PreorderLandingPage({ slug }) {
                             onClick={() => setSelectedTier({ name: t.name, price: t.price, deposit: t.deposit })}
                             className={`p-2.5 rounded-xl border text-left text-xs transition-all cursor-pointer ${
                               isChosen
-                                ? 'bg-[#C8FF3D]/10 border-[#C8FF3D] text-[#F5F3EA] shadow-sm'
+                                ? 'text-[#F5F3EA] shadow-sm'
                                 : 'bg-[#0D1014] border-[#252B32] text-[#969DA6] hover:text-[#F5F3EA]'
                             }`}
+                            style={
+                              isChosen
+                                ? {
+                                    backgroundColor: `${brandColor}18`,
+                                    borderColor: brandColor
+                                  }
+                                : {}
+                            }
                           >
                             <span className="font-bold block text-[#F5F3EA] text-[11px] truncate">{t.name}</span>
-                            <span className="text-[#C8FF3D] font-mono font-bold text-xs">${t.price}</span>
+                            <span className="font-mono font-bold text-xs" style={{ color: brandColor }}>${t.price}</span>
                           </button>
                         )
                       })}
@@ -827,7 +956,7 @@ export default function PreorderLandingPage({ slug }) {
                         placeholder="Jane Doe"
                         value={buyerName}
                         onChange={e => setBuyerName(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-[#0D1014] border border-[#252B32] text-xs text-[#F5F3EA] outline-none focus:border-[#C8FF3D]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#0D1014] border border-[#252B32] text-xs text-[#F5F3EA] outline-none focus:border-slate-400"
                       />
                     </div>
 
@@ -841,7 +970,7 @@ export default function PreorderLandingPage({ slug }) {
                         placeholder="jane@example.com"
                         value={buyerEmail}
                         onChange={e => setBuyerEmail(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-[#0D1014] border border-[#252B32] text-xs text-[#F5F3EA] outline-none focus:border-[#C8FF3D]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#0D1014] border border-[#252B32] text-xs text-[#F5F3EA] outline-none focus:border-slate-400"
                       />
                     </div>
                   </div>
@@ -857,9 +986,18 @@ export default function PreorderLandingPage({ slug }) {
                         onClick={() => setPaymentMethod('stripe')}
                         className={`py-2 px-3 rounded-xl border flex items-center justify-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
                           paymentMethod === 'stripe'
-                            ? 'bg-[#C8FF3D] text-[#080A0C] border-[#C8FF3D] shadow-sm'
+                            ? 'shadow-sm'
                             : 'bg-[#0D1014] border-[#252B32] text-[#969DA6] hover:text-[#F5F3EA]'
                         }`}
+                        style={
+                          paymentMethod === 'stripe'
+                            ? {
+                                backgroundColor: brandColor,
+                                color: brandContrastText,
+                                borderColor: brandColor
+                              }
+                            : {}
+                        }
                       >
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>Stripe (Card)</span>
@@ -885,7 +1023,7 @@ export default function PreorderLandingPage({ slug }) {
                     <div className="p-3 rounded-xl bg-[#0D1014] border border-[#252B32] space-y-2">
                       <div className="flex items-center justify-between text-[10px] text-[#969DA6]">
                         <span>Card Details</span>
-                        <span className="text-[#78E08F] font-mono flex items-center gap-1">
+                        <span className="font-mono flex items-center gap-1" style={{ color: brandColor }}>
                           <Lock className="w-2.5 h-2.5" />
                           <span>256-bit Encrypted</span>
                         </span>
@@ -896,7 +1034,7 @@ export default function PreorderLandingPage({ slug }) {
                         placeholder="4242 •••• •••• 4242"
                         value={cardNumber}
                         onChange={e => setCardNumber(e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg bg-[#101419] border border-[#252B32] text-xs text-[#F5F3EA] outline-none font-mono focus:border-[#C8FF3D]"
+                        className="w-full px-3 py-1.5 rounded-lg bg-[#101419] border border-[#252B32] text-xs text-[#F5F3EA] outline-none font-mono focus:border-slate-400"
                       />
 
                       <div className="grid grid-cols-2 gap-2">
@@ -905,14 +1043,14 @@ export default function PreorderLandingPage({ slug }) {
                           placeholder="MM / YY"
                           value={cardExp}
                           onChange={e => setCardExp(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg bg-[#101419] border border-[#252B32] text-xs text-[#F5F3EA] outline-none font-mono focus:border-[#C8FF3D] text-center"
+                          className="w-full px-3 py-1.5 rounded-lg bg-[#101419] border border-[#252B32] text-xs text-[#F5F3EA] outline-none font-mono focus:border-slate-400 text-center"
                         />
                         <input
                           type="text"
                           placeholder="CVC"
                           value={cardCvc}
                           onChange={e => setCardCvc(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg bg-[#101419] border border-[#252B32] text-xs text-[#F5F3EA] outline-none font-mono focus:border-[#C8FF3D] text-center"
+                          className="w-full px-3 py-1.5 rounded-lg bg-[#101419] border border-[#252B32] text-xs text-[#F5F3EA] outline-none font-mono focus:border-slate-400 text-center"
                         />
                       </div>
                     </div>
@@ -933,7 +1071,7 @@ export default function PreorderLandingPage({ slug }) {
                   {/* Total Bar */}
                   <div className="p-2.5 rounded-xl bg-[#0D1014] border border-[#252B32] text-xs flex items-center justify-between">
                     <span className="text-[#969DA6]">Total Due Today:</span>
-                    <span className="text-sm font-bold text-[#78E08F] font-mono">${selectedTier.price}.00</span>
+                    <span className="text-sm font-bold font-mono" style={{ color: brandColor }}>${selectedTier.price}.00</span>
                   </div>
 
                   <button
@@ -942,8 +1080,17 @@ export default function PreorderLandingPage({ slug }) {
                     className={`w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all disabled:opacity-50 shadow-lg cursor-pointer ${
                       paymentMethod === 'paypal'
                         ? 'bg-[#ffc439] hover:bg-[#f0b830] text-[#080A0C]'
-                        : 'bg-[#C8FF3D] hover:bg-[#d8ff66] text-[#080A0C]'
+                        : 'hover:opacity-90'
                     }`}
+                    style={
+                      paymentMethod === 'stripe'
+                        ? {
+                            backgroundColor: brandColor,
+                            color: brandContrastText,
+                            boxShadow: `0 8px 24px -4px ${hexToRgba(brandColor, 0.3)}`
+                          }
+                        : {}
+                    }
                   >
                     {isProcessing ? (
                       <>
