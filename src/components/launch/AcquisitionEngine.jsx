@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import {
   Target,
+  Activity,
   Search,
   Send,
   MessageSquare,
@@ -557,7 +558,7 @@ export default function AcquisitionEngine({
     "Partnership inquiry for {{display_name}} [#{{handle}}]",
   );
   const [templateBody, setTemplateBody] = useState(
-    `Hi {{first_name}},\n\nI have been following your {{niche}} work on {{platform}} and wanted to reach out directly regarding a potential venture partnership.\n\nI head venture partnerships at CoLaunch. We partner 50/50 with creators to build, deploy, and monetize custom software products for their audience. Our studio covers 100% of software engineering, UI/UX design, cloud infrastructure, and ongoing technical support at zero financial cost to you.\n\nBased on an analysis of your channel, our team has architected 3 tailored software product concepts designed specifically for your community to build a sustainable, recurring software revenue stream.\n\nWould you be open to reviewing a short 3-concept breakdown and interactive landing page preview this week?\n\nTo reply, simply respond directly to this email:\n• "I am interested, let's proceed" — and I will send over the concepts, revenue roadmap, and live previews.\n• Or "Not interested" — and I will immediately close your file with zero follow-ups.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP3_INQUIRY | CF-CID:{{creator_id}} | Handle:@{{handle}}]`,
+    `Hi {{first_name}},\n\nI have been following your {{niche}} work on {{platform}} and wanted to reach out directly regarding a potential venture partnership.\n\nI head venture partnerships at CoLaunch. We partner 50/50 with creators to build, deploy, and monetize custom software products for their audience. Our studio covers 100% of software engineering, UI/UX design, cloud infrastructure, and ongoing technical support at zero financial cost to you.\n\nBased on an analysis of your channel, our team has architected 3 tailored software product concepts designed specifically for your community to build a sustainable, recurring software revenue stream.\n\nWould you be open to reviewing a short 3-concept breakdown and interactive landing page preview this week?\n\nTo reply, simply respond directly to this email:\n• "I am interested, let's proceed" — and I will send over the concepts, revenue roadmap, and live previews.\n• Or "Not interested" — and I will immediately close your file with zero follow-ups.\n\nBest regards,\nCoLaunch Venture Partnerships\n\n---\nRef: [CF-STAGE:STEP3_INQUIRY | CF-CID:{{creator_id}} | Handle:@{{handle}}]`,
   );
   const [showStep3EmailPreview, setShowStep3EmailPreview] = useState(false);
 
@@ -3346,7 +3347,7 @@ export default function AcquisitionEngine({
       `Under our 50/50 partnership, our engineering team handles 100% of product development, UI/UX design, cloud hosting, billing infrastructure, and ongoing technical support with zero financial cost or risk to you.\n\n` +
       `> **100% Flexible:** If you'd like to adjust any of these concepts, explore additional directions, or if you already have an idea of your own you'd love to build for your community, we are completely open to it. You maintain full creative control, and our engineering team is here to bring your vision to life.\n\n` +
       `Let me know which concept resonates most with you, or if you'd like us to draft more ideas or look into your own concept. You can simply reply directly to this email.\n\n` +
-      `Best regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+      `Best regards,\nCoLaunch Venture Partnerships\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     const subject = (creator.id === selectedCreator?.id && customPitchSubject) ? customPitchSubject : defaultSubject;
     const body = (creator.id === selectedCreator?.id && customPitchBody) ? customPitchBody : defaultBody;
@@ -4933,7 +4934,7 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
     const magicPortalUrl = `${origin}/portal/${portalSlug}?token=${portalToken}&offer=track_choice`;
 
     const followUpSubject = `Reminder: Choose Your Co-Launch Track for ${prodName} ($${cobuilderPassPrice} DIY or Studio-Managed)`;
-    const followUpBody = `Hi ${firstName},\n\nFollowing up on the co-launch offer for **${prodName}**.\n\nPlease let us know if you would like to proceed with:\n1. Track 1: Do-It-Yourself ProjectOS ($${cobuilderPassPrice} USD one-time fee) with 100% revenue retention & full command control\n2. Track 2: Studio-Managed Track (50/50 Revenue Split — Free Upfront)\n\nClick the link below to select your track or complete the $${cobuilderPassPrice} payment:\n${magicPortalUrl}\n\nFeel free to reply directly to this email with any questions.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch`;
+    const followUpBody = `Hi ${firstName},\n\nFollowing up on the co-launch offer for **${prodName}**.\n\nPlease let us know if you would like to proceed with:\n1. Track 1: Do-It-Yourself ProjectOS ($${cobuilderPassPrice} USD one-time fee) with 100% revenue retention & full command control\n2. Track 2: Studio-Managed Track (50/50 Revenue Split — Free Upfront)\n\nClick the link below to select your track or complete the $${cobuilderPassPrice} payment:\n${magicPortalUrl}\n\nFeel free to reply directly to this email with any questions.\n\nBest regards,\nCoLaunch Venture Partnerships`;
 
     try {
       const { sendDirectEmail } = await import("../../services/opsApi");
@@ -7190,13 +7191,13 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
                             <div className="flex items-start sm:items-center space-x-3.5 min-w-0">
                               <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center font-bold text-sm sm:text-base shadow-sm ring-2 ring-blue-100 flex-shrink-0">
-                                AR
+                                CL
                               </div>
                               <div className="min-w-0">
                                 <div className="flex items-center space-x-2 flex-wrap">
                                   <span className="text-sm font-semibold text-slate-900">Creator Partnerships Team</span>
                                   <span className="text-xs text-slate-500 hidden sm:inline">•</span>
-                                  <span className="text-xs text-slate-600">Alex Rivera</span>
+                                  <span className="text-xs text-slate-600">CoLaunch Team</span>
                                   <span className="text-xs text-slate-400 hidden md:inline">&lt;{PARTNERSHIP_EMAIL}&gt;</span>
                                 </div>
                                 <div className="text-xs text-slate-500 mt-0.5 flex items-center flex-wrap gap-1">
@@ -7271,8 +7272,8 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                             {/* Sign-off text */}
                             <div className="pt-2 text-slate-700 text-sm">
                               <p>Best regards,</p>
-                              <p className="font-medium text-slate-900 mt-1">Alex Rivera</p>
-                              <p className="text-slate-500 text-xs">Head of Venture Partnerships · CoLaunch</p>
+                              <p className="font-medium text-slate-900 mt-1">CoLaunch Venture Partnerships</p>
+                              <p className="text-slate-500 text-xs">Venture Partnerships · CoLaunch</p>
                             </div>
 
                             {/* BEGIN: ProfessionalSignature */}
@@ -7287,8 +7288,8 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                                 </div>
                                 {/* Representative Credentials */}
                                 <div className="text-xs min-w-0">
-                                  <div className="font-bold text-slate-900 text-sm tracking-tight">Alex Rivera</div>
-                                  <div className="text-slate-500 font-medium mt-0.5">Head of Venture Partnerships • CoLaunch</div>
+                                  <div className="font-bold text-slate-900 text-sm tracking-tight">CoLaunch Venture Partnerships</div>
+                                  <div className="text-slate-500 font-medium mt-0.5">Venture Partnerships • CoLaunch</div>
                                   <div className="mt-2 text-slate-600 flex flex-wrap items-center gap-x-2.5 gap-y-1">
                                     <a className="font-medium text-slate-900 hover:text-indigo-600 underline decoration-slate-300" href={`mailto:${PARTNERSHIP_EMAIL}`}>
                                       {PARTNERSHIP_EMAIL}
@@ -8445,8 +8446,8 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
 
                       <div className="pt-2 text-xs text-slate-600">
                         <p>Best regards,</p>
-                        <p className="font-bold text-slate-900 mt-0.5">Alex Rivera</p>
-                        <p className="text-slate-500">Head of Venture Partnerships, CoLaunch</p>
+                        <p className="font-bold text-slate-900 mt-0.5">CoLaunch Venture Partnerships</p>
+                        <p className="text-slate-500">CoLaunch Studio</p>
                       </div>
                     </div>
                   </div>

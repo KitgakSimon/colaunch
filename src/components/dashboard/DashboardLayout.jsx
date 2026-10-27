@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Sidebar from './Sidebar'
 import Marketing from './Marketing'
 import ContentCalendar from './ContentCalendar'
@@ -10,10 +10,13 @@ import Accounts from './Accounts'
 import Settings from './Settings'
 import ForgeChat from './ForgeChat'
 import { useForge } from '../../App'
-import { Sparkles, Laptop, Smartphone, Menu, LogOut } from 'lucide-react'
+import { Sparkles, Laptop, Smartphone, Menu, LogOut, Zap } from 'lucide-react'
 import WingLogo from '../ui/WingLogo'
 import { AppMockup } from '../onboarding/Preview'
 import ApiKeysModal from '../ui/ApiKeysModal'
+import PricingPointModal from './PricingPointModal'
+import DIYSubscriptionModal from '../launch/DIYSubscriptionModal'
+import { hexToRgb } from '../../utils/avatarColorExtractor'
 
 function DashboardAppPreview() {
   const { creatorData } = useForge()
@@ -177,12 +180,61 @@ export default function DashboardLayout() {
   } = useForge()
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 1024)
   const [chatOpen, setChatOpen] = useState(false)
+  const [pricingModalOpen, setPricingModalOpen] = useState(false)
+  const [diyModalOpen, setDiyModalOpen] = useState(false)
+
+  // Resolve Creator Brand Color detected in Step 5 Section 1
+  const creatorBrandColor = useMemo(() => {
+    if (creatorData?.brand_color) return creatorData.brand_color
+    if (creatorData?.brandColor) return creatorData.brandColor
+    if (creatorData?.brandHex) return creatorData.brandHex
+    try {
+      const rawMap = localStorage.getItem("forge_creator_brand_color_map")
+      if (rawMap) {
+        const map = JSON.parse(rawMap)
+        const id = creatorData?.id
+        const handle = (creatorData?.handle || '').replace(/^@/, '').toLowerCase()
+        if (id && map[id]?.primaryHex) return map[id].primaryHex
+        if (handle && map[handle]?.primaryHex) return map[handle].primaryHex
+        const entries = Object.values(map)
+        if (entries.length > 0 && entries[entries.length - 1]?.primaryHex) {
+          return entries[entries.length - 1].primaryHex
+        }
+      }
+    } catch {}
+    // Signature BBC Studios / CoLaunch creator purple matching demo video (0:36s)
+    return '#7C5CFC'
+  }, [creatorData?.brand_color, creatorData?.brandColor, creatorData?.brandHex, creatorData?.id, creatorData?.handle])
+
+  const [cr, cg, cb] = useMemo(() => hexToRgb(creatorBrandColor), [creatorBrandColor])
+
+  // Listen for pricing events from child tabs (Revenue, Marketing, etc.)
+  useEffect(() => {
+    const handleOpenPricing = () => setPricingModalOpen(true)
+    window.addEventListener('forge_open_pricing', handleOpenPricing)
+    return () => window.removeEventListener('forge_open_pricing', handleOpenPricing)
+  }, [])
 
   const TabComponent = TAB_COMPONENTS[activeTab] || Marketing
-  const theme = creatorData.theme || 'dark'
 
   return (
-    <div className={`flex h-screen overflow-hidden theme-${theme}`} style={{ background: 'var(--theme-bg)', color: 'var(--theme-text)' }}>
+    <div 
+      className="flex h-screen overflow-hidden theme-dark" 
+      style={{ 
+        background: '#090d16', 
+        color: '#F5F3EA',
+        '--theme-bg': '#090d16',
+        '--theme-sidebar-bg': '#0b0f19',
+        '--theme-card-bg': '#121722',
+        '--theme-border-color': 'rgba(255,255,255,0.08)',
+        '--theme-text': '#F5F3EA',
+        '--theme-text-muted': '#94a3b8',
+        '--theme-accent': creatorBrandColor,
+        '--theme-accent-bg': `rgba(${cr}, ${cg}, ${cb}, 0.14)`,
+        '--theme-accent-border': `rgba(${cr}, ${cg}, ${cb}, 0.35)`,
+        '--theme-btn-primary-text': '#ffffff',
+      }}
+    >
       {/* Sidebar */}
       <Sidebar
         activeTab={activeTab}
@@ -192,13 +244,13 @@ export default function DashboardLayout() {
       />
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col overflow-hidden" style={{ minWidth: 0 }}>
+      <main className="flex-1 flex flex-col overflow-hidden" style={{ minWidth: 0, background: '#090d16' }}>
         {/* Top bar */}
         <div
           className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b flex-shrink-0"
           style={{
-            borderColor: 'var(--theme-border-color)',
-            background: 'var(--theme-sidebar-bg)',
+            borderColor: 'rgba(255,255,255,0.08)',
+            background: '#0b0f19',
             backdropFilter: 'blur(12px)',
           }}
         >
@@ -213,20 +265,38 @@ export default function DashboardLayout() {
               <Menu size={18} />
             </button>
             <div>
-              <h1 className="text-[15px] font-semibold tracking-tight" style={{ color: 'var(--theme-text)' }}>
+              <h1 className="text-[15px] font-semibold tracking-tight text-white">
                 {TAB_LABELS[activeTab]}
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Live status */}
-            <div
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full"
-              style={{ background: 'var(--theme-accent-bg)', border: '1px solid var(--theme-accent-border)' }}
+          <div className="flex items-center gap-2.5">
+            {/* Commercial Launch & Pricing Point Button */}
+            <button
+              onClick={() => setPricingModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-bold shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              style={{
+                background: creatorBrandColor,
+                color: '#ffffff',
+                boxShadow: `0 0 16px rgba(${cr}, ${cg}, ${cb}, 0.35)`
+              }}
+              title="Review Co-Launch Commercial Terms & Pricing"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              <span className="text-[12px]" style={{ color: 'var(--theme-text)' }}>
+              <Zap size={12} className="fill-current" />
+              <span>Launch Plan • Pricing</span>
+            </button>
+
+            {/* Live status pill */}
+            <div
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border"
+              style={{ 
+                background: `rgba(${cr}, ${cg}, ${cb}, 0.1)`, 
+                borderColor: `rgba(${cr}, ${cg}, ${cb}, 0.25)` 
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="text-[12px] text-slate-200">
                 {creatorData.productName || 'Creator Academy'} live
               </span>
             </div>
@@ -234,31 +304,30 @@ export default function DashboardLayout() {
             {/* Forge Chat toggle */}
             <button
               onClick={() => setChatOpen(o => !o)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-150"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-150 border"
               style={{
-                background: chatOpen ? 'var(--theme-accent-bg)' : 'rgba(255,255,255,0.05)',
-                border: '1px solid',
-                borderColor: chatOpen ? 'var(--theme-accent)' : 'var(--theme-border-color)',
-                color: chatOpen ? 'var(--theme-text)' : 'var(--theme-text-muted)',
+                background: chatOpen ? `rgba(${cr}, ${cg}, ${cb}, 0.15)` : 'rgba(255,255,255,0.05)',
+                borderColor: chatOpen ? creatorBrandColor : 'rgba(255,255,255,0.08)',
+                color: chatOpen ? '#ffffff' : 'var(--theme-text-muted)',
               }}
             >
-              <Sparkles size={13} style={{ color: chatOpen ? 'var(--theme-accent)' : 'inherit' }} />
-              <span className="text-[12px] font-medium hidden sm:block">Ask Forge</span>
+              <Sparkles size={13} style={{ color: chatOpen ? creatorBrandColor : 'inherit' }} />
+              <span className="text-[12px] font-medium hidden sm:block text-slate-200">Ask Forge</span>
             </button>
 
             {/* Creator name + avatar */}
             <div className="flex items-center gap-2">
               {creatorData.name && (
-                <span className="text-[12px] hidden sm:block" style={{ color: 'var(--theme-text-muted)' }}>
+                <span className="text-[12px] hidden sm:block text-slate-300 font-medium">
                   {creatorData.name}
                 </span>
               )}
               <div
                 className="w-8 h-8 rounded-full border overflow-hidden flex items-center justify-center font-semibold text-[13px] cursor-pointer flex-shrink-0"
                 style={{
-                  background: 'var(--theme-card-bg)',
-                  borderColor: 'var(--theme-border-color)',
-                  color: 'var(--theme-text)',
+                  background: '#121722',
+                  borderColor: `rgba(${cr}, ${cg}, ${cb}, 0.35)`,
+                  color: '#ffffff',
                 }}
               >
                 {creatorData.avatarUrl ? (
@@ -348,6 +417,34 @@ export default function DashboardLayout() {
       {apiModalOpen && (
         <ApiKeysModal onClose={() => setApiModalOpen(false)} tab="ai" />
       )}
+
+      {/* Commercial Launch & Pricing Point Modal */}
+      <PricingPointModal
+        isOpen={pricingModalOpen}
+        onClose={() => setPricingModalOpen(false)}
+        creatorData={creatorData}
+        creatorBrandColor={creatorBrandColor}
+        onSelectTrack={(track) => {
+          // Track choice processed in modal
+        }}
+        onOpenDiyPayment={() => {
+          setPricingModalOpen(false)
+          setDiyModalOpen(true)
+        }}
+      />
+
+      {/* DIY Co-Builder License Card Checkout Modal */}
+      <DIYSubscriptionModal
+        isOpen={diyModalOpen}
+        onClose={() => setDiyModalOpen(false)}
+        project={{
+          creatorName: creatorData.name || creatorData.handle,
+          productName: creatorData.productName || 'Creator OS',
+          diyFee: 50,
+          diyPassPrice: 50
+        }}
+        onUnlockSuccess={() => setDiyModalOpen(false)}
+      />
     </div>
   )
 }

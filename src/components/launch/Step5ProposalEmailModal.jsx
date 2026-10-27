@@ -109,7 +109,7 @@ export default function Step5ProposalEmailModal({
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
             <span className="text-[11px] text-slate-600">
-              Styled as an authentic email from <strong>Alex Rivera</strong> with embedded screenshots and research notes — no promotional blast cards or spam buttons.
+              Styled as an authentic email from <strong>CoLaunch Partnerships</strong> with embedded screenshots and research notes — no promotional blast cards or spam buttons.
             </span>
           </div>
 
@@ -153,7 +153,7 @@ export default function Step5ProposalEmailModal({
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs space-y-1.5 font-sans">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-500 w-16 text-[11px] uppercase tracking-wider">From:</span>
-                  <span className="text-slate-800 font-medium">Alex Rivera &lt;creatorforgeweb@gmail.com&gt;</span>
+                  <span className="text-slate-800 font-medium">CoLaunch Partnerships &lt;creatorforgeweb@gmail.com&gt;</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-500 w-16 text-[11px] uppercase tracking-wider">To:</span>
