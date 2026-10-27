@@ -25,6 +25,64 @@ const FEATURES = [
   { icon: Volume2, label: 'Podcast section' },
 ]
 
+function getDynamicProducts(blueprint, creatorData) {
+  const name = creatorData.name || creatorData.handle?.replace('@', '') || 'Creator'
+  const bpName = blueprint?.name || 'Platform'
+  const bpNameL = bpName.toLowerCase()
+  const category = (blueprint?.raw?.product_category || '').toLowerCase()
+  const followers = parseInt(creatorData.followers) || 0
+
+  // 1. Philanthropy / Impact / Cause ventures
+  if (bpNameL.includes('philanthrop') || bpNameL.includes('impact') || bpNameL.includes('charity')) {
+    return [
+      { title: 'Community Impact Pass', price: '$9.99 / mo', type: 'Monthly Membership' },
+      { title: 'Project Founding Partner', price: '$49.00', type: 'Impact Tier' },
+      { title: 'Executive Impact Brief & Strategy', price: '$299.00', type: 'Annual Report' },
+      { title: 'Transparency Ledger & Asset Pack', price: 'Free', type: 'Public Access' }
+    ]
+  }
+
+  // 2. High-scale challenge / App / Entertainment / Drops
+  if (bpNameL.includes('challenge') || bpNameL.includes('drop') || bpNameL.includes('box') || category === 'app') {
+    return [
+      { title: `${name}'s Seasonal Challenge Pass`, price: '$4.99 / mo', type: 'Digital Pass' },
+      { title: 'VIP Exclusive Drop Bundle', price: '$29.99', type: 'Limited Edition' },
+      { title: 'Golden Ticket Entry & Live Session', price: '$99.00', type: 'Exclusive Access' },
+      { title: 'Fan Starter Toolkit & Wallpapers', price: 'Free', type: 'Starter Pack' }
+    ]
+  }
+
+  // 3. Course / Academy / Learning
+  if (category === 'course' || bpNameL.includes('academy') || bpNameL.includes('masterclass')) {
+    const isBig = followers >= 100_000
+    return [
+      { title: `${name}'s Foundational Masterclass`, price: isBig ? '$49.00' : '$29.00', type: 'Core Curriculum' },
+      { title: 'Viral Strategy & Production Playbook', price: isBig ? '$129.00' : '$79.00', type: 'Advanced Guide' },
+      { title: '1-on-1 Channel Audit & Mentorship', price: isBig ? '$499.00' : '$199.00', type: 'Direct Access' },
+      { title: 'Thumbnail & Retention Templates', price: 'Free', type: 'Starter Pack' }
+    ]
+  }
+
+  // 4. Community / Membership
+  if (category === 'community' || bpNameL.includes('circle') || bpNameL.includes('club')) {
+    return [
+      { title: 'General Member Access', price: '$12.00 / mo', type: 'Membership' },
+      { title: 'Pro Tier + Monthly Live AMAs', price: '$35.00 / mo', type: 'VIP Tier' },
+      { title: 'Founding Member Lifetime Pass', price: '$299.00', type: 'Lifetime' },
+      { title: 'Community Discussion Pass', price: 'Free', type: 'Community' }
+    ]
+  }
+
+  // 5. Default tailored to followers & product name
+  const basePrice = followers >= 1_000_000 ? 19.99 : 9.99
+  return [
+    { title: `${bpName} Starter Guide`, price: `$${basePrice.toFixed(2)}`, type: 'Digital Guide' },
+    { title: 'Complete Resource Vault & Files', price: `$${(basePrice * 2.5).toFixed(2)}`, type: 'Toolkit' },
+    { title: 'Exclusive Strategy Session', price: `$${followers >= 1_000_000 ? '249.00' : '99.00'}`, type: 'Consultation' },
+    { title: 'Essential Launch Assets', price: 'Free', type: 'Free Tier' }
+  ]
+}
+
 export function AppMockup({ theme, activeTab, setActiveTab, blueprint, creatorData, extraTabs, isMobile }) {
   const isDark = theme === 'dark' || theme === 'premium' || theme === 'minimalist' || !theme
   
@@ -188,7 +246,7 @@ export function AppMockup({ theme, activeTab, setActiveTab, blueprint, creatorDa
       return (
         <div className="space-y-3 p-4">
           {[
-            { title: 'Launch Day Live Q&A', desc: 'Join Carter for the live reveal and get early answers.', status: 'Live in 2 days', action: 'Add' },
+            { title: 'Launch Day Live Q&A', desc: `Join ${creatorName} for the live reveal and get early answers.`, status: 'Live in 2 days', action: 'Add' },
             { title: 'Weekly Setup Critiques', desc: 'Host review of community visual setups.', status: 'Mon at 8:00 PM', action: 'Remind' }
           ].map((e, i) => (
             <div 
@@ -251,14 +309,10 @@ export function AppMockup({ theme, activeTab, setActiveTab, blueprint, creatorDa
     }
 
     if (tabLower.includes('product') || tabLower.includes('guide') || tabLower.includes('shop') || tabLower.includes('consult') || tabLower.includes('drop')) {
+      const dynamicProducts = getDynamicProducts(blueprint, creatorData)
       return (
         <div className="grid grid-cols-2 gap-3 p-4">
-          {[
-            { title: 'Core Guide Blueprint', price: '$9.99', type: 'PDF Ebook' },
-            { title: 'Interactive Master Toolkit', price: '$24.99', type: 'Resources' },
-            { title: '1-on-1 Monetization Call', price: '$149.00', type: 'Consultation' },
-            { title: 'Exclusive Setup Files', price: 'Free', type: 'Assets' }
-          ].map((p, i) => (
+          {dynamicProducts.map((p, i) => (
             <div 
               key={i} 
               className={`rounded-xl p-3 border transition-all duration-200 flex flex-col justify-between ${styles.glow || ''}`}
