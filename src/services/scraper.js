@@ -606,7 +606,6 @@ function extractHandle(url) {
       if (parts[0] === 'user' || parts[0] === 'c' || parts[0] === 'channel') {
         const h = parts[1]
         if (h) {
-          if (parts[0] === 'channel') return `channel/${h}`
           return h.replace('@', '')
         }
       }
