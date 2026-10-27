@@ -101,13 +101,20 @@ function fmt(n) {
   return String(n)
 }
 
-/** Parse subscriber strings like "1.2M", "450K", "10,000" into a number */
-function parseBigNum(val) {
+/** Parse subscriber strings like "524M", "524M subscribers", "450K", "10,000" into a number */
+export function parseBigNum(val) {
   if (typeof val === 'number') return val
   if (!val) return 0
-  const s = String(val).replace(/,/g, '').trim()
-  if (s.endsWith('M') || s.endsWith('m')) return Math.round(parseFloat(s) * 1_000_000)
-  if (s.endsWith('K') || s.endsWith('k')) return Math.round(parseFloat(s) * 1_000)
+  const s = String(val).replace(/,/g, '').trim().toLowerCase()
+  const m = s.match(/([\d.]+)\s*([kmb])?/)
+  if (m) {
+    const num = parseFloat(m[1]) || 0
+    const unit = m[2]
+    if (unit === 'b') return Math.round(num * 1_000_000_000)
+    if (unit === 'm') return Math.round(num * 1_000_000)
+    if (unit === 'k') return Math.round(num * 1_000)
+    return Math.round(num)
+  }
   return parseInt(s) || 0
 }
 
@@ -160,11 +167,20 @@ async function _doScrape(url, platform) {
     throw new Error(data.error || 'Failed to retrieve scraped data from backend.')
   }
   const scraped = data.scraped
+  const parsedFollowers = parseBigNum(
+    scraped.follower_count ?? scraped.followers ?? scraped.subscribers ?? scraped.numberOfSubscribers ?? 0
+  )
+
+  const rawNiche = Array.isArray(scraped.niche) && scraped.niche.length > 0 
+    ? scraped.niche[0] 
+    : (scraped.niche || inferNicheFromDescription(scraped.bio || ''))
+  const cleanNiche = rawNiche ? (rawNiche.charAt(0).toUpperCase() + rawNiche.slice(1)) : 'Entertainment'
+
   return {
     platform: scraped.platform || platform,
     handle: scraped.handle?.startsWith('@') ? scraped.handle : `@${scraped.handle || handle}`,
     name: scraped.display_name || scraped.handle?.replace('@', '') || 'Creator',
-    followers: scraped.follower_count || 0,
+    followers: parsedFollowers,
     description: scraped.bio || '',
     avatarUrl: scraped.avatar_url || '',
     videoCount: scraped.videoCount || scraped.video_count || 0,
@@ -172,7 +188,7 @@ async function _doScrape(url, platform) {
     totalViews: scraped.totalViews || scraped.total_views || 0,
     following: scraped.following || 0,
     heartCount: scraped.heartCount || scraped.heart_count || 0,
-    niche: Array.isArray(scraped.niche) && scraped.niche.length > 0 ? scraped.niche[0] : (scraped.niche || inferNicheFromDescription(scraped.bio || '')),
+    niche: cleanNiche,
     engagementRate: scraped.engagement_score || scraped.engagementRate || 3.8,
     recentPosts: (scraped.recent_posts || []).map(p => ({
       title: p.title || '',

@@ -596,7 +596,17 @@ export default function App() {
   const goTo = (s) => navigate(s)
 
   const updateCreator = (data) => {
-    setCreatorData(prev => ({ ...prev, ...data }))
+    setCreatorData(prev => {
+      const updated = { ...prev, ...data }
+      try {
+        if (updated && (updated.handle || updated.url || updated.name)) {
+          localStorage.setItem('forge_creator_data', JSON.stringify(updated))
+        }
+      } catch (e) {
+        console.warn('[Forge] Failed to persist creator data:', e)
+      }
+      return updated
+    })
   }
 
   // Handle URL navigation popstate and session restores

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForge, getAccent, useBgJob } from '../../App'
 import { Check, Play, Eye, Heart } from 'lucide-react'
 import WingLogo from '../ui/WingLogo'
@@ -191,11 +191,25 @@ export default function Analyzing() {
     'Optimal business model selected for your profile',
   ]
 
+  const scrapeDoneRef = useRef(false)
+  const stepsDoneRef = useRef(false)
+  const hasAdvancedRef = useRef(false)
+
+  const finishAndAdvance = () => {
+    if (hasAdvancedRef.current) return
+    hasAdvancedRef.current = true
+    setProgress(100)
+    setConfidence(96)
+    setDone(true)
+    setTimeout(next, 700)
+  }
+
   // Await real scrape promise
   useEffect(() => {
     const promise = getScrapePromise()
     
     if (!promise) {
+      scrapeDoneRef.current = true
       if (recsJob.status === 'idle') {
         startBgJob('onboarding-recs', async (sig) => {
           const aiRecs = await generateRecommendationsAI(creatorData, sig)
@@ -210,6 +224,7 @@ export default function Analyzing() {
 
     promise
       .then(data => {
+        scrapeDoneRef.current = true
         setLiveData(data)
         updateCreator(data)
         
@@ -252,8 +267,13 @@ export default function Analyzing() {
             throw new Error("Empty recommendations response")
           })
         }
+
+        if (stepsDoneRef.current) {
+          finishAndAdvance()
+        }
       })
       .catch(err => {
+        scrapeDoneRef.current = true
         const msg = err?.message || String(err)
         console.error('[Forge] Scrape failed:', msg)
         if (msg.includes('NO_') || msg.includes('NO_KEY')) {
@@ -273,6 +293,10 @@ export default function Analyzing() {
             throw new Error("Empty recommendations response")
           })
         }
+
+        if (stepsDoneRef.current) {
+          finishAndAdvance()
+        }
       })
   }, [])
 
@@ -290,8 +314,17 @@ export default function Analyzing() {
 
     const runSteps = () => {
       if (stepIdx >= ANALYSIS_STEPS.length) {
-        setDone(true)
-        setTimeout(next, 900)
+        stepsDoneRef.current = true
+        if (scrapeDoneRef.current || !getScrapePromise()) {
+          finishAndAdvance()
+        } else {
+          // If scrape is still processing, wait up to 10s max
+          setTimeout(() => {
+            if (!hasAdvancedRef.current) {
+              finishAndAdvance()
+            }
+          }, 10000)
+        }
         return
       }
       setActiveStep(stepIdx)

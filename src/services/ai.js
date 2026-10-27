@@ -1330,6 +1330,7 @@ Return exactly this JSON structure:
       "target_audience": "Specific audience segment",
       "revenue_model": "Pricing strategy (e.g. $29/mo membership, $199 one-time course)",
       "revenue_potential": "$5K–$20K / mo (reasonable estimation matching their followers/niche)",
+      "rationale": "1-sentence tailored explanation of why this product fits this creator and audience specifically",
       "confidence_score": 0.95
     },
     ...

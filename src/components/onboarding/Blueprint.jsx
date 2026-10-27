@@ -11,8 +11,14 @@ import { generateRecommendationsAI } from '../../services/ai'
 
 function fmt(n) {
   n = parseInt(n) || 0
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000)     return `${Math.round(n / 1_000)}K`
+  if (n >= 1_000_000) {
+    const m = n / 1_000_000
+    return m % 1 === 0 ? `${m}M` : `${m.toFixed(1)}M`
+  }
+  if (n >= 1_000) {
+    const k = n / 1_000
+    return k % 1 === 0 ? `${k}K` : `${k.toFixed(1)}K`
+  }
   return String(n)
 }
 
@@ -37,26 +43,37 @@ function buildCreatorBlurb(creator) {
   const displayName = name || (handle || '').replace('@', '') || 'This creator'
   const fmtFollowers = followers ? fmt(followers) : null
   const eng = parseFloat(engagementRate) || 0
-  const platformLabel = PLATFORM_LABELS[platform] || platform || 'social'
+  const isYT = platform === 'youtube'
+  const followerTerm = isYT ? 'subscribers' : 'followers'
 
-  // Use real bio if available and meaningful
+  // Use real bio if available and meaningful (avoid generic subscribe prompts)
   if (description && description.length > 20) {
     const short = description.split('.')[0].trim()
-    if (short.length > 15 && short.length < 120) return short
+    const isGenericPrompt = short.toLowerCase().includes('subscribe') && short.length < 35
+    if (short.length > 15 && short.length < 120 && !isGenericPrompt) {
+      return short
+    }
   }
 
-  // Build from signals
-  const parts = []
-  if (niche && niche !== 'Lifestyle & Creativity') parts.push(`${niche} creator`)
-  else parts.push('creator')
+  // Build natural, grammatically correct blurb from signals
+  const cleanNiche = (niche && niche !== 'Lifestyle & Creativity' && niche !== 'Creator') ? niche : 'content'
+  const article = /^[aeiou]/i.test(cleanNiche) ? 'an' : 'a'
 
-  if (fmtFollowers) parts.push(`with ${fmtFollowers} ${platformLabel} followers`)
+  let text = `${displayName} is ${article} ${cleanNiche} creator`
+  if (fmtFollowers) {
+    text += ` with ${fmtFollowers} ${followerTerm}`
+  }
+  if (eng >= 6) {
+    text += ' and an exceptionally engaged audience.'
+  } else if (eng >= 3.0) {
+    text += ' and a highly engaged audience.'
+  } else if (eng > 0) {
+    text += ' and an established community.'
+  } else {
+    text += '.'
+  }
 
-  if (eng >= 6) parts.push('and an exceptionally engaged audience')
-  else if (eng >= 3.5) parts.push('and a highly engaged audience')
-  else if (eng > 0) parts.push('and an established community')
-
-  return displayName + ' is a ' + parts.join(' ')
+  return text
 }
 
 // ── Why-this-fits reasons (dynamic per blueprint × creator) ──────────────────
@@ -384,6 +401,9 @@ function mapRecommendationsToBlueprints(recs) {
       primary: index === 0,
       preview: config.preview,
       features: featuresMap[r.product_category] || featuresMap.other,
+      rationale: r.rationale || '',
+      targetAudience: r.target_audience || '',
+      revenueModel: r.revenue_model || '',
       raw: r
     }
   })
@@ -427,7 +447,12 @@ export default function Blueprint() {
     if (promise && isScrapePending()) {
       setIsScraping(true)
       promise
-        .then(() => setIsScraping(false))
+        .then((data) => {
+          setIsScraping(false)
+          if (data && (data.followers || data.name || data.recentPosts)) {
+            updateCreator(data)
+          }
+        })
         .catch(() => setIsScraping(false))
     } else {
       setIsScraping(false)
@@ -435,7 +460,7 @@ export default function Blueprint() {
   }, [])
 
   useEffect(() => {
-    if (hasNoRecs && recsJob.status === 'idle') {
+    if (hasNoRecs && recsJob.status === 'idle' && !isScraping) {
       startBgJob('onboarding-recs', async (sig) => {
         const aiRecs = await generateRecommendationsAI(creatorData, sig)
         if (aiRecs && Array.isArray(aiRecs) && aiRecs.length > 0) {
@@ -444,7 +469,7 @@ export default function Blueprint() {
         throw new Error("Empty recommendations response")
       })
     }
-  }, [hasNoRecs, recsJob.status])
+  }, [hasNoRecs, recsJob.status, isScraping])
 
   useEffect(() => {
     if (recsJob.status === 'done' && recsJob.result) {
@@ -760,7 +785,7 @@ export default function Blueprint() {
                   {creatorData.followers ? fmt(creatorData.followers) : '?'}
                 </p>
                 <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                  {PLATFORM_LABELS[creatorData.platform] || 'followers'}
+                  {creatorData.platform === 'youtube' ? 'Subscribers' : 'Followers'}
                 </p>
               </div>
               {creatorData.engagementRate > 0 && (
@@ -972,11 +997,11 @@ export default function Blueprint() {
                       <p className="text-[12px] font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>{blueprint.revenue}</p>
                     </div>
                   </div>
-                  {altReasons[0] && (
+                  {(blueprint.rationale || altReasons[0]) && (
                     <div className="flex items-start gap-1.5 mt-2 pt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                       <span className="text-[9px] flex-shrink-0 mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>✓</span>
                       <p className="text-[11px] leading-snug" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                        {altReasons[0]}
+                        {blueprint.rationale || altReasons[0]}
                       </p>
                     </div>
                   )}
