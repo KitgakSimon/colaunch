@@ -33,18 +33,18 @@ export default function FormattedMarkdownBody({
 
   content = content.replace(/---\s*$/, "").trim();
 
-  // Helper to parse inline styles (bold, italics, links, code)
+  // Helper to parse inline styles (bold, italics, links, images, code)
   const renderInline = (str) => {
     if (!str) return null;
 
-    // Tokenize string for links, bold, italics, and code
+    // Tokenize string for images, links, bold, italics, and code
     const tokens = [];
     let remaining = str;
     let keyIdx = 0;
 
-    // Regex matching markdown link, bold, italic, code, or bare URL
+    // Regex matching markdown image (![alt](url)), markdown link ([text](url)), bold, italic, code, or bare URL
     const inlineRegex =
-      /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(\*\*[^*]+\*\*)|(\*[^*]+\*)|(`[^`]+`)|(https?:\/\/[^\s<]+)/;
+      /!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)|\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(\*\*[^*]+\*\*)|(\*[^*]+\*)|(`[^`]+`)|(https?:\/\/[^\s<]+)/;
 
     while (remaining) {
       const match = remaining.match(inlineRegex);
@@ -62,9 +62,20 @@ export default function FormattedMarkdownBody({
         );
       }
 
-      const [fullMatch, linkText, linkUrl, boldText, italicText, codeText, bareUrl] = match;
+      const [fullMatch, imgAlt, imgUrl, linkText, linkUrl, boldText, italicText, codeText, bareUrl] = match;
 
-      if (linkText && linkUrl) {
+      if (imgUrl !== undefined) {
+        tokens.push(
+          <div key={keyIdx++} className="my-2.5">
+            <img
+              src={imgUrl}
+              alt={imgAlt || "Concept Preview"}
+              className="rounded-xl border border-slate-200/90 shadow-2xs max-w-full h-auto object-cover max-h-[300px] w-full"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            />
+          </div>
+        );
+      } else if (linkText && linkUrl) {
         tokens.push(
           <a
             key={keyIdx++}
@@ -73,8 +84,8 @@ export default function FormattedMarkdownBody({
             rel="noopener noreferrer"
             className={
               isDark
-                ? "text-purple-400 hover:text-purple-300 font-semibold underline underline-offset-2 transition-colors"
-                : "text-purple-600 hover:text-purple-700 font-semibold underline underline-offset-2 transition-colors"
+                ? "text-sky-400 hover:text-sky-300 font-semibold underline underline-offset-2 transition-colors"
+                : "text-sky-600 hover:text-sky-700 font-semibold underline underline-offset-2 transition-colors"
             }
           >
             {linkText}
@@ -107,8 +118,8 @@ export default function FormattedMarkdownBody({
             key={keyIdx++}
             className={
               isDark
-                ? "px-1.5 py-0.5 rounded bg-white/[0.08] text-purple-300 font-mono text-[11px]"
-                : "px-1.5 py-0.5 rounded bg-slate-100 text-purple-700 border border-slate-200 font-mono text-[11px]"
+                ? "px-1.5 py-0.5 rounded bg-white/[0.08] text-sky-300 font-mono text-[11px]"
+                : "px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200 font-mono text-[11px]"
             }
           >
             {cleanCode}
@@ -123,8 +134,8 @@ export default function FormattedMarkdownBody({
             rel="noopener noreferrer"
             className={
               isDark
-                ? "text-purple-400 hover:text-purple-300 font-medium underline underline-offset-2 break-all transition-colors"
-                : "text-purple-600 hover:text-purple-700 font-medium underline underline-offset-2 break-all transition-colors"
+                ? "text-sky-400 hover:text-sky-300 font-medium underline underline-offset-2 break-all transition-colors"
+                : "text-sky-600 hover:text-sky-700 font-medium underline underline-offset-2 break-all transition-colors"
             }
           >
             {bareUrl}
@@ -138,13 +149,14 @@ export default function FormattedMarkdownBody({
     return tokens;
   };
 
-  // Preprocess text to ensure lists and headings are separated from preceding paragraphs
+  // Preprocess text to ensure lists, blockquotes, and headings are separated from preceding paragraphs
   const preprocessMarkdownContent = (raw) => {
     if (!raw) return "";
     const rawLines = raw.split("\n");
     const processed = [];
     const listMarkerRegex = /^(\s*)(?:[•\-\*]|\d+[.)])\s+/;
     const headingRegex = /^#{1,6}\s+/;
+    const quoteRegex = /^>\s*/;
     let inList = false;
 
     for (let i = 0; i < rawLines.length; i++) {
@@ -152,8 +164,9 @@ export default function FormattedMarkdownBody({
       const stripped = line.trim();
       const isListItem = listMarkerRegex.test(stripped);
       const isHeading = headingRegex.test(stripped);
+      const isQuote = quoteRegex.test(stripped);
 
-      if (isHeading && processed.length > 0 && processed[processed.length - 1].trim()) {
+      if ((isHeading || isQuote) && processed.length > 0 && processed[processed.length - 1].trim()) {
         processed.push("");
       }
 
@@ -175,7 +188,7 @@ export default function FormattedMarkdownBody({
     return processed.join("\n");
   };
 
-  // Split into structural blocks (paragraphs, lists, headings, dividers)
+  // Split into structural blocks (paragraphs, lists, headings, dividers, blockquotes)
   const blocks = preprocessMarkdownContent(content).split(/\n\s*\n/);
 
   return (
@@ -195,6 +208,23 @@ export default function FormattedMarkdownBody({
               key={bIdx}
               className={`my-3 ${isDark ? "border-white/10" : "border-slate-200"}`}
             />
+          );
+        }
+
+        // Blockquotes (Highlighted Notes)
+        if (trimmed.startsWith(">")) {
+          const quoteContent = trimmed.replace(/^>\s*/gm, "").trim();
+          return (
+            <div
+              key={bIdx}
+              className={`p-3.5 my-2 rounded-xl border-l-4 text-xs leading-relaxed shadow-2xs ${
+                isDark
+                  ? "bg-slate-800/80 border-slate-700 border-l-sky-400 text-slate-200"
+                  : "bg-sky-50/70 border border-sky-200/80 border-l-sky-600 text-slate-800"
+              }`}
+            >
+              {renderInline(quoteContent)}
+            </div>
           );
         }
 

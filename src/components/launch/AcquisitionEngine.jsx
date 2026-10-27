@@ -81,6 +81,7 @@ import { resolveCreatorTheme } from "../../utils/creatorTheme";
 import ConceptEditorModal from "./ConceptEditorModal";
 import CustomizedDeckModal from "./CustomizedDeckModal";
 import ClientProfileModal from "./ClientProfileModal";
+import Step5ProposalEmailModal from "./Step5ProposalEmailModal";
 import { deleteAllCreators } from "../../services/opsApi";
 import { buildSmartFallbackPlan } from "../../services/ai";
 import AdminPipelineLookup from "./AdminPipelineLookup";
@@ -3171,6 +3172,7 @@ export default function AcquisitionEngine({
   const [viewingDeckConcept, setViewingDeckConcept] = useState(null);
   const [viewingDeckIndex, setViewingDeckIndex] = useState(0);
   const [step5EmailViewMode, setStep5EmailViewMode] = useState("preview"); // "preview" | "edit"
+  const [showStep5EmailModal, setShowStep5EmailModal] = useState(false);
 
   // Step 5 Creator Avatar AI Vision & Brand Color state
   const [creatorBrandColorMap, setCreatorBrandColorMap] = useState(() => {
@@ -3296,8 +3298,11 @@ export default function AcquisitionEngine({
     const frontendBase = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
     const creatorSlug = (creator.handle || creator.name || 'creator').replace(/^@/, '').toLowerCase().replace(/[^a-z0-9\-]/g, '');
 
-    const conceptsWithImages = rawConcepts.map((c, i) => {
-      const img = c.customImageUrl || c.imageUrl || c.image_url || getConceptImageUrl(c, creator.niche);
+    const conceptsWithImages = rawConcepts.slice(0, 3).map((c, i) => {
+      let img = c.customImageUrl || c.imageUrl || c.image_url || getConceptImageUrl(c, creator.niche);
+      if (img && typeof img === 'string' && img.startsWith('/')) {
+        img = `${frontendBase}${img}`;
+      }
       const conceptSlug = (c.name || `concept-${i + 1}`).toLowerCase().replace(/[^a-z0-9\-]/g, '-');
       const landingPageUrl = c.landingPageUrl || c.landing_page_url || `${frontendBase}/preorder/${creatorSlug}?concept=${conceptSlug}`;
       return {
@@ -3313,19 +3318,34 @@ export default function AcquisitionEngine({
     const cleanHandle = (creator.handle || "").replace(/^@/, "").trim();
     const firstName = (creator.name || creator.display_name || "there").split(" ")[0];
     const cId = creator.id;
+    const niche = Array.isArray(creator.niche) ? creator.niche.join(", ") : (creator.niche || "channel");
+    const platform = creator.platform || "social media";
 
     const defaultSubject = `Software concepts tailored for @${cleanHandle}`;
+
+    const conceptsBlocks = conceptsWithImages
+      .map((c, i) => {
+        const lines = [
+          `${i + 1}. **${c.name}** (${c.pricing || "$29/mo"})`,
+          `• Tagline: ${c.tagline || "Custom software platform"}`,
+          `• Solves: ${c.problem || c.description} (Opportunity Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Custom Blueprint]" : ""}`,
+          `• Landing Page: ${c.landingPageUrl}`,
+        ];
+        if (c.imageUrl) {
+          lines.push(`\n![${c.name} Preview](${c.imageUrl})`);
+        }
+        return lines.join("\n");
+      })
+      .join("\n\n");
+
     const defaultBody =
       `Hi ${firstName},\n\n` +
-      `Following up as promised. Based on our analysis of your ${creator.niche || "channel"} audience on ${creator.platform || "social media"}, here are the top 3 software product concepts we designed for your community:\n\n` +
-      conceptsWithImages
-        .map(
-          (c, i) =>
-            `${i + 1}. ${c.name} (${c.pricing || "$29/mo"})\n   • Tagline: ${c.tagline || "Custom audience software"}\n   • Problem: ${c.problem || c.description} (Opportunity Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Custom Blueprint]" : ""}\n   • Landing Page: ${c.landingPageUrl}`,
-        )
-        .join("\n\n") +
-      `\n\nUnder our 50/50 partnership, our engineering team handles 100% of product development, hosting, payment billing, and customer support with zero financial cost to you.\n\n` +
-      `Please review the landing page previews above and let us know which concept you prefer. To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
+      `Following up on our partnership discussion. Based on our research on your ${niche} content and community on ${platform}, here are the top 3 software product concepts we engineered for your audience:\n\n` +
+      `> **Audience Research Note:** These 3 software concepts were architected directly from an in-depth analysis of your channel videos, recurring questions in your comments, and community discussions. They are built around real demand your audience has already demonstrated.\n\n` +
+      `${conceptsBlocks}\n\n` +
+      `Under our 50/50 partnership, our engineering team handles 100% of product development, UI/UX design, cloud hosting, billing infrastructure, and ongoing technical support with zero financial cost or risk to you.\n\n` +
+      `> **100% Flexible:** If you'd like to adjust any of these concepts, explore additional directions, or if you already have an idea of your own you'd love to build for your community, we are completely open to it. You maintain full creative control, and our engineering team is here to bring your vision to life.\n\n` +
+      `Let me know which concept resonates most with you, or if you'd like us to draft more ideas or look into your own concept. You can simply reply directly to this email.\n\n` +
       `Best regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
 
     const subject = (creator.id === selectedCreator?.id && customPitchSubject) ? customPitchSubject : defaultSubject;
@@ -3566,9 +3586,10 @@ export default function AcquisitionEngine({
     const creatorSlug = cleanHandle.toLowerCase().replace(/[^a-z0-9\-]/g, '');
     const landingUrl = `${frontendBase}/preorder/${creatorSlug}?concept=${conceptName.toLowerCase().replace(/[^a-z0-9\-]/g, '-')}`;
 
+    const emailData = getStep5EmailData(creator);
     return {
-      subject: `Software concepts tailored for @${cleanHandle}`,
-      body: `Hi ${firstName},\n\nFollowing up on our partnership discussion. Based on our analysis of your ${creator.niche || "content"} audience, we engineered 3 custom software concepts for your community.\n\nOur top recommendation is:\n• ${conceptName} (${pricing}) — ${tagline}\n  Key Focus: Solves ${problem} (Target MVP: ${mvpTime})\n  Landing Page: ${landingUrl}\n\nUnder our 50/50 partnership, CoLaunch handles 100% of engineering, hosting, billing, and support at zero financial cost to you.\n\nPlease take a look and let us know which concept you prefer.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch`,
+      subject: emailData.defaultSubject,
+      body: emailData.defaultBody,
     };
   };
 
@@ -3642,26 +3663,9 @@ export default function AcquisitionEngine({
   // Regenerate pitch copy with a fresh high-converting angle
   const handleRegeneratePitch = () => {
     if (!selectedCreator) return;
-    const concepts =
-      selectedCreator.productConcepts || ensureCreatorConcepts(selectedCreator);
-    const cleanHandle = (selectedCreator.handle || "").replace(/^@/, "").trim();
-    const firstName = selectedCreator.name?.split(" ")[0] || "there";
-    const creatorSlug = (selectedCreator.handle || selectedCreator.name || "creator").replace(/^@/, "").toLowerCase().replace(/[^a-z0-9\-]/g, "");
-    const frontendBase = typeof window !== "undefined" ? window.location.origin : "http://localhost:3001";
-    const subject = `Software concepts breakdown for @${cleanHandle}`;
-    const body =
-      `Hi ${firstName},\n\nFollowing up on our partnership discussion. We analyzed your audience to architect 3 custom software solutions for your followers:\n\n` +
-      concepts
-        .map(
-          (c, i) => {
-            const landingUrl = c.landingPageUrl || c.landing_page_url || `${frontendBase}/preorder/${creatorSlug}?concept=${(c.name || `concept-${i+1}`).toLowerCase().replace(/[^a-z0-9\-]/g, '-')}`;
-            return `${i + 1}. ${c.name} (${c.pricing || "$29/mo"})\n   • Tagline: ${c.tagline || "Custom software platform"}\n   • Solves: ${c.problem || c.description} (Opportunity Score: ${c.opportunityScore || 95}/100)\n   • Landing Page: ${landingUrl}`;
-          }
-        )
-        .join("\n\n") +
-      `\n\nUnder our 50/50 partnership, our engineering team handles 100% of product development, hosting, payment billing, and customer support with zero financial cost to you.\n\nTo move forward, simply reply to this email with your preferred concept number.\n\nBest regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${selectedCreator.id} | Handle:@${cleanHandle}]`;
-    setCustomPitchSubject(subject);
-    setCustomPitchBody(body);
+    const emailData = getStep5EmailData(selectedCreator);
+    setCustomPitchSubject(emailData.defaultSubject);
+    setCustomPitchBody(emailData.defaultBody);
   };
 
   // Send Opportunity Pitch via SMTP & Activate AI Response Monitor
@@ -3732,20 +3736,12 @@ export default function AcquisitionEngine({
       };
     });
 
-    const cleanHandle = (creator.handle || "").replace(/^@/, "").trim();
-    const firstName = (creator.name || creator.display_name || "there").split(" ")[0];
-    const pitchSubject = `Software concepts tailored for @${cleanHandle}`;
-    const pitchBody =
-      `Hi ${firstName},\n\nFollowing up on our partnership discussion. Based on our analysis of your ${creator.niche || "channel"} audience on ${creator.platform || "social media"}, here are the top 3 software product concepts we designed for your community:\n\n` +
-      conceptsToSend
-        .map(
-          (c, i) =>
-            `${i + 1}. ${c.name} (${c.pricing || "$29/mo"})\n   • Tagline: ${c.tagline || "Custom software platform"}\n   • Solves: ${c.problem || c.description} (Opportunity Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Custom Blueprint]" : ""}\n   • Landing Page: ${c.landingPageUrl}`,
-        )
-        .join("\n\n") +
-      `\n\nUnder our 50/50 partnership, our engineering team handles 100% of product development, hosting, payment billing, and customer support with zero financial cost to you.\n\n` +
-      `Please review the landing page previews above and let us know which concept you prefer. To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
-      `Best regards,\nAlex Rivera\nHead of Venture Partnerships, CoLaunch\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`;
+    const emailData = getStep5EmailData({
+      ...creator,
+      productConcepts: conceptsToSend,
+    });
+    const pitchSubject = emailData.defaultSubject;
+    const pitchBody = emailData.defaultBody;
 
     // Use custom pitch only if this is the currently selected creator (user may have edited it)
     const subjectToSend =
@@ -4131,23 +4127,12 @@ export default function AcquisitionEngine({
     });
 
     // Also synchronize custom proposal email body to reflect edited concept
-    const firstName = (selectedCreator.name || selectedCreator.display_name || "there").split(" ")[0];
-    const cleanHandle = (selectedCreator.handle || "").replace(/^@/, "").trim();
-    const cId = selectedCreator.id;
-    setCustomPitchSubject(`Top 3 software concepts tailored for @${cleanHandle}`);
-    setCustomPitchBody(
-      `Hi ${firstName},\n\n` +
-      `Following up as promised! Based on our analysis of your ${selectedCreator.niche || "channel"} audience on ${selectedCreator.platform || "social media"}, here are the top 3 software product concepts we designed for your community:\n\n` +
-      newConcepts
-        .map(
-          (c, i) =>
-            `${i + 1}. ${c.name} (${c.pricing || "$29/mo"}) — ${c.tagline}\n   • Solves: ${c.problem || c.description} (Score: ${c.opportunityScore || 95}/100)${c.isModifiedByAdmin ? " [Customized Blueprint]" : ""}`,
-        )
-        .join("\n\n") +
-      `\n\nUnder our 50/50 partnership, our engineering team will build and deploy the complete MVP at zero cost to you.\n\n` +
-      `Take a look and let us know which concept you'd be most excited to build and launch with us! To move forward, simply reply to this email with: "I will be interested in Concept 1" (or Concept 2, Concept 3).\n\n` +
-      `Best regards,\nThe CoLaunch Team\n\n---\nRef: [CF-STAGE:STEP6_PITCH | CF-CID:${cId} | Handle:@${cleanHandle}]`
-    );
+    const updatedEmailData = getStep5EmailData({
+      ...selectedCreator,
+      productConcepts: newConcepts,
+    });
+    setCustomPitchSubject(updatedEmailData.defaultSubject);
+    setCustomPitchBody(updatedEmailData.defaultBody);
 
     notify("success", "Concept Saved", `Updated "${enrichedConcept.name}" — email proposal & cards refreshed with modified concept.`);
   };
@@ -4609,7 +4594,8 @@ export default function AcquisitionEngine({
       showAwaitingModal ||
       decisionModal?.isOpen ||
       isLaunchingProject ||
-      showDeleteConfirmModal
+      showDeleteConfirmModal ||
+      showStep5EmailModal
     );
     if (isAnyModalOpen) {
       const prevOverflow = document.body.style.overflow;
@@ -4618,7 +4604,7 @@ export default function AcquisitionEngine({
         document.body.style.overflow = prevOverflow;
       };
     }
-  }, [showInterestedModal, showAwaitingModal, decisionModal?.isOpen, isLaunchingProject, showDeleteConfirmModal]);
+  }, [showInterestedModal, showAwaitingModal, decisionModal?.isOpen, isLaunchingProject, showDeleteConfirmModal, showStep5EmailModal]);
 
   const handleGenerateDecisionAi = async () => {
     if (!decisionModal.creator) return;
@@ -9728,6 +9714,17 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
                 </span>
               </button>
 
+              {/* Preview Proposal Email Button */}
+              <button
+                type="button"
+                onClick={() => setShowStep5EmailModal(true)}
+                className="h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 whitespace-nowrap shadow-2xs"
+                title="Preview the exact 1-on-1 proposal email with images and highlighted notes before sending"
+              >
+                <Mail className="w-3.5 h-3.5 text-sky-600" />
+                <span>Preview Proposal Email</span>
+              </button>
+
               {Boolean(selectedCreator && pitchSentMap[selectedCreator.id]) ? (
                 <>
                   <button
@@ -10399,13 +10396,24 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
 
                   {/* Step 5 Bottom Action Bar */}
                   <div className="mt-8 pt-5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <button
-                      type="button"
-                      onClick={() => setActiveStep(4)}
-                      className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium text-xs transition-all cursor-pointer"
-                    >
-                      ← Back to Step 4
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setActiveStep(4)}
+                        className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium text-xs transition-all cursor-pointer"
+                      >
+                        ← Back to Step 4
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowStep5EmailModal(true)}
+                        className="px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                        title="Preview the exact 1-on-1 proposal email with images and highlighted notes"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-sky-600" />
+                        <span>Preview Proposal Email</span>
+                      </button>
+                    </div>
                     <button
                       type="button"
                       onClick={() => {
@@ -12690,6 +12698,32 @@ Ref: [CF-STAGE:PROJECT_KICKOFF | CF-CID:${selectedCreator.id} | Handle:@${handle
         }}
         onClose={() => setEditingConcept(null)}
         onSave={handleSaveConcept}
+      />
+
+      {/* Step 5 1-on-1 Proposal Email Preview & Edit Modal */}
+      <Step5ProposalEmailModal
+        isOpen={showStep5EmailModal}
+        creator={selectedCreator}
+        emailData={selectedCreator ? getStep5EmailData(selectedCreator) : null}
+        customSubject={customPitchSubject}
+        customBody={customPitchBody}
+        isSending={isSendingPitch}
+        onSaveCopy={(subj, body) => {
+          setCustomPitchSubject(subj);
+          setCustomPitchBody(body);
+        }}
+        onResetCopy={() => {
+          if (selectedCreator) {
+            const data = getStep5EmailData(selectedCreator);
+            setCustomPitchSubject(data.defaultSubject);
+            setCustomPitchBody(data.defaultBody);
+          }
+        }}
+        onSendAndAdvance={() => {
+          setShowStep5EmailModal(false);
+          handleSendBlueprintAndAdvanceToStep6(selectedCreator);
+        }}
+        onClose={() => setShowStep5EmailModal(false)}
       />
 
       {/* Step 5 Interactive Customized Pitch Deck Modal */}
