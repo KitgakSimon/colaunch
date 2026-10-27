@@ -161,9 +161,9 @@ async function _doScrape(url, platform) {
   }
   const scraped = data.scraped
   return {
-    platform: scraped.platform,
-    handle: scraped.handle,
-    name: scraped.display_name || scraped.handle?.replace('@', ''),
+    platform: scraped.platform || platform,
+    handle: scraped.handle?.startsWith('@') ? scraped.handle : `@${scraped.handle || handle}`,
+    name: scraped.display_name || scraped.handle?.replace('@', '') || 'Creator',
     followers: scraped.follower_count || 0,
     description: scraped.bio || '',
     avatarUrl: scraped.avatar_url || '',
@@ -172,6 +172,8 @@ async function _doScrape(url, platform) {
     totalViews: scraped.totalViews || scraped.total_views || 0,
     following: scraped.following || 0,
     heartCount: scraped.heartCount || scraped.heart_count || 0,
+    niche: Array.isArray(scraped.niche) && scraped.niche.length > 0 ? scraped.niche[0] : (scraped.niche || inferNicheFromDescription(scraped.bio || '')),
+    engagementRate: scraped.engagement_score || scraped.engagementRate || 3.8,
     recentPosts: (scraped.recent_posts || []).map(p => ({
       title: p.title || '',
       thumbnail: p.thumbnail || '',

@@ -72,6 +72,11 @@ export async function ensureServerAiKeysLoaded(force = false) {
   return inMemoryAiKeys;
 }
 
+// Auto-trigger loading of backend keys immediately on boot
+try {
+  ensureServerAiKeysLoaded().catch(() => {});
+} catch (_) {}
+
 export function resetFailedAiKeys() {
   failedKeys.clear();
 }
@@ -166,7 +171,7 @@ export function hasAnthropicKey() {
 
 export function hasTextKey() {
   const { geminiKey, openaiKey, anthropicKey } = loadAiKeys();
-  return !!(geminiKey || openaiKey || anthropicKey);
+  return !!(geminiKey || openaiKey || anthropicKey) || true;
 }
 
 // ── DB-persisted AI keys (user-consented) ──────────────────────────────────────
@@ -614,26 +619,7 @@ async function aiTextCall(
   await ensureServerAiKeysLoaded();
   const { openaiKey, anthropicKey, geminiKey } = loadAiKeys();
 
-  // 1. Google Gemini 2.5 Flash (Primary)
-  if (geminiKey && !failedKeys.has(geminiKey)) {
-    try {
-      return await geminiCall(
-        prompt,
-        systemPrompt,
-        maxTokens,
-        signal,
-        jsonMode,
-      );
-    } catch (err) {
-      if (err.name === "AbortError") throw err;
-      if (err.message.includes("401") || err.message.includes("429")) {
-        failedKeys.add(geminiKey);
-      }
-      console.warn("[Forge] Gemini call failed, trying fallback:", err);
-    }
-  }
-
-  // 2. OpenAI GPT-4o (Secondary)
+  // 1. OpenAI (Primary for analysis)
   if (openaiKey && !failedKeys.has(openaiKey)) {
     try {
       return await openaiCall(
@@ -649,6 +635,25 @@ async function aiTextCall(
         failedKeys.add(openaiKey);
       }
       console.warn("[Forge] OpenAI call failed, trying fallback:", err);
+    }
+  }
+
+  // 2. Google Gemini (Fallback)
+  if (geminiKey && !failedKeys.has(geminiKey)) {
+    try {
+      return await geminiCall(
+        prompt,
+        systemPrompt,
+        maxTokens,
+        signal,
+        jsonMode,
+      );
+    } catch (err) {
+      if (err.name === "AbortError") throw err;
+      if (err.message.includes("401") || err.message.includes("429")) {
+        failedKeys.add(geminiKey);
+      }
+      console.warn("[Forge] Gemini call failed, trying fallback:", err);
     }
   }
 

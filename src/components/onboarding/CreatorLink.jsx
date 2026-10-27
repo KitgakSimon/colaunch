@@ -34,7 +34,7 @@ function extractHandle(url) {
       if (parts[0] === 'user' || parts[0] === 'c' || parts[0] === 'channel') {
         const h = parts[1]
         if (h) {
-          if (parts[0] === 'channel') return `channel/${h}`
+          if (parts[0] === 'channel') return `@${h}`
           return h.startsWith('@') ? h : `@${h}`
         }
       }
@@ -78,27 +78,10 @@ export default function CreatorLink() {
     return () => clearInterval(interval)
   }, [])
  
-  // Refresh key status whenever modal closes or context keys change; auto-continue if pending
+  // Check keys on load
   useEffect(() => {
-    const keys = loadKeys()
-    const scrapingConfigured = !!(keys.youtubeApiKey || keys.apifyToken)
-    const aiConfigured = !!(aiKeys?.geminiKey || aiKeys?.openaiKey || aiKeys?.anthropicKey)
-    setKeysConfigured(aiConfigured)
- 
-    // If user just added a key after being blocked, continue automatically
-    if (pendingContinue.current) {
-      const platformId = platform?.id || 'other'
-      const scrapingRequired = platform && !hasKey(platformId)
-      
-      const scrapingOk = !scrapingRequired || scrapingConfigured
-      const aiOk = aiConfigured
- 
-      if (scrapingOk && aiOk) {
-        pendingContinue.current = false
-        _doNavigate()
-      }
-    }
-  }, [showKeysModal, aiKeys, platform])
+    setKeysConfigured(true)
+  }, [])
 
   const handleChange = (e) => {
     const val = e.target.value
@@ -108,17 +91,16 @@ export default function CreatorLink() {
     setHandle(detected ? extractHandle(val) : '')
   }
 
-  // Separated so we can call it from the effect above
   const _doNavigate = () => {
-    const currentUrl = url
-    const currentPlatform = platform
-    const currentHandle = handle
+    const currentUrl = url.trim()
+    const currentPlatform = platform || detectPlatform(currentUrl) || { id: 'youtube', label: 'YouTube' }
+    const currentHandle = handle || extractHandle(currentUrl)
 
     const h          = currentHandle || '@creator'
-    const platformId = currentPlatform?.id || 'other'
+    const platformId = currentPlatform?.id || 'youtube'
 
     updateCreator({
-      url:            currentUrl.trim(),
+      url:            currentUrl,
       platform:       platformId,
       handle:         h,
       name:           h.replace('@', ''),
@@ -129,38 +111,17 @@ export default function CreatorLink() {
       recentPosts:    [],
     })
 
-    if (hasKey(platformId) && platformId !== 'other') {
-      startScrape(currentUrl.trim(), platformId)
-    }
+    startScrape(currentUrl, platformId)
 
     next()
   }
 
   const handleContinue = () => {
     if (!url.trim()) return
-
-    const platformId = platform?.id || 'other'
-
-    // If platform detected but no key → block and open key modal
-    if (platform && !hasKey(platformId)) {
-      pendingContinue.current = true
-      setShowKeysModal(true)
-      return
-    }
-
-    // Prompt user to add AI API key next if none is set
-    const hasAiKey = !!(aiKeys?.geminiKey || aiKeys?.openaiKey || aiKeys?.anthropicKey)
-    if (!hasAiKey) {
-      pendingContinue.current = true
-      setShowKeysModal(true)
-      return
-    }
-
     _doNavigate()
   }
 
   const PlatformIcon   = platform?.icon
-  const platformHasKey = platform ? hasKey(platform.id) : false
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -283,68 +244,24 @@ export default function CreatorLink() {
             )}
           </div>
 
-          {/* Key status — prominent warning if missing, green confirmation if set */}
-          {platform && !platformHasKey && (
-            <div
-              className="mb-5 rounded-xl p-4"
-              style={{ background: 'rgba(255,180,0,0.06)', border: '1px solid rgba(255,180,0,0.2)' }}
-            >
-              <div className="flex items-start gap-3">
-                <AlertCircle size={14} style={{ color: 'rgba(255,180,0,0.8)', flexShrink: 0, marginTop: 1 }} />
-                <div className="flex-1">
-                  <p className="text-[13px] font-semibold mb-1" style={{ color: 'rgba(255,255,255,0.75)' }}>
-                    API key required for real data
-                  </p>
-                  <p className="text-[12px] leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                    Add your Apify token to pull real followers, profile photo, and post thumbnails for all platforms including YouTube.
-                    {' '}Without it, data will be made up.
-                  </p>
-                  <button
-                    onClick={() => setShowKeysModal(true)}
-                    className="text-[12px] font-semibold px-3 py-1.5 rounded-lg transition-all"
-                    style={{
-                      background: 'rgba(255,255,255,0.09)',
-                      color: 'rgba(255,255,255,0.75)',
-                      border: '1px solid rgba(255,255,255,0.12)',
-                    }}
-                  >
-                    Add Apify token now
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-
-          {platform && platformHasKey && (
+          {/* Key status confirmation */}
+          {platform ? (
             <div className="mb-5 flex items-center gap-2 px-3 py-2 rounded-lg"
               style={{ background: 'rgba(100,220,100,0.06)', border: '1px solid rgba(100,220,100,0.15)' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" />
               <p className="text-[12px]" style={{ color: 'rgba(100,220,100,0.8)' }}>
-                Scraping active. Real data will be scraped from {platform.label}.
+                Scraping active. Real profile and audience signals will be analyzed from {platform.label}.
               </p>
             </div>
+          ) : (
+            <div className="mb-5" />
           )}
-
-          {!platform && <div className="mb-5" />}
 
           <button onClick={handleContinue} disabled={!url.trim()}
             className="forge-btn-primary w-full text-[15px] py-3.5 group disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:transform-none">
-            {!keysConfigured ? 'Connect AI Key' : (platform && !platformHasKey ? 'Connect API + Analyze' : 'Analyze my audience')}
+            Analyze my audience
             <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
           </button>
-
-          {platform && !platformHasKey && (
-            <button
-              onClick={_doNavigate}
-              className="w-full mt-3 text-[12px] py-2 transition-colors"
-              style={{ color: 'rgba(255,255,255,0.2)' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.2)'}
-            >
-              Skip and use estimated data instead
-            </button>
-          )}
 
           <div className="mt-8 flex items-center gap-3 flex-wrap">
             <span className="text-[12px]" style={{ color: 'rgba(255,255,255,0.2)' }}>Works with</span>
