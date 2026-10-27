@@ -531,16 +531,47 @@ export default function Welcome() {
             </a>
           </nav>
 
-          {/* Header Action Button & Hamburger Menu */}
+          {/* Header Action Buttons & Hamburger Menu */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 whitespace-nowrap">
-            {/* Signature Button with Top-Right Beacon (Responsive & Compact on Mobile) */}
+            {/* Login / Dashboard Link */}
+            {userProfile ? (
+              <button
+                type="button"
+                onClick={() => goTo('dashboard')}
+                className="hidden sm:inline-flex items-center text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all cursor-pointer"
+              >
+                Dashboard
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => goTo('login')}
+                className="hidden sm:inline-flex items-center text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all cursor-pointer"
+              >
+                Login
+              </button>
+            )}
+
+            {/* Launch OS / Operator Command Center (Desktop Pill) */}
             <button
               type="button"
               onClick={() => { window.location.href = '/launch' }}
-              className="relative inline-flex items-center gap-1 sm:gap-2 text-[11px] sm:text-xs md:text-sm font-bold px-2.5 sm:px-4 md:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 select-none min-h-[34px] sm:min-h-[42px]"
+              className="hidden xl:inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 transition-colors cursor-pointer"
+              title="Creator Launch OS Command Center"
             >
-              <span><span className="hidden xs:inline">Start </span>Engagement</span>
-              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5] shrink-0" />
+              <span>Launch OS</span>
+              <ExternalLink className="w-3 h-3 text-slate-400" />
+            </button>
+
+            {/* Get Started Button -> takes directly to Step 1: Where is your audience? (Image 2) */}
+            <button
+              type="button"
+              onClick={() => goTo('creator-link')}
+              className="relative inline-flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs md:text-sm font-bold px-3 sm:px-4 md:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 select-none min-h-[34px] sm:min-h-[42px]"
+              title="Analyze Creator Audience & Get Started"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5] shrink-0 group-hover:translate-x-0.5 transition-transform" />
               {/* Signature Top-Right Accent Beacon Dot */}
               <span className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 flex h-2.5 w-2.5 sm:h-3 sm:w-3 pointer-events-none items-center justify-center">
                 <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 border border-white shadow-xs" />
@@ -638,20 +669,47 @@ export default function Welcome() {
               <p className="text-xs text-slate-500 font-mono">
                 <span className="font-bold text-slate-800">CoLaunch</span> · We code & run the app. You split profits 50/50.
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  window.location.href = '/launch'
-                }}
-                className="relative w-full sm:w-auto px-6 py-2.5 text-center text-xs sm:text-sm font-bold text-white rounded-xl bg-[#0F172A] hover:bg-[#1E293B] min-h-[44px] flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Start Engagement</span>
-                <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 pointer-events-none items-center justify-center">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 border border-white" />
-                </span>
-              </button>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                {userProfile ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      goTo('dashboard')
+                    }}
+                    className="flex-1 sm:flex-none px-4 py-2.5 text-center text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl min-h-[44px] flex items-center justify-center cursor-pointer transition-colors"
+                  >
+                    Dashboard
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      goTo('login')
+                    }}
+                    className="flex-1 sm:flex-none px-4 py-2.5 text-center text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl min-h-[44px] flex items-center justify-center cursor-pointer transition-colors"
+                  >
+                    Login
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    goTo('creator-link')
+                  }}
+                  className="relative flex-1 sm:flex-none px-5 py-2.5 text-center text-xs sm:text-sm font-bold text-white rounded-xl bg-[#0F172A] hover:bg-[#1E293B] min-h-[44px] flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                  title="Analyze Creator Audience & Get Started"
+                >
+                  <span>Get Started</span>
+                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 pointer-events-none items-center justify-center">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 border border-white" />
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -719,20 +777,32 @@ export default function Welcome() {
               Helping creators acquire more monthly paying subscribers by turning their audience into simple, high-retention software products. $0 upfront cost, 100% managed.
             </p>
 
-            {/* Action Row: Start Engagement Action Button linking to /launch */}
+            {/* Action Row: Get Started linking to creator-link (Image 2) & /launch */}
             <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-3.5 sm:gap-4 w-full">
-              {/* Primary Signature Button with Beacon (Links to /launch) */}
+              {/* Primary Signature Button with Beacon (Takes directly to Step 1: Where is your audience?) */}
               <button
                 type="button"
-                onClick={() => { window.location.href = '/launch' }}
+                onClick={() => goTo('creator-link')}
                 className="relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-5 py-3 sm:px-7 sm:py-4 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-white text-xs sm:text-sm font-display font-bold shadow-[0_6px_24px_rgba(15,23,42,0.18)] hover:shadow-[0_10px_32px_rgba(15,23,42,0.28)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 select-none min-h-[44px] sm:min-h-[48px] shrink-0 uppercase tracking-wide w-full sm:w-auto"
+                title="Analyze Creator Audience & Get Started"
               >
-                <span>Start Engagement</span>
-                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
                 {/* Signature Top-Right Accent Beacon Dot */}
                 <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3 pointer-events-none items-center justify-center">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white shadow-xs" />
                 </span>
+              </button>
+
+              {/* Secondary Launch OS Console link */}
+              <button
+                type="button"
+                onClick={() => { window.location.href = '/launch' }}
+                className="inline-flex items-center justify-center gap-2 px-4 py-3 sm:px-5 sm:py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 text-xs sm:text-sm font-semibold shadow-xs hover:border-slate-300 transition-all cursor-pointer min-h-[44px] sm:min-h-[48px]"
+                title="Creator Launch OS Command Center"
+              >
+                <span>Launch OS Console</span>
+                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               {/* Inline Estimate Label */}

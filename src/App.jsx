@@ -237,8 +237,13 @@ export default function App() {
       }
       if (path === '/login') return 'login'
       if (path === '/signup') return 'signup'
+      if (path === '/get-started' || path === '/creator-link') return 'creator-link'
 
       if (path === '/') {
+        const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+        if (searchParams && searchParams.get('step') === 'creator-link') {
+          return 'creator-link'
+        }
         const cachedStep = localStorage.getItem('forge_onboarding_step')
         if (cachedStep && ['welcome', 'creator-link', 'analyzing', 'blueprint', 'preview', 'building', 'pre-finish', 'celebration'].includes(cachedStep)) {
           return cachedStep
@@ -614,6 +619,8 @@ export default function App() {
         setStep('login')
       } else if (path === '/signup') {
         setStep('signup')
+      } else if (path === '/get-started' || path === '/creator-link') {
+        setStep('creator-link')
       } else if (path === '/dashboard') {
         if (cachedUser && activeSession === 'true') {
           setStep('dashboard')
