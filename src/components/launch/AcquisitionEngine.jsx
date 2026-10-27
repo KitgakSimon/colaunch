@@ -68,6 +68,7 @@ import {
   Presentation,
   Monitor,
   Layers,
+  Tag,
 } from "lucide-react";
 import DynamicConceptMockup, { BRAND_COLORS, getBrandColorObj } from "./DynamicConceptMockup";
 import {
